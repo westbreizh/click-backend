@@ -126,7 +126,6 @@ INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_ch
 ( 'cordage','Babolat',' http://localhost:3001/logo-babolat.webp  ' , 'Pro Hurricane Tour', 'Monofilament de polyester', 'Contrôle', '1.25 mm', 'Noir', 14.90, 8, 7, 4, 6, 2, 'Bobine 200m', 'Le Pro Hurricane Tour est un cordage idéal pour les joueurs recherchant un maximum de contrôle et de prise d''effet.', ' http://localhost:3001/bobine.jpg  ' ),
 ( 'cordage','Babolat',' http://localhost:3001/logo-babolat.webp  ' , 'VS Touch', 'Boyau naturel', 'Confort', '1.30 mm', 'Naturel', 72.90, 6, 5, 8, 7, 4, 'Garniture 12m', 'Le cordage VS Touch est le cordage de référence des joueurs recherchant un confort optimal et une excellente sensation de jeu.', ' http://localhost:3001/rpm.jpg '),
 ( 'cordage','Babolat',' http://localhost:3001/logo-babolat.webp  ' , 'XCel', 'Multifilament', 'Confort', '1.30 mm', 'Noir', 13.90, 6, 4, 7, 8, 4, 'Garniture 12m', 'Le cordage XCel est un cordage multifilament idéal pour les joueurs recherchant un maximum de confort et une bonne résistance.', '  http://localhost:3001/bobine.jpg' ),
-( 'cordage','Babolat',' http://localhost:3001/logo-babolat.webp ' ,'Origin', 'Monofilament de copolyester', 'Confort', '1.30 mm', 'Noir', 16.90, 7, 6, 6, 7, 3, 'Bobine 200m', 'Le cordage Origin est un cordage de copolyester qui offre un excellent compromis entre confort et contrôle.', ' http://localhost:3001/rpm.jpg');
 
 INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
 ('cordage', 'Wilson',  ' http://localhost:3001/Wilson-logo.webp ', 'Sensation', 'Multifilament', 'Confort', '16', 'Naturel', 13.99, 8, 6, 7, 9, 8, 'Bobine 200m', 'Le cordage multifilament Wilson Sensation offre un excellent confort grâce à sa construction en fibres de polyamide.', ' http://localhost:3001/rpm.jpg'),
@@ -167,24 +166,16 @@ image_url VARCHAR(255)
 INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
 VALUES
 ('balle', 'Dunlop',' http://localhost:3001/dunlop-logo.webp', 'Fort Elite', 3.99, 'Carton de tubes', 'standard', 'Balle de tennis en caoutchouc haute performance', ' http://localhost:3001/dunlop-ball.jpg  '),
-('balle', 'Dunlop',' http://localhost:3001/dunlop-logo.webp', 'Pro Tour', 4.99, 'Tube de balles', 'standard', 'Balle de tennis professionnelle pour les tournois', ' http://localhost:3001/dunlop-ball.jpg '),
-('balle', 'Dunlop',' http://localhost:3001/dunlop-logo.webp', 'Training', 2.99, 'Tube de balles', 'standard','Balle de tennis idéale pour entraînement', ' http://localhost:3001/dunlop-ball.jpg  '),
-('balle', 'Dunlop',' http://localhost:3001/dunlop-logo.webp', 'Championship', 4.99, 'BiPackTube de balles', 'standard', 'Balle de tennis de compétition durable', ' http://localhost:3001/dunlop-ball.jpg ');
+('balle', 'Dunlop',' http://localhost:3001/dunlop-logo.webp', 'Pro Tour', 4.99, 'Tube de balles', 'standard', 'Balle de tennis professionnelle pour les tournois', ' http://localhost:3001/dunlop-ball.jpg ');
 
 INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
 VALUES
-('balle', 'Wilson',' http://localhost:3001/Wilson-logo.webp ', 'US Open', 5.99, 'Tube de balles', 'Balles oranges', 'Balle de tennis officielle de l\'US Open', ' http://localhost:3001/WILSON_BALLES_ORANGE_X3.jpg'),
-('balle', 'Wilson',' http://localhost:3001/Wilson-logo.webp ', 'Championship', 4.99, 'Tube de balles', 'standard', 'Balle de tennis de compétition durable', ' http://localhost:3001/balles-wilson-us-open-x-4.net.jpg'),
-('balle', 'Wilson',' http://localhost:3001/Wilson-logo.webp ', 'Tour Premier', 6.99, 'pack de 2 tubes de balles,', 'standard', 'Balle de tennis de qualité supérieure pour les tournois', ' http://localhost:3001/balles-wilson-us-open-x-4.net.jpg'),
-('balle', 'Wilson',' http://localhost:3001/Wilson-logo.webp ', 'Team 2', 2.99, 'Tube de balles', 'standard','Balle de tennis idéale pour l\'entraînement en équipe', ' http://localhost:3001/balles-wilson-us-open-x-4.net.jpg');
+('balle', 'Wilson',' http://localhost:3001/Wilson-logo.webp ', 'US Open', 5.99, 'Tube de balles', 'Balles oranges', 'Balle de tennis officielle de l\'US Open', ' http://localhost:3001/WILSON_BALLES_ORANGE_X3.jpg');
 
 
 INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
 VALUES
-('balle', 'Technifibre', ' http://localhost:3001/tecnifibre.webp ', 'Pro Red Code', 6.99, 'Tube de balles', 'standard', 'Balle de tennis de qualité supérieure pour les tournois', ' http://localhost:3001/thballe.jpeg'),
-('balle', 'Technifibre',' http://localhost:3001/tecnifibre.webp ', 'X-One', 5.99, 'Tube de balles', 'standard', 'Balle de tennis en caoutchouc haute performance', ' http://localhost:3001/thballe.jpeg'),
-('balle', 'Technifibre', ' http://localhost:3001/tecnifibre.webp ','T-Fight', 4.99, 'pack de 2 tubes de balles', 'standard', 'Balle de tennis pour la compétition et l\'entraînement', ' http://localhost:3001/thcarton-balle.jpeg'),
-('balle', 'Technifibre', ' http://localhost:3001/tecnifibre.webp ','Club', 2.99, 'Carton de tubes', 'standard', 'Balle de tennis pour l\'entraînement et les loisirs', ' http://localhost:3001/thballe.jpeg');
+('balle', 'Technifibre', ' http://localhost:3001/tecnifibre.webp ', 'Pro Red Code', 6.99, 'Tube de balles', 'standard', 'Balle de tennis de qualité supérieure pour les tournois', ' http://localhost:3001/thballe.jpeg');
 
 
 
@@ -207,10 +198,8 @@ image_url VARCHAR(255)
 
 INSERT INTO accessories (categorie, mark,logoMark_url, model, price, product, description_text, image_url) VALUES
 ('accessoire', 'Babolat', 'http://localhost:3001/logo-babolat.webp','Syntec Pro', 7.99, 'grip', 'Le grip Babolat Syntec Pro est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.', 'http://localhost:3001/surgrip.webp'),
-('accessoire','Babolat', 'http://localhost:3001/logo-babolat.webp', 'Pro Tour', 5.99, 'surgrip', 'Le surgrip Babolat Pro Tour est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.', 'http://localhost:3001/surgrip.webp'),
 ('accessoire','Babolat','http://localhost:3001/logo-babolat.webp', 'VS Original', 12.99, 'anti-vibrateur', 'L\'anti-vibrateur Babolat VS Original est conçu pour offrir une réduction des vibrations et une meilleure stabilité.', 'http://localhost:3001/antivibe2.webp');
 
 INSERT INTO accessories (categorie, mark,logoMark_url, model, price, product, description_text, image_url) VALUES
-('accessoire', 'Head', ' http://localhost:3001/head-logo.webp',  'Hydrosorb Pro', 8.99, 'grip', 'Le grip Head Hydrosorb Pro est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.', 'http://localhost:3001/surgrip.webp'),
 ('accessoire', 'Head',' http://localhost:3001/head-logo.webp', 'Super Comp', 4.99, 'surgrip', 'Le surgrip Head Super Comp est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.', 'http://localhost:3001/surgrip.webp'),
 ('accessoire', 'Head', ' http://localhost:3001/head-logo.webp','Smartsorb', 9.99, 'anti-vibrateur', 'L\'anti-vibrateur Head Smartsorb est conçu pour offrir une réduction des vibrations et une meilleure stabilité.', 'http://localhost:3001/antivibrateur.jpg');
