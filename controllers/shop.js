@@ -49,7 +49,7 @@ exports.productListRandom = (req, res ) => {
     (error, results) =>{
       if (error){          
         res.status(404).json({
-        message: 'erreur avec la base ici depuis mise en ligne serveurde donnée'
+        message: 'erreur avec la base ici depuis mise en ligne serveur de donnée'
       })
       }
 

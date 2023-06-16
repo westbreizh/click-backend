@@ -5,6 +5,12 @@ const mysql = require('mysql2');
 const dotenv = require("dotenv");   
 dotenv.config();
 
+
+
+
+
+
+
 const sqlConnectionCreate = mysql.createConnection({  // creation de la connection via le port, le nom d'utilisateur, mot de passe et le nom de la bdd, contenu dans le fichier env. chargé dans process.env
     host: process.env.DB_HOST,
     user: process.env.DB_USER,
