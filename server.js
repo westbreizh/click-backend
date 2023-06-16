@@ -4,7 +4,7 @@
 
 const http = require('http'); // Import du package http (https requiert un certificat SSL à obtenir avec un nom de domaine)
 const app = require('./app');
-
+const cool = require('cool-ascii-faces')
 
 //La fonction normalizePort renvoie un port valide (numéro ou chaîne)
 //Cela configure le port de connection en fonction de l'environnement
@@ -27,6 +27,8 @@ const normalizePort = val => {
 app.get('/', (req, res) => {
   res.send('Hello, test world!');
 });
+
+app.get('/cool', (req, res) => res.send(cool()))
 
 
 
