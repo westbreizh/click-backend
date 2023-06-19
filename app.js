@@ -33,6 +33,8 @@ app.use(helmet({
 
 app.use(express.static('public/logo'));
 app.use(express.static('public/string'));
+app.use(express.static('public/ball'));
+app.use(express.static('public/accessorie'));
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
