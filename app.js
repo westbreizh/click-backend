@@ -30,8 +30,8 @@ app.use(helmet({
   crossOriginResourcePolicy: false,
 }));
 
+
 app.use(express.static('public/images'));
-app.use(express.static('public/logo'));
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
