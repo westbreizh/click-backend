@@ -24,9 +24,6 @@ const normalizePort = val => {
 
 
 
-app.get('/', (req, res) => {
-  res.send('Hello, test world!');
-});
 
 app.get('/cool', (req, res) => res.send(cool()))
 

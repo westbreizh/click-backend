@@ -100,28 +100,32 @@ CREATE TABLE `club_shop` (
 
 CREATE TABLE string (
 id INT PRIMARY KEY AUTO_INCREMENT,
-categorie VARCHAR(50), 
-mark VARCHAR(50),
-logoMark_url VARCHAR(255),
-model VARCHAR(50),
-composition VARCHAR(50),
-first_characteristic VARCHAR(50),
-gauge VARCHAR(10),
-color VARCHAR(20),
-price DECIMAL(10,2),
-control INT,
-power INT,
-spin INT,
-comfort INT,
-durability INT,
-packaging VARCHAR(50),
-description_text VARCHAR(255),
-image_url VARCHAR(255)
+categorie                   VARCHAR(25), 
+mark                        VARCHAR(25),
+model                       VARCHAR(50),
+composition                 VARCHAR(25),
+packaging                   VARCHAR(25),
+price                       DECIMAL(10,2),
+first_characteristic        VARCHAR(50),
+control_rating              INT,
+power                       INT,
+spin                        INT,
+comfort                     INT,
+durability_rating           INT,
+gauge                       VARCHAR(10),
+color                       VARCHAR(20),
+image_url                   VARCHAR(255),
+logoMark_url                VARCHAR(255),
+description_text            VARCHAR(255)
 );
 
 
-INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp ','Poly Tour Pro', 'Co-polyester', 'Controle effet', '1.25 mm', 'jaune', 105, 8, 6, 8, 5, 7, 'Bobine 200m', 'Cordage co-polyester pour une bonne combinaison de prise d\'effet et de contrôle.', ' https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp ');
+INSERT INTO string (categorie, mark, logoMark_url, model, composition, packaging, price, first_characteristic, control_rating, power, spin, comfort, durability_rating, gauge, color, image_url, description_text)
+VALUES 
+('cordage', 'Yonex', 'https://click-backend.herokuapp.com/yonex-logo.webp', 'Poly Tour Pro', 'Co-polyester', 'garniture 12m', 10, 'Controle effet', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex-poly-tour-pro-200m.webp', 
+'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester pour nous sur le marché. Il se démarque par sa polyvalence et offre une prise d \'effets et un très bon contrôle combiné avec . Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.');
+('cordage', 'Yonex', 'https://click-backend.herokuapp.com/yonex-logo.webp', 'Poly Tour Pro', 'Co-polyester', 'bobine 200m', 105, 'Controle effet', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp', 
+'L\'un des meilleurs cordages en co-polyester pour nous sur le marché. Il se démarque par sa polyvalence et offre une prise d \'effets et un très bon contrôle .');
 
 
 

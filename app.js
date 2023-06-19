@@ -31,7 +31,8 @@ app.use(helmet({
 }));
 
 
-app.use(express.static('public/images'));
+app.use(express.static('public/logo'));
+app.use(express.static('public/string'));
 
 app.get('/', (req, res) => {
   res.send('Hello, world!');
