@@ -119,30 +119,9 @@ description_text VARCHAR(255),
 image_url VARCHAR(255)
 );
 
-INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-( 'cordage','Babolat','https://click-backend.herokuapp.com/logo-babolat.webp', 'RPM Blast', 'Monofilament de polyester', 'Contrôle', '1.25 mm', 'Noir', 14.90, 8, 7, 4, 6, 2, 'Garniture 12m', 'Le cordage RPM Blast est le cordage de référence des joueurs exigeants à la recherche de contrôle.',' https://click-backend.herokuapp.com/bobine.jpg  '  ),
-( 'cordage','Babolat','https://click-backend.herokuapp.com/logo-babolat.webp  ' , 'Pro Hurricane Tour', 'Monofilament de polyester', 'Contrôle', '1.25 mm', 'Noir', 14.90, 8, 7, 4, 6, 2, 'Bobine 200m', 'Le Pro Hurricane Tour est un cordage idéal pour les joueurs recherchant un maximum de contrôle et de prise d''effet.', ' https://click-backend.herokuapp.com/bobine.jpg  ' ),
-( 'cordage','Babolat',' /* https://click-backend.herokuapp.com/ */logo-babolat.webp  ' , 'VS Touch', 'Boyau naturel', 'Confort', '1.30 mm', 'Naturel', 72.90, 6, 5, 8, 7, 4, 'Garniture 12m', 'Le cordage VS Touch est le cordage de référence des joueurs recherchant un confort optimal et une excellente sensation de jeu.', ' https://click-backend.herokuapp.com/rpm.jpg '),
-( 'cordage','Babolat',' https://click-backend.herokuapp.com/logo-babolat.webp  ' , 'XCel', 'Multifilament', 'Confort', '1.30 mm', 'Noir', 13.90, 6, 4, 7, 8, 4, 'Garniture 12m', 'Le cordage XCel est un cordage multifilament idéal pour les joueurs recherchant un maximum de confort et une bonne résistance.', '  https://click-backend.herokuapp.com/bobine.jpg' );
 
 INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-('cordage', 'Wilson',  ' https://click-backend.herokuapp.com/Wilson-logo.webp ', 'Sensation', 'Multifilament', 'Confort', '16', 'Naturel', 13.99, 8, 6, 7, 9, 8, 'Bobine 200m', 'Le cordage multifilament Wilson Sensation offre un excellent confort grâce à sa construction en fibres de polyamide.', ' https://click-backend.herokuapp.com/rpm.jpg'),
-( 'cordage', 'Wilson', ' https://click-backend.herokuapp.com/Wilson-logo.webp  ','Revolve', 'Co-polyester', 'Contrôle', '17', 'Noir', 14.99, 9, 8, 9, 7, 6, 'Bobine 200m', 'Le cordage en co-polyester Wilson Revolve offre un excellent contrôle de balle et une grande précision.', ' https://click-backend.herokuapp.com/bobine.jpg  '),
-('cordage', 'Wilson', ' https://click-backend.herokuapp.com/Wilson-logo.webp  ','Natural Gut', 'Boyau naturel', 'Sensation', '16', 'Naturel', 74.99, 9, 7, 8, 10, 5, 'Garniture 12m', 'Le cordage en boyau naturel Wilson Natural Gut offre un toucher exceptionnel et une grande puissance.', ' https://click-backend.herokuapp.com/bobine.jpg  ');
-
-INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-( 'cordage', "Head", ' https://click-backend.herokuapp.com/head-logo.webp ',"Lynx Edge", "Co-polyester", "Contrôle", "1,25mm", "Noir", 159.90, 8, 6, 7, 5, 8, "Bobine de 200m", "Le cordage Head Lynx Edge est conçu pour les joueurs recherchant un maximum de contrôle et de précision dans leurs frappes. Sa composition en co-polyester offre une excellente durée de vie.", ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage', "Head",' https://click-backend.herokuapp.com/head-logo.webp ', "Hawk", "Co-polyester", "Puissance", "1,25mm", "Noir", 159.90, 6, 8, 6, 7, 7, "Bobine de 200m", "Le cordage Head Hawk est conçu pour les joueurs recherchant une excellente puissance et un bon contrôle. Sa composition en co-polyester offre également une bonne durée de vie.", ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage', "Head", ' https://click-backend.herokuapp.com/head-logo.webp',"Velocity MLT", "Multifilament", "Confort", "1,25mm", "Noir", 109.90, 6, 7, 6, 9, 6, "Garniture 12m", "Le cordage Head Velocity MLT est conçu pour les joueurs recherchant un maximum de confort dans leurs frappes. Sa composition en multifilament offre également une bonne puissance et une bonne prise d'effet.",' https://click-backend.herokuapp.com/head.jpg  ' );
-INSERT INTO string ( categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-( 'cordage','Technifibre',' https://click-backend.herokuapp.com/tecnifibre.webp ', 'X-One Biphase', 'Multifilament', 'Puissance', '1.24 mm', 'Naturel', 17.90, 7, 9, 8, 7, 5, 'Bobine 200m', 'Le cordage X-One Biphase de Technifibre est un cordage premium à multifilament.',' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage','Technifibre', ' https://click-backend.herokuapp.com/tecnifibre.webp ', 'Black Code', 'Monofilament', 'Contrôle', '1.18 mm', 'Noir', 14.90, 9, 6, 7, 8, 7, 'Bobine 200m', 'Le cordage Black Code de Technifibre est un cordage monofilament haut de gamme pour les joueurs qui recherchent un excellent contrôle.', ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage','Technifibre', ' https://click-backend.herokuapp.com/tecnifibre.webp ', 'Razor Code', 'Monofilament', 'Prise d\'effet', '1.25 mm', 'Gris', 13.90, 8, 7, 9, 6, 7, 'Garniture 12m', 'Le cordage Razor Code de Technifibre est un cordage monofilament conçu pour offrir une excellente prise d\'effet.', ' https://click-backend.herokuapp.com/bobine.jpg  ');
-INSERT INTO string (categorie, mark, logoMark_url, model,  composition, first_characteristic, gauge, color, price, control, power, spin, comfort, durability, packaging, description_text, image_url)VALUES
-( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp  ', 'Poly Tour Strike', 'Co-polyester', 'Contrôle', '1.20 mm', 'Noir', 16.99, 8, 8, 7, 6, 7, 'Bobine 200m', 'Cordage co-polyester pour un contrôle précis et une bonne durée de vie.', ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp  ','Poly Tour Pro', 'Co-polyester', 'Puissance', '1.25 mm', 'Blanc', 16.99, 7, 9, 6, 7, 6, 'Garniture 12m', 'Cordage co-polyester pour une bonne combinaison de puissance et de contrôle.', ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp  ', 'Poly Tour Spin G', 'Co-polyester', 'Prise effet', '1.25 mm', 'Bleu', 16.99, 8, 7, 9, 7, 6, 'Bobine 200m', 'Cordage co-polyester pour une excellente prise d\'effet et une bonne durée de vie.', ' https://click-backend.herokuapp.com/bobine.jpg  '),
-( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp  ', 'Poly Tour Fire', 'Co-polyester', 'Confort', '1.25 mm', 'Orange', 16.99, 6, 7, 6, 8, 6, 'Garniture 12m', 'Cordage co-polyester pour une bonne combinaison de contrôle et de confort.', ' https://click-backend.herokuapp.com/bobine.jpg  '); 
+( 'cordage','Yonex', ' https://click-backend.herokuapp.com/yonex-logo.webp ','Poly Tour Pro', 'Co-polyester', 'Controle effet', '1.25 mm', 'jaune', 105, 8, 6, 8, 5, 7, 'Bobine 200m', 'Cordage co-polyester pour une bonne combinaison de prise d\'effet et de contrôle.', ' https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp ');
 
 
 
@@ -160,6 +139,12 @@ sort VARCHAR(50),
 description_text VARCHAR(255),
 image_url VARCHAR(255)
 );
+
+
+
+
+
+
 
 INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
 VALUES
