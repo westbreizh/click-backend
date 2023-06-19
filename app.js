@@ -33,7 +33,9 @@ app.use(helmet({
 app.use(express.static('public/images'));
 app.use(express.static('public/logo'));
 
-
+app.get('/', (req, res) => {
+  res.send('Hello, world!');
+});
 
 app.use('/api/user', userRoutes);
 app.use('/api/shop', shopRoutes);
