@@ -108,7 +108,7 @@ packaging                   VARCHAR(25),
 price                       DECIMAL(10,2),
 first_characteristic        VARCHAR(50),
 control_rating              INT,
-power_rating                       INT,
+power_rating                INT,
 spin                        INT,
 comfort                     INT,
 durability_rating           INT,
@@ -122,12 +122,15 @@ description_text            VARCHAR(255)
 
 INSERT INTO string (categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
-('cordage', 'Yonex', 'Poly Tour Pro', 'Co-polyester', 'garniture 12m', 10, 'Controle effet', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex-poly-tour-pro-200m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
+('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'garniture 12m', 10, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex-poly-tour-pro-12m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
 'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle combiné. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
-('cordage', 'Yonex', 'Poly Tour Pro', 'Co-polyester', 'bobine 200m', 105, 'Controle effet', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle.');
-('cordage', 'Yonex', 'Poly Tour Pro', 'Co-polyester', 'bobine 200m', 90, ' effet', 8, 3, 9, 3, 8, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_grand.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle.');
+('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'bobine 200m', 105, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
+'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle.'),
+('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'garniture 12m', 10, 'Prise d\'effet', 9, 3, 9, 9, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_garniture.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
+' n cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. Achetez simplement une garniture et nous vous rembourserons le montant lors de l\'achat de la bobine complète !.'),
+('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'bobine 200m', 89, 'Prise d\'effet', 9, 3, 9, 3, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_grand.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
+' n cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. ');
+
 
 
 
