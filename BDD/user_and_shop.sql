@@ -1,102 +1,5 @@
 
-
-USE click_and_raquette ;
-
-SHOW DATABASES ;
-
- SHOW tables;
-
-DROP TABLE IF EXISTS `player`;
-
-CREATE TABLE
-    `player` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `civilite` varchar(100) DEFAULT NULL,
-        `lastname` varchar(100) DEFAULT NULL,
-        `forename` varchar(100) DEFAULT NULL,
-        `email` varchar(255) NOT NULL,
-        `password` varchar(255) NOT NULL,
-        `telephone` varchar(20) DEFAULT NULL,
-        `address_id` int DEFAULT NULL,
-        `club_id` int DEFAULT NULL,
-        `shop_id` int DEFAULT NULL,
-        `string_id` int DEFAULT NULL,
-        `string_rope` int DEFAULT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `email` (`email`)
-    ) ;
-
-DROP TABLE IF EXISTS `address`;
-
-
-
-CREATE TABLE 
-    `address` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `road` varchar(100) DEFAULT NULL,
-        `city` varchar(100) DEFAULT NULL,
-        `postalCode` varchar(100) DEFAULT NULL,
-        `inHabitant` int NOT NULL,
-        PRIMARY KEY (`id`)
-    ) ENGINE = InnoDB  DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
-
-
-DROP TABLE IF EXISTS `club`;
-
-CREATE TABLE
-    `club` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `name` varchar(100) DEFAULT NULL,
-        `number_player` int NOT NULL ,
-        `road` varchar(100) DEFAULT NULL,
-        `city` varchar(100) DEFAULT NULL,
-        `postalCode` varchar(100) DEFAULT NULL,
-        `email` varchar(255) NOT NULL,
-        `Phone_number` varchar(20) DEFAULT NULL,
-
-        PRIMARY KEY (`id`)
-
-
-    ) ENGINE = InnoDB AUTO_INCREMENT = 0 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
-
-INSERT INTO club ( name, number_player, road,city, postalCode, email, Phone_number  )VALUES
-( 'TC Quimper', 525, '131 boulevard de Créac\'h Gwen', 'Quimper', '29 000','contact@tcquimper.fr', '02 98 90 42 66'   ),
-( 'TC Penmach', 100, 'stade municipal', '29 760', 'Penmach',  '@contact...', '06 49 51 01 59' );
-
-
-
-
- DROP TABLE IF EXISTS `shop`;
-
-CREATE TABLE
-    `shop` (
-        `id` int NOT NULL AUTO_INCREMENT,
-        `name` varchar(100) DEFAULT NULL,
-        `email` varchar(255) NOT NULL,
-        `address_id` int DEFAULT NULL,
-        `password` varchar(255) NOT NULL,
-        PRIMARY KEY (`id`),
-        UNIQUE KEY `email` (`email`)
-    ) ENGINE = InnoDB AUTO_INCREMENT = 11 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
-
-
-
-DROP TABLE IF EXISTS `club_shop`;
-
-
-CREATE TABLE `club_shop` (
-    `club_id` int NOT NULL,
-    `shop_id` int NOT NULL,
-    PRIMARY KEY (`club_id`, `shop_id`),
-    FOREIGN KEY (`club_id`) REFERENCES `club` (`id`),
-    FOREIGN KEY (`shop_id`) REFERENCES `shop` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
-
-
- DROP TABLE IF EXISTS `string`;
+DROP TABLE IF EXISTS `string`;
 
 CREATE TABLE string (
 id INT PRIMARY KEY AUTO_INCREMENT,
@@ -123,13 +26,13 @@ description_text            VARCHAR(255)
 INSERT INTO string (categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
 ('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'garniture 12m', 10, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex-poly-tour-pro-12m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle combiné. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
+'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelenttes prise d\'effets et un très bon contrôle. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
 ('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'bobine 200m', 105, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre une prise d\'effets et un très bon contrôle.'),
+'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelenttes prises d\'effets et un très bon contrôle.'),
 ('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'garniture 12m', 10, 'Prise d\'effet', 9, 3, 9, 9, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_garniture.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-' n cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. Achetez simplement une garniture et nous vous rembourserons le montant lors de l\'achat de la bobine complète !.'),
+' Un cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. Achetez simplement une garniture et nous vous rembourserons le montant lors de l\'achat de la bobine complète !.'),
 ('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'bobine 200m', 89, 'Prise d\'effet', 9, 3, 9, 3, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_grand.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-' n cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. ');
+' Un cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. ');
 
 
 
