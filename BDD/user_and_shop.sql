@@ -10,7 +10,7 @@ packaging           VARCHAR(50),
 sort                VARCHAR(50),
 logoMark_url        VARCHAR(255),
 image_url           VARCHAR(255),
-description_text    VARCHAR(255),
+description_text    VARCHAR(255)
 );
 
 INSERT INTO ball (categorie, mark, model, price, packaging, sort, logoMark_url, image_url, description_text)
