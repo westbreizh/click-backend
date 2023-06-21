@@ -1,3 +1,28 @@
+DROP TABLE IF EXISTS `ball`;
+
+CREATE TABLE ball (
+id INT PRIMARY KEY AUTO_INCREMENT,
+categorie           VARCHAR(50), 
+mark                VARCHAR(50),
+model               VARCHAR(50),
+price               DECIMAL(10,2),
+packaging           VARCHAR(50),
+sort                VARCHAR(50),
+logoMark_url        VARCHAR(255),
+image_url           VARCHAR(255),
+description_text    VARCHAR(255),
+);
+
+INSERT INTO ball (categorie, mark, model, price, packaging, sort, logoMark_url, image_url, description_text)
+VALUES
+('balle', 'Dunlop', 'ATP Championship', 6.50, 'Tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/dunlop-championship.webp' ,
+'La balle Dunlop ATP Championship possède une enveloppe extérieure en Durafelt HD Cloth, un tissu de qualité premium qui offre une frappe consistante et une grande durabilité. '),
+('balle', 'Dunlop', 'Fort all court', 16, ' Bipack de tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/bi-pack-dunlop-fort.webp' ,
+'Ces balles de tennis pressurisées sont adaptées à tous les niveaux de jeu et à toutes les surfaces. Elles sont équipées de la technologie Dunlop HD Core, qui améliore leur résistance sans compromettre leur jouabilité. '),
+('balle', 'Dunlop', 'Fort all court', 9, 'Tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/dunlop-fort.webp' ,
+'Ces balles de tennis pressurisées sont adaptées à tous les niveaux de jeu et à toutes les surfaces. Elles sont équipées de la technologie Dunlop HD Core, qui améliore leur résistance sans compromettre leur jouabilité. ');
+
+
 
 DROP TABLE IF EXISTS `string`;
 
@@ -25,32 +50,24 @@ description_text            VARCHAR(255)
 
 INSERT INTO string (categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
+
 ('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'garniture 12m', 10, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/yonex-poly-tour-pro-12m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelenttes prise d\'effets et un très bon contrôle. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
+'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelentes prise d\'effets et un très bon contrôle. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
+
 ('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'bobine 200m', 105, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', 'https://click-backend.herokuapp.com/bobine-yonex-poly-tour-pro-200m.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelenttes prises d\'effets et un très bon contrôle.'),
+'L\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelentes prises d\'effets et un très bon contrôle.'),
+
 ('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'garniture 12m', 10, 'Prise d\'effet', 9, 3, 9, 9, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_garniture.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
 ' Un cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. Achetez simplement une garniture et nous vous rembourserons le montant lors de l\'achat de la bobine complète !.'),
+
 ('cordage', 'Yonex', 'Poly Tour Spin', 'Monofilament', 'bobine 200m', 89, 'Prise d\'effet', 9, 3, 9, 3, 8, '1.25 mm', 'bleu', 'https://click-backend.herokuapp.com/yonex_poly_tour_spin_grand.webp', 'https://click-backend.herokuapp.com/yonex-logo.webp',
-' Un cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. ');
+' Un cordage rigide orienté contrôle et prise d\'effets grâce à sa forme pentagonale. '),
 
+('cordage', 'Babolat', 'RPM Blast', 'Monofilament', 'garniture 12m', 18, 'Prise d\'effet', 8, 4, 8, 3, 7, '1.25 mm', 'noir', 'https://click-backend.herokuapp.com/cordage-tennis-babolat-rpm-blast-12m.webp', 'https://click-backend.herokuapp.com/logo-babolat.webp',
+'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.'),
 
-
-
- DROP TABLE IF EXISTS `ball`;
-
-CREATE TABLE ball (
-id INT PRIMARY KEY AUTO_INCREMENT,
-categorie VARCHAR(50), 
-mark VARCHAR(50),
-logoMark_url VARCHAR(255),
-model VARCHAR(50),
-price DECIMAL(10,2),
-packaging VARCHAR(50),
-sort VARCHAR(50),
-description_text VARCHAR(255),
-image_url VARCHAR(255)
-);
+('cordage', 'Babolat', 'RPM Blast', 'Monofilament', 'bobine 200m', 18, 'Prise d\'effet', 8, 4, 8, 3, 7, '1.25 mm', 'noir', 'https://click-backend.herokuapp.com/bobine-cordage-tennis-babolat-rpm-blast-200m.webp', 'https://click-backend.herokuapp.com/logo-babolat.webp',
+'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.');
 
 
 
@@ -58,19 +75,13 @@ image_url VARCHAR(255)
 
 
 
-INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
-VALUES
-('balle', 'Dunlop',' https://click-backend.herokuapp.com/dunlop-logo.webp', 'Fort Elite', 3.99, 'Carton de tubes', 'standard', 'Balle de tennis en caoutchouc haute performance', ' https://click-backend.herokuapp.com/dunlop-ball.jpg  '),
-('balle', 'Dunlop',' https://click-backend.herokuapp.com/dunlop-logo.webp', 'Pro Tour', 4.99, 'Tube de balles', 'standard', 'Balle de tennis professionnelle pour les tournois', ' https://click-backend.herokuapp.com/dunlop-ball.jpg ');
-
-INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
-VALUES
-('balle', 'Wilson',' https://click-backend.herokuapp.com/Wilson-logo.webp ', 'US Open', 5.99, 'Tube de balles', 'Balles oranges', 'Balle de tennis officielle de l\'US Open', ' https://click-backend.herokuapp.com/WILSON_BALLES_ORANGE_X3.jpg');
 
 
-INSERT INTO ball (categorie, mark, logoMark_url, model, price, packaging, sort, description_text, image_url)
-VALUES
-('balle', 'Technifibre', ' https://click-backend.herokuapp.com/tecnifibre.webp ', 'Pro Red Code', 6.99, 'Tube de balles', 'standard', 'Balle de tennis de qualité supérieure pour les tournois', ' https://click-backend.herokuapp.com/thballe.jpeg');
+
+
+
+
+
 
 
 
