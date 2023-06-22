@@ -7,34 +7,6 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-// on récupère le produit sélectionné via le id et la catégorie(nom du tableau)
-exports.productSelected = (req, res ) => {
-
-  console.log( "le payload fournit à productSelected est" );   console.log( req.body ) ;
-  // on récupère la categorie et l'd du produit 
-  const productCategorie = req.body.productCategorie;
-  const productId = req.body.productId
-
-  // on recherche le produit dans la bdd
-  db.query(`SELECT * FROM ${productCategorie} WHERE id = ${productId} `, 
-    (error, results) =>{
-      if (error){          
-        res.status(404).json({
-        message: 'erreur avec la base de donnée'
-      })
-      }
-
-      {
-        const productSelected = results
-        return res.status(201).json(results = {
-        productSelected: productSelected,
-        message: 'le produit choisi a été récupéré!'
-        });
-       }
-    } 
-  )
-
-}
 
 
 // retourne l'ensemble  des cordage de manière aléatoire
@@ -285,6 +257,33 @@ exports.accessoriesListFiltered = (req, res) => {
 };
 
 
+// on récupère le produit sélectionné via le id et le nom du tableau
+exports.productSelected = (req, res ) => {
+
+  console.log( "le payload fournit à productSelected est" );   console.log( req.body ) ;
+  // on récupère la categorie et l'd du produit 
+  const productCategorie = req.body.productCategorie;
+  const productId = req.body.productId
+
+  // on recherche le produit dans la bdd
+  db.query(`SELECT * FROM ${productCategorie} WHERE id = ${productId} `, 
+    (error, results) =>{
+      if (error){          
+        res.status(404).json({
+        message: 'erreur avec la base de donnée'
+      })
+      }
+
+      {
+        const productSelected = results
+        return res.status(201).json(results = {
+        productSelected: productSelected,
+        message: 'le produit choisi a été récupéré!'
+        });
+       }
+    } 
+  )
+}
 
 
 

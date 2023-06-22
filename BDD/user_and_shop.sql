@@ -1,3 +1,52 @@
+ DROP TABLE IF EXISTS `accessories`;
+
+CREATE TABLE accessories (
+id INT PRIMARY KEY AUTO_INCREMENT,
+categorie           VARCHAR(50),  
+mark                VARCHAR(50),
+model               VARCHAR(50),
+price               DECIMAL(10,2),
+product             VARCHAR(50),
+logoMark_url        VARCHAR(255),
+image_url           VARCHAR(255),
+description_text    VARCHAR(255)
+);
+
+
+INSERT INTO accessories (categorie, mark, model, price, product, logoMark_url, image_url, description_text) VALUES
+('accessoire', 'Babolat',' My Overgrip 3 unités', 4.50, 'surgrip', 'https://click-backend.herokuapp.com/logo-babolat.webp', 'https://click-backend.herokuapp.com/public/accessorie/3-surgrip-babolat.webp',
+ 'Le grip Babolat my overgrip est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.'),
+
+('accessoire', 'Tourna', 'Original 10 unités ', 19.90, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/10-tourna-grip.webp',
+'Le surgrip Tourna Original est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.'),
+
+('accessoire', 'Tourna', 'Tuff 3 unités', 9.50, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/3-tourna-grip.webp',
+'Le surgrip Tourna Tuff est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.');
+
+
+
+
+
+DROP TABLE IF EXISTS `tariffs`;
+
+CREATE TABLE tariffs (
+id INT PRIMARY KEY AUTO_INCREMENT,
+categorie_service   VARCHAR(50), 
+price               DECIMAL(10,2),
+description_text    VARCHAR(255)
+);
+
+INSERT INTO tariffs (categorie_service, price, description_text)
+VALUES
+('pose cordage', '1O', 'tarif pour un forfait de pose du un cordage'),
+('dépot retrait', '1', 'tarif pour le service de collecte et retrait de la raquette');
+
+
+
+
+
+
+
 DROP TABLE IF EXISTS `ball`;
 
 CREATE TABLE ball (
@@ -17,8 +66,10 @@ INSERT INTO ball (categorie, mark, model, price, packaging, sort, logoMark_url, 
 VALUES
 ('balle', 'Dunlop', 'ATP Championship', 6.50, 'Tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/dunlop-championship.webp' ,
 'La balle Dunlop ATP Championship possède une enveloppe extérieure en Durafelt HD Cloth, un tissu de qualité premium qui offre une frappe consistante et une grande durabilité. '),
+
 ('balle', 'Dunlop', 'Fort all court', 16, ' Bipack de tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/bi-pack-dunlop-fort.webp' ,
 'Ces balles de tennis pressurisées sont adaptées à tous les niveaux de jeu et à toutes les surfaces. Elles sont équipées de la technologie Dunlop HD Core, qui améliore leur résistance sans compromettre leur jouabilité. '),
+
 ('balle', 'Dunlop', 'Fort all court', 9, 'Tube de 4 balles', 'standard', ' https://click-backend.herokuapp.com/dunlop-logo.webp', ' https://click-backend.herokuapp.com/dunlop-fort.webp' ,
 'Ces balles de tennis pressurisées sont adaptées à tous les niveaux de jeu et à toutes les surfaces. Elles sont équipées de la technologie Dunlop HD Core, qui améliore leur résistance sans compromettre leur jouabilité. ');
 
@@ -85,27 +136,3 @@ VALUES
 
 
 
- DROP TABLE IF EXISTS `accessories`;
-
-CREATE TABLE accessories (
-id INT PRIMARY KEY AUTO_INCREMENT,
-categorie VARCHAR(50),  
-mark VARCHAR(50),
-logoMark_url VARCHAR(255),
-model VARCHAR(50),
-price DECIMAL(10,2),
-product VARCHAR(50),
-description_text VARCHAR(255),
-image_url VARCHAR(255)
-);
-
-
-
-
-INSERT INTO accessories (categorie, mark,logoMark_url, model, price, product, description_text, image_url) VALUES
-('accessoire', 'Babolat', 'https://click-backend.herokuapp.com/logo-babolat.webp','Syntec Pro', 7.99, 'grip', 'Le grip Babolat Syntec Pro est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.', 'https://click-backend.herokuapp.com/surgrip.webp'),
-('accessoire','Babolat','https://click-backend.herokuapp.com/logo-babolat.webp', 'VS Original', 12.99, 'anti-vibrateur', 'L\'anti-vibrateur Babolat VS Original est conçu pour offrir une réduction des vibrations et une meilleure stabilité.', 'https://click-backend.herokuapp.com/antivibe2.webp');
-                            https://click-backend.herokuapp.com/antivibe2.webp'
-INSERT INTO accessories (categorie, mark,logoMark_url, model, price, product, description_text, image_url) VALUES
-('accessoire', 'Head',' https://click-backend.herokuapp.com/head-logo.webp', 'Super Comp', 4.99, 'surgrip', 'Le surgrip Head Super Comp est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.', 'https://click-backend.herokuapp.com/surgrip.webp'),
-('accessoire', 'Head', ' https://click-backend.herokuapp.com/head-logo.webp','Smartsorb', 9.99, 'anti-vibrateur', 'L\'anti-vibrateur Head Smartsorb est conçu pour offrir une réduction des vibrations et une meilleure stabilité.', 'https://click-backend.herokuapp.com/antivibrateur.jpg');
