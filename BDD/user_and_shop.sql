@@ -6,14 +6,14 @@ categorie           VARCHAR(50),
 mark                VARCHAR(50),
 model               VARCHAR(50),
 price               DECIMAL(10,2),
-type-product             VARCHAR(50),
+type_product             VARCHAR(50),
 logoMark_url        VARCHAR(255),
 image_url           VARCHAR(255),
 description_text    VARCHAR(255)
 );
 
 
-INSERT INTO accessories (categorie, mark, model, price, type-product, logoMark_url, image_url, description_text) VALUES
+INSERT INTO accessories (categorie, mark, model, price, type_product, logoMark_url, image_url, description_text) VALUES
 ('accessoire', 'Babolat',' My Overgrip 3 unités', 4.50, 'surgrip', 'https://click-backend.herokuapp.com/logo-babolat.webp', 'https://click-backend.herokuapp.com/3-surgrip-babolat.webp',
  'Le grip Babolat my overgrip est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.'),
 
@@ -118,9 +118,13 @@ VALUES
 'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.'),
 
 ('cordage', 'Babolat', 'RPM Blast', 'Monofilament', 'bobine 200m', 18, 'Prise d\'effet', 8, 4, 8, 3, 7, '1.25 mm', 'noir', 'https://click-backend.herokuapp.com/bobine-cordage-tennis-babolat-rpm-blast-200m.webp', 'https://click-backend.herokuapp.com/logo-babolat.webp',
-'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.');
+'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.'),
 
+('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'bobine 200m', 325, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', 'https://click-backend.herokuapp.com/technifibre-biphase-bobine.webp', 'https://click-backend.herokuapp.com/logo-technifibre.webp',
+'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance. '),
 
+('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'garniture 12m', 22, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', 'https://click-backend.herokuapp.com/technifibre-biphase-12m.webp', 'https://click-backend.herokuapp.com/logo-technifibre.webp',
+'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance. ');
 
 
 
