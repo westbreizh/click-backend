@@ -6,21 +6,21 @@ categorie           VARCHAR(50),
 mark                VARCHAR(50),
 model               VARCHAR(50),
 price               DECIMAL(10,2),
-product             VARCHAR(50),
+type-product             VARCHAR(50),
 logoMark_url        VARCHAR(255),
 image_url           VARCHAR(255),
 description_text    VARCHAR(255)
 );
 
 
-INSERT INTO accessories (categorie, mark, model, price, product, logoMark_url, image_url, description_text) VALUES
-('accessoire', 'Babolat',' My Overgrip 3 unités', 4.50, 'surgrip', 'https://click-backend.herokuapp.com/logo-babolat.webp', 'https://click-backend.herokuapp.com/public/accessorie/3-surgrip-babolat.webp',
+INSERT INTO accessories (categorie, mark, model, price, type-product, logoMark_url, image_url, description_text) VALUES
+('accessoire', 'Babolat',' My Overgrip 3 unités', 4.50, 'surgrip', 'https://click-backend.herokuapp.com/logo-babolat.webp', 'https://click-backend.herokuapp.com/3-surgrip-babolat.webp',
  'Le grip Babolat my overgrip est conçu pour offrir une excellente adhérence et une absorption optimale de la transpiration.'),
 
-('accessoire', 'Tourna', 'Original 10 unités ', 19.90, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/10-tourna-grip.webp',
+('accessoire', 'Tourna', 'Original 10 unités ', 19.90, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/10-tourna-surgrip.webp',
 'Le surgrip Tourna Original est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.'),
 
-('accessoire', 'Tourna', 'Tuff 3 unités', 9.50, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/3-tourna-grip.webp',
+('accessoire', 'Tourna', 'Tuff 3 unités', 9.50, 'surgrip',' https://click-backend.herokuapp.com/logo-tourna.webp', 'https://click-backend.herokuapp.com/3-tourna-surgrip.webp',
 'Le surgrip Tourna Tuff est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.');
 
 
