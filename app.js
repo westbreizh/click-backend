@@ -2,16 +2,7 @@ const express = require('express');
 const app = express();
 
 const cors = require('cors');
-// Configurer les options CORS
-const corsOptions = {
-  origin: 'https://click-and-raquette.com', // L'origine autorisée
-  optionsSuccessStatus: 200 // Facultatif: définir le statut de réussite pour les pré-vérifications OPTIONS
-};
-
-// Utiliser le middleware CORS
-app.use(cors(corsOptions));
-
-
+app.use(cors());
 
 //const rateLimit = require("./middleware/rate-limit");
 //const helmet = require('helmet');
@@ -40,6 +31,7 @@ const stripeRoutes = require ('./routes/stripes')
 
 
 app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
