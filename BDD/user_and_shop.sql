@@ -1,4 +1,38 @@
- DROP TABLE IF EXISTS `accessories`;
+DROP TABLE IF EXISTS `player`;
+
+CREATE TABLE `player` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `civilite`      varchar(100) DEFAULT NULL,
+    `lastname`      varchar(100) DEFAULT NULL,
+    `forename`      varchar(100) DEFAULT NULL,
+    `email`         varchar(255) NOT NULL,
+    `password`      varchar(255) NOT NULL,
+    `telephone`     varchar(20) DEFAULT NULL,
+    `string_id`     int DEFAULT NULL,
+    `string_rope`   int DEFAULT NULL,
+    `hub`           varchar(100) DEFAULT NULL,
+    `hubBack`       varchar(100) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `email` (`email`),
+    FOREIGN KEY (`string_id`) REFERENCES `string`(`id`)
+) ;
+
+
+DROP TABLE IF EXISTS `address`;
+
+CREATE TABLE `address` (
+    `id` int NOT NULL AUTO_INCREMENT,
+    `road` varchar(100) DEFAULT NULL,
+    `city` varchar(100) DEFAULT NULL,
+    `postalCode` varchar(100) DEFAULT NULL,
+    `inHabitant_email` int NOT NULL,
+    PRIMARY KEY (`id`),
+    FOREIGN KEY (`inHabitant_email`) REFERENCES `player`(`id`)
+) ;
+
+
+
+DROP TABLE IF EXISTS `accessories`;
 
 CREATE TABLE accessories (
 id INT PRIMARY KEY AUTO_INCREMENT,
