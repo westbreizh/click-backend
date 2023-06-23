@@ -25,7 +25,7 @@ CREATE TABLE `address` (
     `road` varchar(100) DEFAULT NULL,
     `city` varchar(100) DEFAULT NULL,
     `postalCode` varchar(100) DEFAULT NULL,
-    `inHabitant_email` int NOT NULL,
+    `inHabitant` int NOT NULL,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`inHabitant_email`) REFERENCES `player`(`id`)
 ) ;

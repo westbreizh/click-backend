@@ -177,27 +177,45 @@ exports.login = (req, res, next) => {
                   const userInfo = result[0];
 
                   //on essaie de retrouver l'adresse du joueur si elle est renseigné
-
-                  db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, result) => {
+                  db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, 
+                  (err, result) => {
                     if (err) {
                       // Gérer l'erreur de requête ici
                       console.error(err);
                       return;
                     }
-                    
+
+
                     if (Array.isArray(result) && result.length > 0) {
                       const userAddress = result[0];
                       console.log(userAddress);
                       console.log(userInfo);
-                      // Continuer le traitement avec userAddress et userInfo
+                      return res.status(201).json(data = {
+                        userInfo: userInfo,
+                        userAddress: userAddress,
+                        token: token,
+                        message: 'connexion au site réussie !'
+                      });
                     } else {
                       // Aucune adresse trouvée pour cet utilisateur
                       console.log("Aucune adresse trouvée pour cet utilisateur");
-                      // Autres actions à prendre en cas d'absence d'adresse
+                      return res.status(201).json(data = {
+                        userInfo: userInfo,
+                        userAddress: "",
+                        token: token,
+                        message: 'connexion au site réussie sans adresse pour le user !'
+                      });
                     }
-                  });
-                  
 
+
+                    const userAddress = result[0]
+                    console.log(userAddress)
+                    console.log(userInfo)
+
+
+                    //on retourne des datas et le message
+
+                  })
                 }
               )
             };
