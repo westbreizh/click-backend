@@ -13,13 +13,12 @@ const cors = require('cors');
 const app = express();
 
 // Middleware CORS
-app.use(cors({
-  origin: ['https://click-and-raquette.com', 'http://localhost:3000'],
-}));
-
+//app.use(cors({
+ // origin: ['https://click-and-raquette.com', 'http://localhost:3000'],
+//}));
 
 app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin','*');
+  res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   next();
