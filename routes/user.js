@@ -15,7 +15,7 @@ const userCtrl = require('../controllers/user');
 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
-router.post('/registerPreferencePlayer', userCtrl.registerPreferencePlayer);
+//router.post('/registerPreferencePlayer', userCtrl.registerPreferencePlayer);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 
