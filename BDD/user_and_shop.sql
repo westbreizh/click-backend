@@ -27,7 +27,7 @@ CREATE TABLE `address` (
     `postalCode` varchar(100) DEFAULT NULL,
     `inHabitant` int NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`inHabitant_email`) REFERENCES `player`(`id`)
+    FOREIGN KEY (`inHabitant`) REFERENCES `player`(`id`) ON DELETE CASCADE
 ) ;
 
 
