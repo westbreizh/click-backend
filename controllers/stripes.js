@@ -41,39 +41,6 @@ const YOUR_DOMAIN = 'https://click-and-raquette.com/';
     }
   };
 
-
-  exports.createCheckOutSession2 = async (req, res) => {
-    console.log("je rentre dans createCheckOutSession2")
-
-    try {
-      const session = await stripe.checkout.sessions.create({
-        line_items: [
-          {
-            price_data: {
-              currency: 'eur',
-              unit_amount: 17 * 100,
-              product_data: {
-                name: 'Panier',
-              },
-            },
-            quantity: 1,
-          },
-        ],
-        mode: 'payment',
-        success_url: `${YOUR_DOMAIN}?success=true`,
-        cancel_url: `${YOUR_DOMAIN}?canceled=true`,
-        automatic_tax: { enabled: true },
-      });
-  
-
-      console.log(session.url);
-  
-      res.json({ sessionUrl: session.url });
-    } catch (error) {
-      console.error('Une erreur est survenue lors de la création de la session de paiement', error);
-      res.status(500).json({ error: 'Erreur lors de la création de la session de paiement' });
-    }
-  };
   
 
 
