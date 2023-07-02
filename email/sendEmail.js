@@ -1,14 +1,14 @@
 const nodemailer = require("nodemailer");
-const handlebars = require("handlebars");
-const fs = require("fs"); //file system
-const path = require("path");
+const handlebars = require("handlebars"); //utilise des modèles prédéfini en incorporants de variables, dans le format html
+const fs = require("fs"); //file system permet de travailler avec la structure des dichiers dans le système d'exploitation
+const path = require("path"); // idem à fs mais indépendant de l'os
 
 
 const sendEmail = async (email, subject, payload, template) => {
 
   try {
 
-    //creation d'un objet transporteur utilisant SMTP 
+    //creation d'un objet transporteur utilisant SMTP  protocole SMTP (Simple Mail Transfer Protocol) pour envoyer des emails. SMTP est un protocole standard utilisé pour l'envoi d'emails via des serveurs de messagerie.
     const transporter = nodemailer.createTransport({
       //host: process.env.EMAIL_HOST,
       //port: 465,
