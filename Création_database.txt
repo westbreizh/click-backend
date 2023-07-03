@@ -1,0 +1,78 @@
+-- Base de données : `groupomania`
+--
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `users`
+--
+
+CREATE TABLE `users` (
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `username` varchar(40) NOT NULL,
+  `email` varchar(40)  NOT NULL,
+  `password` varchar(100) NOT NULL,
+  `is_admin` varchar(1),
+   PRIMARY KEY (id)
+) ENGINE=InnoDB;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `posts`
+--
+
+CREATE TABLE `posts` (
+  id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  id_user SMALLINT UNSIGNED NOT NULL,
+  titre varchar(40) NOT NULL,
+  date datetime NOT NULL DEFAULT current_timestamp(),
+  texte text NOT NULL,
+  image_url varchar(40),
+  likes smallint,
+  dislikes` smallint,
+  users_liked text,
+  users_disliked text,
+) 
+
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `comments`
+--
+
+DROP TABLE IF EXISTS `comments`;
+CREATE TABLE `comments` (
+  `id` SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id_user` SMALLINT UNSIGNED NOT NULL,
+  `texte` TEXT NOT NULL,
+  `id_post`SMALLINT UNSIGNED,
+  PRIMARY KEY (id)
+) 
+ENGINE=InnoDB;
+
+
+
+
+
+
+
+
+
+
+
+--
+-- Index pour la table `comments`
+--
+ALTER TABLE `comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_userId_comments` (`id_user`),
+  ADD KEY `fk_postId_comments` (`id_post`);
+
+--
+-- Index pour la table `posts`
+--
+ALTER TABLE `posts`
+  ADD KEY `fk_userId_posts` (`id_user`);
+
