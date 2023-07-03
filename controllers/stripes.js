@@ -131,12 +131,12 @@ exports.actionAfterPaiement = async (req, res) => {
           customerName: event.data.object.customer_name,
           amount: event.data.object.amount / 100,
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
-          paymentMethod: event.data.object.payment_method_types[0],
+          paymentMethod: "event.data.object.payment_method_types[0]",
         }, './email/template/confirmationPaiementEmail');
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
         // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
-        return response.sendStatus(500);
+        return res.sendStatus(500);
       }      
 
       // Traiter l'événement de charge réussie
