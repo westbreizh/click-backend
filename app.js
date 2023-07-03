@@ -37,6 +37,7 @@ app.use((req, res, next) => {
   next();
 });
 
+console.log("test")
 
 
 
