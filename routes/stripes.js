@@ -7,8 +7,12 @@ const stripeCtrl = require('../controllers/stripes');
 
 router.post('/create-checkout-session', stripeCtrl.createCheckOutSession);
 router.post('/webhook', async (req, res, next) => {
+    console.log("dans route"+req)
+
     try {
+
       req.rawBody = await getRawBody(req);
+      console.log("dans route"+req.rawBody)
       next();
     } catch (err) {
       next(err);
