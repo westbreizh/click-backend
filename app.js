@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const bodyParser = require('body-parser');
+
 
 const cors = require('cors');
 app.use(cors());
@@ -43,7 +43,7 @@ app.use((req, res, next) => {
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(bodyParser.raw({ type: 'application/json' }));
+
 
 
 app.get('/', (req, res) => {
