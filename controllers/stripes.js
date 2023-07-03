@@ -96,7 +96,7 @@ function saveInvoiceToDatabase(paymentIntent) {
 const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
 
 
-exports.actionAfterPaiement = async (request, res) => {
+exports.actionAfterPaiement = async (request, response) => {
 
   console.log("je rentre dans webhook");
 
@@ -151,7 +151,7 @@ exports.actionAfterPaiement = async (request, res) => {
   }
 
   // Renvoyer une réponse 200 pour accuser réception de l'événement
-  res.sendStatus(200);
+  response.sendStatus(200);
 };
 
 
