@@ -5,6 +5,19 @@ const shopRoutes = require ('./routes/shop')
 const stripeRoutes = require ('./routes/stripes')
 
 
+// Middleware d'analyse JSON pour toutes les routes, à l'exception de la route webhook
+app.use((req, res, next) => {
+  if (req.originalUrl === 'https://click-backend.herokuapp.com/api/stripe/webhook') {
+    console.log("jévite bien le passage de expressjson")
+    next(); // Passe à la prochaine middleware sans analyser le JSON
+  } else {
+    console.log("je passe dans le middleware json")
+
+    express.json()(req, res, next); // Analyse JSON pour toutes les autres routes
+  }
+});
+
+
 // gestion des images, fichier statiques sans codes logiques
 app.use(express.static('public/logo'));
 app.use(express.static('public/string'));
@@ -18,17 +31,7 @@ app.use(express.static('public/accessorie'));
 
 app.use(express.urlencoded({ extended: true }));
 
-// Middleware d'analyse JSON pour toutes les routes, à l'exception de la route webhook
-app.use((req, res, next) => {
-  if (req.originalUrl === 'https://click-backend.herokuapp.com/api/stripe/webhook') {
-    console.log("jévite bien le passage de expressjson")
-    next(); // Passe à la prochaine middleware sans analyser le JSON
-  } else {
-    console.log("je passe dans le middleware json")
-
-    express.json()(req, res, next); // Analyse JSON pour toutes les autres routes
-  }
-});
+X
 
 
 
