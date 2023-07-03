@@ -1,6 +1,7 @@
 const stripe = require('stripe')('sk_test_51NGdYqI8HrVwrRfPKAmQ17TgZh2yWZtGjNNqhHyMXhebWNh03YR5zgGhibzt5oHJM1eRD5UrwRAvhZPNhs48fC9L00UjaCIuJq');
 const YOUR_DOMAIN = 'https://click-and-raquette.com';
 const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
+const bodyParser = require('body-parser');
 
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
