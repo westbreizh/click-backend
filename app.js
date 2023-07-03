@@ -1,6 +1,33 @@
 const express = require('express');
 const app = express();
 
+
+// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
+webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
+
+app.post('/api/stripe/webhook', express.raw({type: 'application/json'}), (req, res) => {
+  const sig = req.headers['stripe-signature'];
+
+  let event;
+
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+  } catch (err) {
+    // On error, log and return the error message
+    console.log(`❌ Error message: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
+
+  // Successfully constructed event
+  console.log('✅ Success:', event.id);
+
+  // Return a response to acknowledge receipt of the event
+  res.json({received: true});
+});
+
+
+
+
 const cors = require('cors');
 app.use(cors());
 
@@ -43,28 +70,6 @@ app.use('/api/shop', shopRoutes);
 app.use('/api/stripe', stripeRoutes);
 
 
-// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
-
-app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
-  const sig = req.headers['stripe-signature'];
-
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-  } catch (err) {
-    // On error, log and return the error message
-    console.log(`❌ Error message: ${err.message}`);
-    return res.status(400).send(`Webhook Error: ${err.message}`);
-  }
-
-  // Successfully constructed event
-  console.log('✅ Success:', event.id);
-
-  // Return a response to acknowledge receipt of the event
-  res.json({received: true});
-});
 
 
 
