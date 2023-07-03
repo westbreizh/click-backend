@@ -125,6 +125,8 @@ exports.actionAfterPaiement = async (req, res) => {
 
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
+      console.log('avant enregistrement dans base de données')
+      saveInvoiceToDatabase(event.data.object);
 
       // Traiter l'événement de charge réussie
       break;
