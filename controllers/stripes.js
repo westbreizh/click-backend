@@ -145,9 +145,6 @@ exports.actionAfterPaiement = async (req, res) => {
   // Renvoyer une réponse 200 pour accuser réception de l'événement
   res.sendStatus(200);
 
-
-  
-
   ;
 }
 

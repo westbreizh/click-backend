@@ -127,12 +127,19 @@ exports.actionAfterPaiement = async (request, response) => {
     case 'payment_intent.succeeded':
       console.log(`intention de paiement réalisé : ${event.type}`);
       saveInvoiceToDatabase(event.data.object);
-      sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
-        customerName: event.data.object.customer_name,
-        amount: event.data.object.amount / 100, // Conversion du montant en euros
-        paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'), // Formatage de la date
-        paymentMethod: event.data.object.payment_method_types[0], // Utilisation de la première méthode de paiement
-      }, './email/template/confirmationPaiementEmail'); // Mettez à jour le chemin vers votre template de confirmation de paiement
+
+      try {
+        await sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+          customerName: event.data.object.customer_name,
+          amount: event.data.object.amount / 100,
+          paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
+          paymentMethod: event.data.object.payment_method_types[0],
+        }, './email/template/confirmationPaiementEmail');
+      } catch (error) {
+        console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+        // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
+        return response.sendStatus(500);
+      }      
 
       break;
 
