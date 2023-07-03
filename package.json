@@ -35,6 +35,7 @@
     "nodemailer": "^6.9.1",
     "nodemon": "^2.0.22",
     "password-validator": "^5.3.0",
+    "raw-body": "^2.5.2",
     "stripe": "^12.9.0"
   },
   "repository": {
