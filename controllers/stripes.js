@@ -93,8 +93,9 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-const endpointSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
-
+const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
+// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
+webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 
 exports.actionAfterPaiement = async (request, response) => {
 
