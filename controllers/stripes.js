@@ -102,7 +102,7 @@ exports.actionAfterPaiement = async (req, res) => {
   console.log("je rentre dans webhook");
 
 
-  const payload = req.rawBody.toString();
+  const payload = req.toString();
   console.log("type of payload"+ typeof(payload))
   console.log("payload"+payload)
   let event;
