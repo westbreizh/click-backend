@@ -125,8 +125,16 @@ exports.actionAfterPaiement = async (req, res) => {
 
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
-      console.log('avant enregistrement dans base de données')
+
       saveInvoiceToDatabase(event.data.object);
+
+      sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+        customerName: event.data.object.customer_name,
+        amount: event.data.object.amount / 100, // Conversion du montant en euros
+        paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'), // Formatage de la date
+        paymentMethod: event.data.object.payment_method_types[0], // Utilisation de la première méthode de paiement
+      }, './email/template/confirmationPaiementEmail'); // Mettez à jour le chemin vers votre template de confirmation de paiement
+
 
       // Traiter l'événement de charge réussie
       break;
