@@ -104,7 +104,7 @@ exports.actionAfterPaiement = async (req, res) => {
 
   try {
     // Construction de l'événement à partir de la demande et de la signature en utilisant l'endpoint secret
-    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
   } catch (err) {
     // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
     res.status(400).send(`Webhook Error: ${err.message}`);
