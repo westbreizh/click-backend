@@ -96,54 +96,53 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 exports.actionAfterPaiement = async (req, res) => {
-  const sig = req.headers['stripe-signature'];
-  console.log("Je rentre dans le webhook");
+
+  const sig = request.headers['stripe-signature'];
+  console.log("je rentre dans webhook");
 
   let event;
-  let body = '';
 
-  // Lire le corps de la requête en tant que Buffer
-  req.on('data', (chunk) => {
-    body += chunk;
-  });
+  try {
+    // Construction de l'événement à partir de la demande et de la signature en utilisant l'endpoint secret
+    event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
+  } catch (err) {
+    // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
+    response.status(400).send(`Webhook Error: ${err.message}`);
+    return;
+  }
 
-  req.on('end', () => {
-    try {
-      // Construction de l'événement à partir du corps de la requête et de la signature en utilisant l'endpoint secret
-      event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
+  // Traitement de l'événement en fonction de son type
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      console.log(`intention de paiement réalisé : ${event.type}`);
+      saveInvoiceToDatabase(event.data.object);
+      sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+        customerName: event.data.object.customer_name,
+        amount: event.data.object.amount / 100, // Conversion du montant en euros
+        paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'), // Formatage de la date
+        paymentMethod: event.data.object.payment_method_types[0], // Utilisation de la première méthode de paiement
+      }, './email/template/confirmationPaiementEmail'); // Mettez à jour le chemin vers votre template de confirmation de paiement
 
-      // Traitement de l'événement en fonction de son type
-      switch (event.type) {
-        case 'payment_intent.succeeded':
-          console.log(`Intention de paiement réalisée : ${event.type}`);
-          saveInvoiceToDatabase(event.data.object);
-          sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
-            customerName: event.data.object.customer_name,
-            amount: event.data.object.amount / 100, // Conversion du montant en euros
-            paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'), // Formatage de la date
-            paymentMethod: event.data.object.payment_method_types[0], // Utilisation de la première méthode de paiement
-          }, './email/template/confirmationPaiementEmail'); // Chemin relatif vers le modèle de courrier électronique
-          break;
-        case 'charge.succeeded':
-          console.log(`Charge, paiement réalisé avec succès : ${event.type}`);
-          // Traiter l'événement de charge réussie
-          break;
-        case 'payment_intent.created':
-          console.log(`Intention de paiement créée : ${event.type}`);
-          // Traiter l'événement de création d'un nouvel intent de paiement
-          break;
-        // Ajouter d'autres cas pour les types d'événements supplémentaires que vous souhaitez traiter
-        default:
-          console.log(`Type d'événement non géré : ${event.type}`);
-      }
+      break;
+      break;
+    case 'charge.succeeded':
+      console.log(`charge, paiement réalisé avec succes : ${event.type}`);
 
-      // Renvoyer une réponse 200 pour accuser réception de l'événement
-      res.send();
-    } catch (err) {
-      res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-  });
+      // Traiter l'événement de charge réussie
+      break;
+    case 'payment_intent.created':
+      // Traiter l'événement de création d'un nouvel intent de paiement
+      console.log(`intention de paiement crée : ${event.type}`);
+      break;
+    // Ajouter d'autres cas pour les types d'événements supplémentaires que vous souhaitez traiter
+    default:
+      console.log(`Type d'événement non géré : ${event.type}`);
+  }
+
+  // Renvoyer une réponse 200 pour accuser réception de l'événement
+  response.send();
 };
+
 
 
 
