@@ -101,7 +101,6 @@ webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 
 exports.actionAfterPaiement = async (req, res) => {
 
-
     const sig = req.headers['stripe-signature'];
   
     let event;
@@ -125,10 +124,20 @@ exports.actionAfterPaiement = async (req, res) => {
 
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
-      console.log('avant enregistrement dans base de données')
       saveInvoiceToDatabase(event.data.object);
 
-      
+      try {
+        await sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+          customerName: event.data.object.customer_name,
+          amount: event.data.object.amount / 100,
+          paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
+          paymentMethod: event.data.object.payment_method_types[0],
+        }, './email/template/confirmationPaiementEmail');
+      } catch (error) {
+        console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+        // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
+        return response.sendStatus(500);
+      }      
 
       // Traiter l'événement de charge réussie
       break;
