@@ -2,15 +2,7 @@ const express = require('express');
 const app = express();
 
 
-app.use((req, res, next) => {
-  if (req.path === '/api/stripe/webhook') {
-    console.log("J'évite bien le passage de express.json");
-    next(); // Passe à la prochaine middleware sans analyser le JSON
-  } else {
-    console.log("Je passe dans le middleware json");
-    express.json()(req, res, next); // Analyse JSON pour toutes les autres routes
-  }
-});
+
 
 //const rateLimit = require("./middleware/rate-limit");
 //const helmet = require('helmet');
