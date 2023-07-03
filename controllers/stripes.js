@@ -93,7 +93,7 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
+const endpointSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 
 
 exports.actionAfterPaiement = async (request, response) => {
@@ -101,7 +101,7 @@ exports.actionAfterPaiement = async (request, response) => {
   console.log("je rentre dans webhook");
 
 
-  console.log("req"+request)
+
 
   let event = request.body;
   // Only verify the event if you have an endpoint secret defined.
@@ -136,7 +136,7 @@ exports.actionAfterPaiement = async (request, response) => {
       }, './email/template/confirmationPaiementEmail'); // Mettez à jour le chemin vers votre template de confirmation de paiement
 
       break;
-      break;
+
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
 
