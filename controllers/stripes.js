@@ -109,9 +109,10 @@ exports.actionAfterPaiement = async (request, response) => {
   if (endpointSecret) {
     // Get the signature sent by Stripe
     const signature = request.headers['stripe-signature'];
-    console.log(signature)
+    console.log("signature" +signature)
     try {
       event = stripe.webhooks.constructEvent(
+        console.log("request.body" +request.body),
         request.body,
         signature,
         endpointSecret
