@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const stripe = require('stripe')('sk_test_51NGdYqI8HrVwrRfPKAmQ17TgZh2yWZtGjNNqhHyMXhebWNh03YR5zgGhibzt5oHJM1eRD5UrwRAvhZPNhs48fC9L00UjaCIuJq');
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
