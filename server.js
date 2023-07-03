@@ -3,8 +3,9 @@ const express = require('express');
 const stripe = require('stripe')('sk_test_...');
 const app = express();
 const db = require("./BDD/database-connect"); // Fichier pour se connecter à la base de données
+const cors = require('cors');
 
-
+app.use(cors());
 
 // Middleware pour autoriser les requêtes depuis n'importe quelle origine
 app.use((req, res, next) => {
@@ -26,7 +27,8 @@ const normalizePort = val => {
   return false;
 };
 
-
+// Route de test
+app.get('/cool', (req, res) => res.send(cool()));
 
 const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
@@ -62,7 +64,7 @@ server.on('listening', () => {
 
 server.listen(port);
 
-
+const sendEmail = require('./email/sendEmail');
 
 
 
