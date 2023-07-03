@@ -103,7 +103,8 @@ exports.actionAfterPaiement = async (req, res) => {
 
 
   const payload = req.body; // Assurez-vous que req.rawBody contient le corps brut de la requête
-  console.log(payload)
+  console.log("type of payload"+ typeof(payload))
+  console.log("payload"+payload)
   let event;
 
   try {
