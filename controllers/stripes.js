@@ -97,7 +97,7 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 exports.actionAfterPaiement = async (req, res) => {
 
-  const sig = request.headers['stripe-signature'];
+  const sig = req.headers['stripe-signature'];
   console.log("je rentre dans webhook");
 
   let event;
