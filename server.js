@@ -5,7 +5,7 @@
 const http = require('http'); // Import du package http (https requiert un certificat SSL à obtenir avec un nom de domaine)
 const app = require('./app');
 const express = require('express');
-
+const stripe = require('stripe')('sk_test_...');
 //La fonction normalizePort renvoie un port valide (numéro ou chaîne)
 //Cela configure le port de connection en fonction de l'environnement
 const normalizePort = val => {
