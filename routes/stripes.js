@@ -6,7 +6,7 @@ const stripeCtrl = require('../controllers/stripes');
 
 
 router.post('/create-checkout-session', stripeCtrl.createCheckOutSession);
-router.post('/webhook1', async (req, res, next) => {
+router.post('/webhook', async (req, res, next) => {
     console.log("dans route"+req)
 
     try {
