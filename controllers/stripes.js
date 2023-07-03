@@ -116,9 +116,34 @@ exports.actionAfterPaiement = async (req, res) => {
   
     // Successfully constructed event
     console.log('✅ Success:', event.id);
+
+  // Traitement de l'événement en fonction de son type
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      console.log(`intention de paiement réalisé : ${event.type}`);
+      break;
+
+    case 'charge.succeeded':
+      console.log(`charge, paiement réalisé avec succes : ${event.type}`);
+
+      // Traiter l'événement de charge réussie
+      break;
+
+    case 'payment_intent.created':
+      // Traiter l'événement de création d'un nouvel intent de paiement
+      console.log(`intention de paiement crée : ${event.type}`);
+      break;
+
+    default:
+      console.log(`Type d'événement non géré : ${event.type}`);
+  }
+
+  // Renvoyer une réponse 200 pour accuser réception de l'événement
+  res.sendStatus(200);
+
+
   
-    // Return a response to acknowledge receipt of the event
-    res.json({received: true});
+
   ;
 }
 
