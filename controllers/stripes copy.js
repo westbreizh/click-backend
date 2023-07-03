@@ -95,32 +95,66 @@ function saveInvoiceToDatabase(paymentIntent) {
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
 //const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-//endpointSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
-// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
+endpointSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 
-exports.actionAfterPaiement = async (req, res) => {
+exports.actionAfterPaiement = async (request, response) => {
+
+  console.log("je rentre dans webhook");
 
 
-    const sig = req.headers['stripe-signature'];
-  
-    let event;
-  
+  let event = request.body;
+  // Only verify the event if you have an endpoint secret defined.
+  // Otherwise use the basic event deserialized with JSON.parse
+  if (endpointSecret) {
+    // Get the signature sent by Stripe
+    const signature = request.headers['stripe-signature'];
+    console.log("signature" +signature)
     try {
-      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+      event = stripe.webhooks.constructEvent(
+        console.log("request.body" +request.body),
+        request.body,
+        signature,
+        endpointSecret
+      );
     } catch (err) {
-      // On error, log and return the error message
-      console.log(`❌ Error message: ${err.message}`);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
+      console.log(`⚠️  Webhook signature verification failed.`, err.message);
+      return response.sendStatus(400);
     }
-  
-    // Successfully constructed event
-    console.log('✅ Success:', event.id);
-  
-    // Return a response to acknowledge receipt of the event
-    res.json({received: true});
-  ;
-}
+  }
+
+  // Traitement de l'événement en fonction de son type
+  switch (event.type) {
+    case 'payment_intent.succeeded':
+      console.log(`intention de paiement réalisé : ${event.type}`);
+      saveInvoiceToDatabase(event.data.object);
+      sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+        customerName: event.data.object.customer_name,
+        amount: event.data.object.amount / 100, // Conversion du montant en euros
+        paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'), // Formatage de la date
+        paymentMethod: event.data.object.payment_method_types[0], // Utilisation de la première méthode de paiement
+      }, './email/template/confirmationPaiementEmail'); // Mettez à jour le chemin vers votre template de confirmation de paiement
+
+      break;
+
+    case 'charge.succeeded':
+      console.log(`charge, paiement réalisé avec succes : ${event.type}`);
+
+      // Traiter l'événement de charge réussie
+      break;
+    case 'payment_intent.created':
+      // Traiter l'événement de création d'un nouvel intent de paiement
+      console.log(`intention de paiement crée : ${event.type}`);
+      break;
+    // Ajouter d'autres cas pour les types d'événements supplémentaires que vous souhaitez traiter
+    default:
+      console.log(`Type d'événement non géré : ${event.type}`);
+  }
+
+  // Renvoyer une réponse 200 pour accuser réception de l'événement
+  response.sendStatus(200);
+};
+
+
 
 
 
