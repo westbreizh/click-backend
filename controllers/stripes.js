@@ -100,7 +100,7 @@ exports.actionAfterPaiement = async (req, res) => {
 
   const sig = req.headers['stripe-signature'];
   console.log("je rentre dans webhook");
-  
+  console.log(req)
   const payload = req.rawBody; // Assurez-vous que req.rawBody contient le corps brut de la requête
   console.log(payload)
   let event;
