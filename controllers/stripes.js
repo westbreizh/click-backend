@@ -97,19 +97,22 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 exports.actionAfterPaiement = async (req, res) => {
-
+  console.log( "reqrowbody"+req.rawBody);
   const sig = req.headers['stripe-signature'];
   console.log("je rentre dans webhook");
 
 
   const payload = req.toString();
-  console.log("type of payload"+ typeof(payload))
-  console.log("payload"+payload)
+
+  const rawBody = req.rawBody; // Obtenez le corps brut de la requête
+  console.log("type rawbody"+ typeof(rawBody))
+  console.log("rawbody"+rawBody)
+
   let event;
 
   try {
     // Construction de l'événement à partir de la demande et de la signature en utilisant l'endpoint secret
-    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
   } catch (err) {
     // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
     res.status(400).send(`Webhook Error: ${err.message}`);
@@ -145,7 +148,7 @@ exports.actionAfterPaiement = async (req, res) => {
   }
 
   // Renvoyer une réponse 200 pour accuser réception de l'événement
-  response.send();
+  res.sendStatus(200);
 };
 
 
