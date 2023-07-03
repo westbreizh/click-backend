@@ -4,7 +4,6 @@ const app = express();
 const db = require("./BDD/database-connect"); // Fichier pour se connecter à la base de données
 
 
-app.use(cors());
 
 // Middleware pour autoriser les requêtes depuis n'importe quelle origine
 app.use((req, res, next) => {
