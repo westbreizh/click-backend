@@ -99,12 +99,14 @@ exports.actionAfterPaiement = async (req, res) => {
 
   const sig = req.headers['stripe-signature'];
   console.log("je rentre dans webhook");
+  // Convertir le payload en chaîne JSON
+  const payload = JSON.stringify(req.body);
 
   let event;
 
   try {
     // Construction de l'événement à partir de la demande et de la signature en utilisant l'endpoint secret
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    event = stripe.webhooks.constructEvent(payload, sig, endpointSecret);
   } catch (err) {
     // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
     res.status(400).send(`Webhook Error: ${err.message}`);
