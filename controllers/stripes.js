@@ -132,7 +132,7 @@ exports.actionAfterPaiement = async (req, res) => {
           amount: event.data.object.amount / 100,
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
           paymentMethod: "event.data.object.payment_method_types[0]",
-        }, './email/template/confirmationPaiementEmail');
+        }, 'email/template/confirmationPaiementEmail.handlebars');
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
         // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
