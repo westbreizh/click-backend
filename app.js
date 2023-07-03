@@ -2,19 +2,10 @@ const express = require('express');
 const app = express();
 
 
-const cors = require('cors');
-app.use(cors());
+//app.use(express.urlencoded({ extended: true }));
+//app.use(express.json());
 
-//const rateLimit = require("./middleware/rate-limit");
-//const helmet = require('helmet');
-//app.use(helmet({
-//  crossOriginResourcePolicy: false,
-//}));
-// Middleware CORS
-//app.use(cors({
- // origin: ['https://click-and-raquette.com', 'http://localhost:3000'],
-//}));
-//const path = require('path');
+
 
 
 // gestion des images, fichier statiques sans codes logiques
@@ -41,8 +32,6 @@ app.use((req, res, next) => {
 
 
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
 
 
 
@@ -56,3 +45,18 @@ app.use('/api/stripe', stripeRoutes);
 
 
 module.exports = app;
+
+
+
+
+
+//const rateLimit = require("./middleware/rate-limit");
+//const helmet = require('helmet');
+//app.use(helmet({
+//  crossOriginResourcePolicy: false,
+//}));
+// Middleware CORS
+//app.use(cors({
+ // origin: ['https://click-and-raquette.com', 'http://localhost:3000'],
+//}));
+//const path = require('path');
