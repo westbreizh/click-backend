@@ -3,12 +3,15 @@ const app = express();
 
 
 app.use(express.urlencoded({ extended: true }));
+
 // Middleware d'analyse JSON pour toutes les routes, à l'exception de la route webhook
 app.use((req, res, next) => {
   if (req.originalUrl === 'https://click-backend.herokuapp.com/api/stripe/webhook') {
     console.log("jévite bien le passage de expressjson")
     next(); // Passe à la prochaine middleware sans analyser le JSON
   } else {
+    console.log("je passe dans le middleware json")
+
     express.json()(req, res, next); // Analyse JSON pour toutes les autres routes
   }
 });
