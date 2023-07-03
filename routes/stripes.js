@@ -7,6 +7,6 @@ const stripeCtrl = require('../controllers/stripes');
 router.use(bodyParser.raw({ type: 'application/json' }));
 
 router.post('/create-checkout-session', stripeCtrl.createCheckOutSession);
-router.post('/webhook', stripeCtrl.actionAfterPaiement);
+router.post('/webhook', express.raw({type: 'application/json'}), stripeCtrl.actionAfterPaiement);
 
 module.exports = router;

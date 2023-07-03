@@ -1,7 +1,7 @@
 const stripe = require('stripe')('sk_test_51NGdYqI8HrVwrRfPKAmQ17TgZh2yWZtGjNNqhHyMXhebWNh03YR5zgGhibzt5oHJM1eRD5UrwRAvhZPNhs48fC9L00UjaCIuJq');
 const YOUR_DOMAIN = 'https://click-and-raquette.com';
-const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
-const bodyParser = require('body-parser');
+
+
 
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
@@ -93,31 +93,33 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
+const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
 
 
+exports.actionAfterPaiement = async (request, res) => {
 
-exports.actionAfterPaiement = async (req, res) => {
-  console.log("req"+req)
-  console.log( "reqrowbody"+req.rawBody);
-  const sig = req.headers['stripe-signature'];
   console.log("je rentre dans webhook");
 
 
-  const payload = req.toString();
+  console.log("req"+request)
 
-  const rawBody = req.rawBody; // Obtenez le corps brut de la requête
-  console.log("type rawbody"+ typeof(rawBody))
-  console.log("rawbody"+rawBody)
-
-  let event;
-
-  try {
-    // Construction de l'événement à partir de la demande et de la signature en utilisant l'endpoint secret
-    event = stripe.webhooks.constructEvent(rawBody, sig, endpointSecret);
-  } catch (err) {
-    // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
-    res.status(400).send(`Webhook Error: ${err.message}`);
-    return;
+  let event = request.body;
+  // Only verify the event if you have an endpoint secret defined.
+  // Otherwise use the basic event deserialized with JSON.parse
+  if (endpointSecret) {
+    // Get the signature sent by Stripe
+    const signature = request.headers['stripe-signature'];
+    console.log(signature)
+    try {
+      event = stripe.webhooks.constructEvent(
+        request.body,
+        signature,
+        endpointSecret
+      );
+    } catch (err) {
+      console.log(`⚠️  Webhook signature verification failed.`, err.message);
+      return response.sendStatus(400);
+    }
   }
 
   // Traitement de l'événement en fonction de son type
