@@ -107,7 +107,7 @@ exports.actionAfterPaiement = async (req, res) => {
     event = stripe.webhooks.constructEvent(request.body, sig, endpointSecret);
   } catch (err) {
     // En cas d'erreur lors de la construction de l'événement, renvoyer une réponse d'erreur 400
-    response.status(400).send(`Webhook Error: ${err.message}`);
+    res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
 
