@@ -1,16 +1,17 @@
 const express = require('express');
 const router = express.Router();
-
 const passwordSchema = require("../middleware/passwordValidate");
 const rateLimit = require("../middleware/rate-limit");
 const auth = require('../middleware/auth'); 
-
 const userCtrl = require('../controllers/user');
 
 //router.post('/signup', passwordSchema, userCtrl.signup);
 //router.post('/login',rateLimit, passwordValidate, userCtrl.login);  
 
 //router.post('/changePassword',auth, userCtrl.changePassword);
+
+// Middleware d'analyse JSON pour toutes les routes du routeur
+router.use(express.json());
 
 
 router.post('/signup', userCtrl.signup);
