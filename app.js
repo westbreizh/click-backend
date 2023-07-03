@@ -51,7 +51,6 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRoutes);
 app.use('/api/shop', shopRoutes);
-app.use('/api/club', clubRoutes);
 app.use('/api/stripe', stripeRoutes);
 
 
