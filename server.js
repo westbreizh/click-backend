@@ -1,9 +1,20 @@
-// creation du serveur qui accuille notre backend constuit via le framewrok express
-// configuration du port de notre ordinateur qui va ecouter les futurs requêtes clients
-// et mise sur ecoute du serveur
+const http = require('http');
+const express = require('express');
+const stripe = require('stripe')('sk_test_...');
+const app = express();
+// fichier pour se connecter à notre base de donnée
+const db = require("./BDD/database-connect")
 
-const http = require('http'); // Import du package http (https requiert un certificat SSL à obtenir avec un nom de domaine)
-const app = require('./app');
+
+const cors = require('cors');
+app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
+
 
 
 //La fonction normalizePort renvoie un port valide (numéro ou chaîne)
@@ -20,17 +31,9 @@ const normalizePort = val => {
   return false;
 };
 
-
-
-
-
-
 app.get('/cool', (req, res) => res.send(cool()))
 
-
-
-
-const port = normalizePort(process.env.PORT || '5001');
+const port = normalizePort(process.env.PORT || '3001');
 app.set('port', port);
 
 const errorHandler = error => {
@@ -53,9 +56,9 @@ const errorHandler = error => {
   }
 };
 
-//fonction "createserver" permettant de créer un serveur 
-//(prend "app" en argument, notre application crée via le module le framework  express)
 
+//fonction "createserver" permettant de créer un serveur 
+//(prend "app" en argument, notre application crée via le module le framework express)
 const server = http.createServer(app);
 
 server.on('error', errorHandler);
@@ -71,12 +74,6 @@ server.listen(port);
 
 
 
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
 
 
 

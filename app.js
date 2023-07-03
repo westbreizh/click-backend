@@ -1,59 +1,16 @@
 const express = require('express');
 const app = express();
-const userRoutes = require('./routes/user');
-const shopRoutes = require ('./routes/shop')
-const stripeRoutes = require ('./routes/stripes')
 
 
-// Middleware d'analyse JSON pour toutes les routes, à l'exception de la route webhook
 app.use((req, res, next) => {
-  if (req.originalUrl === 'https://click-backend.herokuapp.com/api/stripe/webhook') {
-    console.log("jévite bien le passage de expressjson")
+  if (req.path === '/api/stripe/webhook') {
+    console.log("J'évite bien le passage de express.json");
     next(); // Passe à la prochaine middleware sans analyser le JSON
   } else {
-    console.log("je passe dans le middleware json")
-
+    console.log("Je passe dans le middleware json");
     express.json()(req, res, next); // Analyse JSON pour toutes les autres routes
   }
 });
-
-
-// gestion des images, fichier statiques sans codes logiques
-app.use(express.static('public/logo'));
-app.use(express.static('public/string'));
-app.use(express.static('public/ball'));
-app.use(express.static('public/accessorie'));
-
-
-
-
-
-
-app.use(express.urlencoded({ extended: true }));
-
-X
-
-
-
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-
-
-
-app.use('/api/user', userRoutes);
-app.use('/api/shop', shopRoutes);
-app.use('/api/stripe', stripeRoutes);
-
-
-module.exports = app;
-
-
-
-
 
 //const rateLimit = require("./middleware/rate-limit");
 //const helmet = require('helmet');
@@ -67,6 +24,37 @@ module.exports = app;
 //const path = require('path');
 
 
+// gestion des images, fichier statiques sans codes logiques
+app.use(express.static('public/logo'));
+app.use(express.static('public/string'));
+app.use(express.static('public/ball'));
+app.use(express.static('public/accessorie'));
+
+
+// importe le chemin pour les routes
+const userRoutes = require('./routes/user');
+const shopRoutes = require ('./routes/shop')
+const stripeRoutes = require ('./routes/stripes')
+
+
+
+
+
+
+
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+
+
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
+
+app.use('/api/user', userRoutes);
+app.use('/api/shop', shopRoutes);
+app.use('/api/stripe', stripeRoutes);
+
+
+module.exports = app;
