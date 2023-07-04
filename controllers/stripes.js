@@ -14,7 +14,7 @@ const db = require("../BDD/database-connect")
 exports.createCheckOutSession = async (req, res) => {
   console.log("je rentre dans stripe backend");
   //console.log(req.body);
-  console.log("req.body.datas"+req.body.datas);
+
   console.log("req.body.userInfo"+req.body.datas.userInfo);
   try {
 
@@ -25,13 +25,19 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPrice = 10;
     const unitAmount = totalPrice * 100;
 
-    const articleList = req.body.datas.articleList
-    const hub = req.body.datas.hubChoice
-    const hubBack = req.body.datas.hubBackChoice
+
+
+    const datas = req.body.datas
+    console.log("req.body.datas"+datas);
+    const articleList = datas.articleList
+    console.log("articleList"+articleList);
+    const hub = datas.hubChoice
+    console.log("hub"+hub);
+    const hubBack = datas.hubBackChoice
     //const email = req.body.datas.userInfo.email;
     //const forename = req.body.datas.userInfo.forename
 
-    console.log(articleList)
+
 
 
 
