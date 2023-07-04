@@ -24,9 +24,14 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPrice = 10;
     const unitAmount = totalPrice * 100;
 
-    const articleList = req.body.articleList
-    console.log(articleList)
+    const articleList = req.body.datas.articleList
+    const hub = req.body.datas.hubChoice
+    const hubBack = req.body.datas.hubBackChoice
+    const email = req.body.datas.userInfo.email
+    const name = req.body.datas.userInfo.name
 
+    console.log(articleList)
+    console.log(name)
 
 
     const session = await stripe.checkout.sessions.create({
