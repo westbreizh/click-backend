@@ -20,9 +20,9 @@ exports.createCheckOutSession = async (req, res) => {
 
     //const totalPriceString = a calculer avec une fonction backend
     //const totalPrice = Number(totalPriceString.replace(",", "."));
-    //const unitAmount = totalPrice * 100;
-    const totalPrice = 10;
 
+    const totalPrice = 10;
+    const unitAmount = totalPrice * 100;
 
     const articleList = req.body.articleList
     console.log(articleList)
