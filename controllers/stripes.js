@@ -13,22 +13,20 @@ const db = require("../BDD/database-connect")
 // fonction d'une session stripe 
 exports.createCheckOutSession = async (req, res) => {
   console.log("je rentre dans stripe backend");
+  console.log(req.body);
 
   try {
 
-    const totalPriceString = req.body.totalPrice;
-    const totalPrice = Number(totalPriceString.replace(",", "."));
-    const unitAmount = totalPrice * 100;
 
-    const articleList = JSON.parse(req.body.articleList).map(article => ({
-      id: article.id,
-      categorie: article.categorie,
-      price: article.price,
-      quantity: article.quantity
-    }));
+    //const totalPriceString = a calculer avec une fonction backend
+    //const totalPrice = Number(totalPriceString.replace(",", "."));
+    //const unitAmount = totalPrice * 100;
+    const totalPrice = 10;
 
-    console.log(req.body.articleList)
+
+    const articleList = req.body.articleList
     console.log(articleList)
+
 
 
     const session = await stripe.checkout.sessions.create({
@@ -50,7 +48,6 @@ exports.createCheckOutSession = async (req, res) => {
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
       metadata: {
-        articleList: JSON.stringify(articleList),
         totalPrice: totalPrice.toFixed(2),
       },
 
