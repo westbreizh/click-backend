@@ -128,10 +128,10 @@ exports.actionAfterPaiement = async (req, res) => {
 
       try {
         await sendEmail(event.data.object.billing_details.email, 'Confirmation de paiement', {
-          customerName: event.data.object.customer_name,
-          amount: event.data.object.amount / 100,
+          customerName: event.data.object.billing_details.name,
+          amount: (event.data.object.amount / 100).toFixed(2),
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
-          paymentMethod: "event.data.object.payment_method_types[0]",
+          paymentMethod: event.data.object.payment_method,
         }, 'email/template/confirmationPaiementEmail.handlebars');
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
@@ -141,6 +141,7 @@ exports.actionAfterPaiement = async (req, res) => {
 
       // Traiter l'événement de charge réussie
       break;
+
 
     case 'payment_intent.created':
       // Traiter l'événement de création d'un nouvel intent de paiement
