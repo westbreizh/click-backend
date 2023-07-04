@@ -27,7 +27,7 @@ exports.createCheckOutSession = async (req, res) => {
 
 
 
-    const datas = req.body.datas
+    const datas = JSON.parse(req.body.datas);
     console.log("req.body.datas"+datas);
     const articleList = datas.articleList
     console.log("articleList"+articleList);
