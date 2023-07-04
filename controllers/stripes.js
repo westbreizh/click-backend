@@ -127,7 +127,7 @@ exports.actionAfterPaiement = async (req, res) => {
       saveInvoiceToDatabase(event.data.object);
 
       try {
-        await sendEmail(event.data.object.customer_email, 'Confirmation de paiement', {
+        await sendEmail(event.data.object.billing_details.email, 'Confirmation de paiement', {
           customerName: event.data.object.customer_name,
           amount: event.data.object.amount / 100,
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
