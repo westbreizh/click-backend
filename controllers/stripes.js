@@ -13,7 +13,7 @@ const db = require("../BDD/database-connect")
 // fonction d'une session stripe 
 exports.createCheckOutSession = async (req, res) => {
   console.log("je rentre dans stripe backend");
-  console.log(req.body);
+  //console.log(req.body);
 
   try {
 
@@ -28,10 +28,10 @@ exports.createCheckOutSession = async (req, res) => {
     const hub = req.body.datas.hubChoice
     const hubBack = req.body.datas.hubBackChoice
     const email = req.body.datas.userInfo.email
-    const name = req.body.datas.userInfo.name
+    const forename = req.body.datas.userInfo.forename
 
     console.log(articleList)
-    console.log(name)
+    console.log(forename)
 
 
     const session = await stripe.checkout.sessions.create({
