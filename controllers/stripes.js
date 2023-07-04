@@ -126,12 +126,15 @@ exports.actionAfterPaiement = async (req, res) => {
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
       saveInvoiceToDatabase(event.data.object);
 
+      const paymentMethod = await stripe.paymentMethods.retrieve(event.data.object.payment_method);
+      const fullName = event.data.object.billing_details.name;
+      const firstName = fullName.split(' ')[0];
       try {
         await sendEmail(event.data.object.billing_details.email, 'Confirmation de paiement', {
-          customerName: event.data.object.billing_details.name,
+          customerName: firstName,
           amount: (event.data.object.amount / 100).toFixed(2),
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
-          paymentMethod: event.data.object.payment_method,
+          paymentMethod: paymentMethod.card.brand,
         }, 'email/template/confirmationPaiementEmail.handlebars');
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
