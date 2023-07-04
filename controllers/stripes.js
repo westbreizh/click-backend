@@ -15,7 +15,7 @@ exports.createCheckOutSession = async (req, res) => {
   console.log("je rentre dans stripe backend");
   //console.log(req.body);
   console.log("req.body.datas"+req.body.datas);
-  console.log("req.body.datas.userInfo"+req.body.datas.userInfo);
+  console.log("req.body.userInfo"+req.body.datas.userInfo);
   try {
 
 
@@ -32,7 +32,7 @@ exports.createCheckOutSession = async (req, res) => {
     //const forename = req.body.datas.userInfo.forename
 
     console.log(articleList)
-    console.log(forename)
+
 
 
     const session = await stripe.checkout.sessions.create({
