@@ -15,7 +15,7 @@ exports.createCheckOutSession = async (req, res) => {
   console.log("je rentre dans stripe backend");
   //console.log(req.body);
 
-  console.log("req.body.userInfo"+req.body.datas.userInfo);
+
   try {
 
 
@@ -34,9 +34,10 @@ exports.createCheckOutSession = async (req, res) => {
     const hub = datas.hubChoice
     console.log("hub"+hub);
     const hubBack = datas.hubBackChoice
-    //const email = req.body.datas.userInfo.email;
-    //const forename = req.body.datas.userInfo.forename
-
+    const email = datas.userInfo.email;
+    console.log("email"+email);
+    const forename = datas.userInfo.forename
+    console.log("forename"+forename);
 
 
 
