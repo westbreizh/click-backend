@@ -27,7 +27,7 @@ exports.createCheckOutSession = async (req, res) => {
     const articleList = req.body.datas.articleList
     const hub = req.body.datas.hubChoice
     const hubBack = req.body.datas.hubBackChoice
-    const email = req.body.datas.userInfo.email
+    //const email = req.body.datas.userInfo.email;
     const forename = req.body.datas.userInfo.forename
 
     console.log(articleList)
