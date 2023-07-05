@@ -39,7 +39,9 @@ exports.createCheckOutSession = async (req, res) => {
     const datas = JSON.parse(req.body.datas);
     const articleList = datas.articleList;
     const hub = datas.hubChoice;
+    console.log(hub)
     const hubBack = datas.hubBackChoice;
+    console.log(hubBack)
     const email = datas.userInfo.email;
     const forename = datas.userInfo.forename;
     const totalPriceFromDatas = datas.totalPrice;
