@@ -13,23 +13,24 @@ function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
   }
 
-  function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
-    return new Promise((resolve, reject) => {
-      // Construisez la requête SQL pour insérer les données dans la table
-      const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-  
-      // Exécutez la requête SQL en utilisant le module mysql2
-      db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
-        if (error) {
-          console.error('Erreur lors de l\'enregistrement de la commande :', error);
-          reject(error);
-        } else {
-          console.log('Commande enregistrée avec succès');
-          resolve(results);
-        }
-      });
+// fonction de sauvegarde de la commande dans la base de données
+function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
+  return new Promise((resolve, reject) => {
+    // Construisez la requête SQL pour insérer les données dans la table
+    const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de l\'enregistrement de la commande :', error);
+        reject(error);
+      } else {
+        console.log('Commande enregistrée avec succès');
+        resolve(results);
+      }
     });
-  }
+  });
+}
   
 
 
@@ -102,17 +103,19 @@ exports.createCheckOutSession = async (req, res) => {
 };
 
 
-
-
-
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
+  if (!paymentIntent.metadata || !paymentIntent.metadata.email || !paymentIntent.metadata.orders_id) {
+    console.error('Email ou Order ID manquant');
+    return;
+  }
+
   const { email, orders_id } = paymentIntent.metadata;
   console.log('Email:', email);
   console.log('Order ID:', orders_id);
   
   const customerEmail = email;
-  const custumer_name = paymentIntent.data.object.billing_details.name;
+  const customer_name = paymentIntent.billing_details.name;
 
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
   const status = 'paid'; // Définissez le statut approprié pour une facture payée
@@ -120,10 +123,10 @@ function saveInvoiceToDatabase(paymentIntent) {
   const paymentDueDate = null; // Remplacez cette valeur par la date d'échéance de paiement appropriée
 
   // Construisez la requête SQL pour insérer les données dans la table
-  const query = `INSERT INTO invoices (orders_id, custumer_name, customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO invoices (orders_id, customer_name, customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   // Exécutez la requête SQL en utilisant le module mysql2
-  db.query(query, [orders_id, custumer_name, customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
+  db.query(query, [orders_id, customer_name, customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
     if (error) {
       console.error('Erreur lors de l\'enregistrement de la facture :', error);
     } else {
@@ -135,12 +138,7 @@ function saveInvoiceToDatabase(paymentIntent) {
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-//const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
-// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
-//endpointSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
-// Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
 webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
-
 exports.actionAfterPaiement = async (req, res) => {
 
     const sig = req.headers['stripe-signature'];
@@ -212,7 +210,7 @@ exports.actionAfterPaiement = async (req, res) => {
 
 
 
-
+//const endpointSecret = "whsec_ab35813a4509298cdec61cee5c63ecf776ed8ec0f201facb38a9f12a067e694b";
 
 
 
