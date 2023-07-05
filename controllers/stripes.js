@@ -59,9 +59,12 @@ exports.createCheckOutSession = async (req, res) => {
     const email = datas.userInfo.email;
     const forename = datas.userInfo.forename;
 
-    const totalPriceFromDatas = datas.totalPrice;
-    const totalPrice = parseFloat(totalPriceFromDatas.replace(",", "."));
-    const totalPriceInCents = Math.round(totalPrice * 100);
+
+
+    const totalPriceString = datas.totalPrice;
+    const totalPrice = Number(totalPriceString.replace(",", "."));
+    const unitAmount = totalPrice * 100;
+
 
     // On enregistre les données dans la table `orders`
     saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
