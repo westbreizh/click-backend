@@ -104,13 +104,7 @@ exports.createCheckOutSession = async (req, res) => {
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
 
-   const metadata = paymentIntent.metadata;
-  const email = paymentIntent.metadata.email;
-  const orders_id = paymentIntent.metadata.orders_id;
 
-  console.log(metadata)
-  console.log('Email:', email);
-  console.log('Order ID:', orders_id);
   
   const customerEmail = email;
   const customer_name = paymentIntent.billing_details.name;
@@ -139,6 +133,8 @@ function saveInvoiceToDatabase(paymentIntent) {
 webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 exports.actionAfterPaiement = async (req, res) => {
 
+
+
     const sig = req.headers['stripe-signature'];
   
     let event;
@@ -163,6 +159,14 @@ exports.actionAfterPaiement = async (req, res) => {
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
 
+      console.log("event.data"+event.data)
+      const metadata = event.data.metadata;
+      const email = metadata.email;
+      const orders_id = metadata.orders_id;
+    
+      console.log(metadata)
+      console.log('Email:', email);
+      console.log('Order ID:', orders_id);
 
 
       saveInvoiceToDatabase(event.data.object);
