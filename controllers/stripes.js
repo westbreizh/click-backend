@@ -39,12 +39,6 @@ exports.createCheckOutSession = async (req, res) => {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
 
-    const hub = datas.hubChoice;
-    console.log(hub)
-    console.log(typeof(hub))
-    const hubBack = datas.hubBackChoice;
-
-
 
     // données pour l'enregirement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
@@ -52,21 +46,18 @@ exports.createCheckOutSession = async (req, res) => {
     const serviceBackDate = new Date();
     const statusOrder ="inité"
     const userInfo = JSON.stringify(datas.userInfo);
-
-
-
-
+    const hub = JSON.stringify(datas.hubChoice);
+    console.log(hub)
+    const hubBack = JSON.stringify(datas.hubBackChoice);
+    console.log(hubBack)
     const email = datas.userInfo.email;
+    console.log(email)
     const forename = datas.userInfo.forename;
 
 
 
-    const totalPriceString = datas.totalPrice;
-    console.log(totalPriceString);
-    
+    const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
-    console.log(totalPrice);
-    
     const unitAmount = Math.round(totalPrice * 100);
     console.log(unitAmount);
     
