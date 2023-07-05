@@ -1,8 +1,6 @@
 const stripe = require('stripe')('sk_test_51NGdYqI8HrVwrRfPKAmQ17TgZh2yWZtGjNNqhHyMXhebWNh03YR5zgGhibzt5oHJM1eRD5UrwRAvhZPNhs48fC9L00UjaCIuJq');
 const YOUR_DOMAIN = 'https://click-and-raquette.com';
 
-
-
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
@@ -10,45 +8,61 @@ const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 
-// fonction d'une session stripe 
-exports.createCheckOutSession = async (req, res) => {
-  console.log("je rentre dans stripe backend");
-  //console.log(req.body);
+// fonction qui calcule le prix d'un element de articleList
+function calculPriceFromArticleListForOneElement(articleList) {
+  //voire a transmettre au backend lors de la commande l'id du produit 
+  }
 
+// Fonction d'enregistrement de la commande dans la table `orders`
+function saveOrderToDatabase(articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) {
+  return new Promise((resolve, reject) => {
+    // Construisez la requête SQL pour insérer les données dans la table `orders`
+    const query = 'INSERT INTO orders (articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    
+    // Exécutez la requête SQL en utilisant une requête préparée avec des paramètres de liaison
+    db.query(query, [articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de l\'enregistrement de la commande :', error);
+        reject(error); // Rejeter la promesse en cas d'erreur
+      } else {
+        console.log('Commande enregistrée avec succès');
+        resolve(results); // Résoudre la promesse avec les résultats de la requête
+      }
+    });
+  });
+}
+
+
+
+// Fonction de création d'une session Stripe et enregistrement des données dans la table `orders`
+exports.createCheckOutSession = async (req, res) => {
+  console.log("Je rentre dans le backend de Stripe");
 
   try {
-
-
-    //const totalPriceString = a calculer avec une fonction backend
-    //const totalPrice = Number(totalPriceString.replace(",", "."));
-
-    const totalPrice = 10;
-    const unitAmount = totalPrice * 100;
-
-
-
+    // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
-    console.log("req.body.datas"+datas);
-    const articleList = datas.articleList
-    console.log("articleList"+articleList);
-    const hub = datas.hubChoice
-    console.log("hub"+hub);
-    const hubBack = datas.hubBackChoice
+    const articleList = datas.articleList;
+    const hub = datas.hubChoice;
+    const hubBack = datas.hubBackChoice;
     const email = datas.userInfo.email;
-    console.log("email"+email);
-    const forename = datas.userInfo.forename
-    console.log("forename"+forename);
+    const forename = datas.userInfo.forename;
+    const totalPriceFromDatas = datas.totalPrice;
+    const totalPrice = Number(totalPriceFromDatas.replace(",", "."));
 
+    // On enregistre les données dans la table `orders`
+    const orderDate = new Date();
+    const status = "initié";
+    const userInfo = JSON.stringify(datas.userInfo);
+    await saveOrderToDatabase(articleList, hub, hubBack, orderDate, null, status, totalPrice, userInfo);
 
-
-
+    // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'paypal'], // Ajoutez 'paypal' pour activer PayPal
       line_items: [
         {
           price_data: {
             currency: 'eur',
-            unit_amount: unitAmount,
+            unit_amount: totalPrice * 100,
             product_data: {
               name: 'Votre commande sur click and raquette',
             },
@@ -61,12 +75,12 @@ exports.createCheckOutSession = async (req, res) => {
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
       metadata: {
-        totalPrice: totalPrice.toFixed(2),
+        forename: forename,
+        email: email,
       },
-
     });
 
-    console.log("je suis dans stripe avant redirection");
+    console.log("Je suis dans Stripe avant redirection");
     res.redirect(303, session.url);
 
   } catch (error) {
@@ -77,12 +91,14 @@ exports.createCheckOutSession = async (req, res) => {
 
 
 
+
+
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
-  console.log(paymentIntent)
+
 
   const customerEmail = 'herbreteauaurelien@tutanota.com';
-  console.log(customerEmail)
+
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
   const status = 'paid'; // Définissez le statut approprié pour une facture payée
   const createdDate = new Date(paymentIntent.created * 1000); // Convertissez la date UNIX en date JavaScript
