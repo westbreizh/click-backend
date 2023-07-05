@@ -160,7 +160,7 @@ exports.actionAfterPaiement = async (req, res) => {
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
 
       console.log("event.data"+event.data)
-      const metadata = event.data.metadata;
+      const metadata = event.data.object.metadata;
       console.log("metadata"+metadata)
       const email = metadata.email;
       console.log('Email:', email);
