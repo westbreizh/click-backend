@@ -47,9 +47,10 @@ exports.createCheckOutSession = async (req, res) => {
     const statusOrder ="inité"
     // On enregistre les données dans la table `orders`
     const orderDate = new Date();
+    const serviceBackDate = new Date();
     const status = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
-    await saveOrderToDatabase(articleList, hub, hubBack, orderDate, null, statusOrder, totalPrice, userInfo);
+    saveOrderToDatabase(articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
 
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
