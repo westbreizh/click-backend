@@ -9,7 +9,9 @@ CREATE TABLE `order` (
   `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
   `email` VARCHAR(255),
-  `userInfo` TEXT
+  `userInfo` TEXT,
+  `hub` TEXT,
+  `hubBack` TEXT,
 );
 
 

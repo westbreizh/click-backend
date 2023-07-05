@@ -14,12 +14,12 @@ function calculPriceFromArticleListForOneElement(articleList) {
   }
 
 // fonction d'enregistrement de la commande
-function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo) {
+function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
   // Construisez la requête SQL pour insérer les données dans la table
-  const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   
   // Exécutez la requête SQL en utilisant le module mysql2
-  db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo], (error, results) => {
+  db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
     if (error) {
       console.error('Erreur lors de l\'enregistrement de la commande :', error);
     } else {
@@ -63,7 +63,7 @@ exports.createCheckOutSession = async (req, res) => {
     
 
     // On enregistre les données dans la table `orders`
-    saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
+    saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
 
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
