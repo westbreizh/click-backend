@@ -55,21 +55,18 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
-    console.log(unitAmount);
 
-
-
-
+    // données pour stripe et enregistrement de la facture et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
-    const forename = datas.userInfo.forename;
 
 
   
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
-    console.log("saveOrder"+ savedOrder)
-    const idOrder = savedOrder.insertId; // Récupérer l'ID généré à partir de `insertId`
+    // Récupérer l'ID généré à partir de `insertId`
+    const idOrder = savedOrder.insertId; 
     console.log("idOrder"+idOrder)
+
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'paypal'], // Ajoutez 'paypal' pour activer PayPal
@@ -90,9 +87,8 @@ exports.createCheckOutSession = async (req, res) => {
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
       metadata: {
-        forename: forename,
         email: email,
-        order_id: idOrder,
+        orders_id: idOrder,
       },
     });
 
@@ -111,9 +107,12 @@ exports.createCheckOutSession = async (req, res) => {
 
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
-
-
-  const customerEmail = 'herbreteauaurelien@tutanota.com';
+  const { email, orders_id } = paymentIntent.metadata;
+  console.log('Email:', email);
+  console.log('Order ID:', orders_id);
+  
+  const customerEmail = email;
+  const custumer_name = paymentIntent.data.object.billing_details.name;
 
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
   const status = 'paid'; // Définissez le statut approprié pour une facture payée
@@ -121,10 +120,10 @@ function saveInvoiceToDatabase(paymentIntent) {
   const paymentDueDate = null; // Remplacez cette valeur par la date d'échéance de paiement appropriée
 
   // Construisez la requête SQL pour insérer les données dans la table
-  const query = `INSERT INTO invoices (customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO invoices (orders_id, custumer_name, customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   // Exécutez la requête SQL en utilisant le module mysql2
-  db.query(query, [customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
+  db.query(query, [orders_id, custumer_name, customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
     if (error) {
       console.error('Erreur lors de l\'enregistrement de la facture :', error);
     } else {
@@ -132,6 +131,7 @@ function saveInvoiceToDatabase(paymentIntent) {
     }
   });
 }
+
 
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
@@ -166,6 +166,9 @@ exports.actionAfterPaiement = async (req, res) => {
 
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
+
+
+
       saveInvoiceToDatabase(event.data.object);
 
       const paymentMethod = await stripe.paymentMethods.retrieve(event.data.object.payment_method);
