@@ -62,11 +62,14 @@ exports.createCheckOutSession = async (req, res) => {
 
 
     const totalPriceString = datas.totalPrice;
-    console.log(totalPriceString)
+    console.log(totalPriceString);
+    
     const totalPrice = Number(totalPriceString.replace(",", "."));
-    console.log(totalPrice)
-    const unitAmount = totalPrice * 100;
-    console.log(unitAmount)
+    console.log(totalPrice);
+    
+    const unitAmount = Math.round(totalPrice * 100);
+    console.log(unitAmount);
+    
 
     // On enregistre les données dans la table `orders`
     saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
