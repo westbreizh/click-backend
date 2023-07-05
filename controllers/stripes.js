@@ -67,7 +67,8 @@ exports.createCheckOutSession = async (req, res) => {
   
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
-    const idOrder = savedOrder.id; // Récupérer l'ID généré
+    console.log("saveOrder"+ savedOrder)
+    const idOrder = savedOrder.insertId; // Récupérer l'ID généré à partir de `insertId`
     console.log("idOrder"+idOrder)
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
