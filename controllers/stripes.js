@@ -38,7 +38,7 @@ exports.createCheckOutSession = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
-    const articleList = datas.articleList;
+    const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     const hub = datas.hubChoice;
     console.log(hub)
     console.log(typeof(hub))
