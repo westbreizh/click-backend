@@ -40,6 +40,7 @@ exports.createCheckOutSession = async (req, res) => {
     const articleList = datas.articleList;
     const hub = datas.hubChoice;
     console.log(hub)
+    consolelog(typeof(hub))
     const hubBack = datas.hubBackChoice;
     console.log(hubBack)
     const email = datas.userInfo.email;
