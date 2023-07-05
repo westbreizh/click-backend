@@ -13,20 +13,24 @@ function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
   }
 
-// fonction d'enregistrement de la commande
-function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
-  // Construisez la requête SQL pour insérer les données dans la table
-  const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
+    return new Promise((resolve, reject) => {
+      // Construisez la requête SQL pour insérer les données dans la table
+      const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   
-  // Exécutez la requête SQL en utilisant le module mysql2
-  db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
-    if (error) {
-      console.error('Erreur lors de l\'enregistrement de la commande :', error);
-    } else {
-      console.log('Commande enregistrée avec succès');
-    }
-  });
-}
+      // Exécutez la requête SQL en utilisant le module mysql2
+      db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de l\'enregistrement de la commande :', error);
+          reject(error);
+        } else {
+          console.log('Commande enregistrée avec succès');
+          resolve(results);
+        }
+      });
+    });
+  }
+  
 
 
 
@@ -47,24 +51,24 @@ exports.createCheckOutSession = async (req, res) => {
     const statusOrder ="inité"
     const userInfo = JSON.stringify(datas.userInfo);
     const hub = JSON.stringify(datas.hubChoice);
-    console.log(hub)
     const hubBack = JSON.stringify(datas.hubBackChoice);
-    console.log(hubBack)
-    const email = datas.userInfo.email;
-    console.log(email)
-    const forename = datas.userInfo.forename;
-
-
-
     const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
     console.log(unitAmount);
-    
 
+
+
+
+    const email = datas.userInfo.email;
+    const forename = datas.userInfo.forename;
+
+
+  
     // On enregistre les données dans la table `orders`
-    saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
-
+    const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
+    const idOrder = savedOrder.id; // Récupérer l'ID généré
+    console.log("idOrder"+idOrder)
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'paypal'], // Ajoutez 'paypal' pour activer PayPal
@@ -87,6 +91,7 @@ exports.createCheckOutSession = async (req, res) => {
       metadata: {
         forename: forename,
         email: email,
+        order_id: idOrder,
       },
     });
 
