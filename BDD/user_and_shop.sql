@@ -8,7 +8,7 @@ CREATE TABLE `order` (
   `hubBack` VARCHAR(255),
   `orderDate` DATE,
   `serviceBackDate` DATE,
-  `status` VARCHAR(255),
+  `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
   `email` VARCHAR(255),
   `userInfo` TEXT;

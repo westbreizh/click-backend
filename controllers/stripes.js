@@ -13,22 +13,18 @@ function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
   }
 
-// Fonction d'enregistrement de la commande dans la table `orders`
-function saveOrderToDatabase(articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) {
-  return new Promise((resolve, reject) => {
-    // Construisez la requête SQL pour insérer les données dans la table `orders`
-    const query = 'INSERT INTO orders (articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
-    
-    // Exécutez la requête SQL en utilisant une requête préparée avec des paramètres de liaison
-    db.query(query, [articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de l\'enregistrement de la commande :', error);
-        reject(error); // Rejeter la promesse en cas d'erreur
-      } else {
-        console.log('Commande enregistrée avec succès');
-        resolve(results); // Résoudre la promesse avec les résultats de la requête
-      }
-    });
+// fonction d'enregistrement de la commande
+function saveOrderToDatabase(articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo) {
+  // Construisez la requête SQL pour insérer les données dans la table
+  const query = 'INSERT INTO orders (articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  
+  // Exécutez la requête SQL en utilisant le module mysql2
+  db.query(query, [articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo], (error, results) => {
+    if (error) {
+      console.error('Erreur lors de l\'enregistrement de la commande :', error);
+    } else {
+      console.log('Commande enregistrée avec succès');
+    }
   });
 }
 
@@ -53,7 +49,7 @@ exports.createCheckOutSession = async (req, res) => {
     const orderDate = new Date();
     const status = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
-    await saveOrderToDatabase(articleList, hub, hubBack, orderDate, null, status, totalPrice, userInfo);
+    await saveOrderToDatabase(articleList, hub, hubBack, orderDate, null, statusOrder, totalPrice, userInfo);
 
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
