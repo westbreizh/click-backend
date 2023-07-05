@@ -4,14 +4,12 @@ DROP TABLE IF EXISTS `order`;
 CREATE TABLE `order` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `articleList` TEXT,
-  `hub` VARCHAR(255),
-  `hubBack` VARCHAR(255),
   `orderDate` DATE,
   `serviceBackDate` DATE,
   `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
   `email` VARCHAR(255),
-  `userInfo` TEXT;
+  `userInfo` TEXT
 );
 
 
