@@ -62,9 +62,11 @@ exports.createCheckOutSession = async (req, res) => {
 
 
     const totalPriceString = datas.totalPrice;
+    console.log(totalPriceString)
     const totalPrice = Number(totalPriceString.replace(",", "."));
+    console.log(totalPrice)
     const unitAmount = totalPrice * 100;
-
+    console.log(unitAmount)
 
     // On enregistre les données dans la table `orders`
     saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
@@ -76,7 +78,7 @@ exports.createCheckOutSession = async (req, res) => {
         {
           price_data: {
             currency: 'eur',
-            unit_amount: totalPrice * 100,
+            unit_amount: unitAmount,
             product_data: {
               name: 'Votre commande sur click and raquette',
             },
