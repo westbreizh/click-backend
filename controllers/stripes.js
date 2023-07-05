@@ -16,7 +16,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
 // fonction d'enregistrement de la commande
 function saveOrderToDatabase(articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo) {
   // Construisez la requête SQL pour insérer les données dans la table
-  const query = 'INSERT INTO orders (articleList, hub, hubBack, orderDate, serviceBackDate, status, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO orders (articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
   
   // Exécutez la requête SQL en utilisant le module mysql2
   db.query(query, [articleList, hub, hubBack, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo], (error, results) => {
@@ -44,7 +44,7 @@ exports.createCheckOutSession = async (req, res) => {
     const forename = datas.userInfo.forename;
     const totalPriceFromDatas = datas.totalPrice;
     const totalPrice = Number(totalPriceFromDatas.replace(",", "."));
-
+    const statusOrder ="inité"
     // On enregistre les données dans la table `orders`
     const orderDate = new Date();
     const status = "initié";
