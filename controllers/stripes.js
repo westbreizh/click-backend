@@ -162,6 +162,8 @@ exports.actionAfterPaiement = async (req, res) => {
       console.log("event.data"+event.data)
       const metadata = event.data.object.metadata;
       console.log("metadata"+metadata)
+      const objet1 = metadata[0]
+      console.log('objet1:', objet1);
       const email = metadata.email;
       console.log('Email:', email);
       const orders_id = metadata.orders_id;
