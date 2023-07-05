@@ -38,22 +38,32 @@ exports.createCheckOutSession = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
-    const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
+
     const hub = datas.hubChoice;
     console.log(hub)
     console.log(typeof(hub))
     const hubBack = datas.hubBackChoice;
-    console.log(hubBack)
-    const email = datas.userInfo.email;
-    const forename = datas.userInfo.forename;
-    const totalPriceFromDatas = datas.totalPrice;
-    const totalPrice = Number(totalPriceFromDatas.replace(",", "."));
-    const statusOrder ="inité"
-    // On enregistre les données dans la table `orders`
+
+
+
+    // données pour l'enregirement de la commande
+    const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     const orderDate = new Date();
     const serviceBackDate = new Date();
-    const status = "initié";
+    const statusOrder ="inité"
     const userInfo = JSON.stringify(datas.userInfo);
+
+
+
+
+    const email = datas.userInfo.email;
+    const forename = datas.userInfo.forename;
+
+    const totalPriceFromDatas = datas.totalPrice;
+    const totalPrice = parseFloat(totalPriceFromDatas.replace(",", "."));
+    const totalPriceInCents = Math.round(totalPrice * 100);
+
+    // On enregistre les données dans la table `orders`
     saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo);
 
     // On crée une session Stripe
