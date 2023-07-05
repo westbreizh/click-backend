@@ -103,13 +103,12 @@ exports.createCheckOutSession = async (req, res) => {
 
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
-  if (!paymentIntent.metadata || !paymentIntent.metadata.email || !paymentIntent.metadata.orders_id) {
-    console.error('Email ou Order ID manquant');
-    return;
-  }
 
-  const { email, orders_id } = paymentIntent.metadata;
+   const metadata = paymentIntent.metadata;
+  const email = paymentIntent.metadata.email;
+  const orders_id = paymentIntent.metadata.orders_id;
 
+  console.log(metadata)
   console.log('Email:', email);
   console.log('Order ID:', orders_id);
   
