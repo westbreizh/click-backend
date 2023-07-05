@@ -33,9 +33,6 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 }
   
 
-
-
-
 // Fonction de création d'une session Stripe et enregistrement des données dans la table `orders`
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
@@ -67,6 +64,7 @@ exports.createCheckOutSession = async (req, res) => {
     // Récupérer l'ID généré à partir de `insertId`
     const idOrder = savedOrder.insertId; 
     console.log("idOrder"+idOrder)
+    console.log("email"+ email)
 
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
@@ -111,6 +109,7 @@ function saveInvoiceToDatabase(paymentIntent) {
   }
 
   const { email, orders_id } = paymentIntent.metadata;
+
   console.log('Email:', email);
   console.log('Order ID:', orders_id);
   
