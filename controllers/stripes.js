@@ -14,25 +14,33 @@ function calculPriceFromArticleListForOneElement(articleList) {
   }
 
 
-// fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase(email, hub, hubBack, stringChoiceId, stringRopeChoice) {
-  return new Promise((resolve, reject) => {
-    // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ? WHERE email = ?';
 
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringChoiceId, stringRopeChoice, email], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la modification des préférences joueur :', error);
-        reject(error);
+
+
+
+
+
+  // fonction de modification des preferences joueurs dans la table payer
+  function savePreferencePlayerToDatabase(email, hub, hubBack, stringChoiceId, stringRopeChoice) {
+    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
+      if (result.length > 0) {
+        const updateQuery = `UPDATE player SET hub = '${hub}', hubBack = '${hubBack}', string_id = ${stringChoiceId}, string_rope = ${stringRopeChoice} WHERE email='${email}'`;
+        db.query(updateQuery, (err, results) => {
+          if (err) {
+            console.error('Erreur lors de la modification des préférences joueur :', err);
+            return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
+          }
+          return res.status(201).json({ message: 'Les préférences joueur ont été modifiées !' });
+        });
       } else {
-        console.log('Préférences joueur modifiées avec succès');
-        resolve(results);
+        return res.status(404).json({ message: "Le joueur n'a pas été retrouvé dans la table player !" });
+      }
+      if (err) {
+        return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
       }
     });
-  });
-}
-
+  }
+  
   
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
