@@ -16,14 +16,15 @@ function calculPriceFromArticleListForOneElement(articleList) {
 
 
   // fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, email) {
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email) {
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
+    console.log("stringRope"+ stringRope)
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, email], (error, results) => {
+    db.query(query, [hub, hubBack, stringId, stringRope, email], (error, results) => {
       if (error) {
         console.error('Erreur lors de la modification des préférences joueur :', error);
         reject(error);
@@ -79,14 +80,15 @@ exports.createCheckOutSession = async (req, res) => {
 
 
     // Variables pour la récupération des préférences du joueur
-    let stringId= 4;
-    let stringRopeChoice = 5;
+    let stringId= null;
+    let stringRope = null;
     console.log("stringId"+ stringId)
+    console.log("stringRope"+ stringRope)
     const buyList = datas.articleList;
 
     for (const item of buyList) {
       if (item.stringRopeChoice) {
-        stringRopeChoice = item.stringRopeChoice;
+        stringChoice = item.stringRopeChoice;
         break;
       }
     }
@@ -98,12 +100,13 @@ exports.createCheckOutSession = async (req, res) => {
       }
     }
     console.log("stringId"+ stringId)
+    console.log("stringRope"+ stringRope)
 
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
 
     // On enregistre les données dans la table `player`
-    savePreferencePlayerToDatabase( hub, hubBack, stringId, email ) 
+    savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email ) 
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
