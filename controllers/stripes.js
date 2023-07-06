@@ -78,8 +78,8 @@ exports.createCheckOutSession = async (req, res) => {
 
 
     // Variables pour la récupération des préférences du joueur
-    let stringId= "hello";
-    let stringRopeChoice = null;
+    let stringId= 4;
+    let stringRopeChoice = 5;
 
     const buyList = datas.articleList;
 
