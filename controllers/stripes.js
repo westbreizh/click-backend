@@ -19,7 +19,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
 function savePreferencePlayerToDatabase( hub, hubBack, stringId, email) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, stringId = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
     db.query(query, [hub, hubBack, stringId, email], (error, results) => {
