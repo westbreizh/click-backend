@@ -18,6 +18,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
   // fonction de modification des preferences joueurs dans la table payer
 function savePreferencePlayerToDatabase( hub, hubBack, stringId, email) {
   return new Promise((resolve, reject) => {
+    console.log(stringId)
     // Construisez la requête SQL pour modifier les données dans la table player
     const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?  WHERE email = ?';
 
