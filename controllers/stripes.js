@@ -63,6 +63,15 @@ exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
 
   try {
+
+
+    // Récupérer le jeton d'authentification de l'en-tête de la requête
+    const auth_token = req.headers.authorization;
+    console.log("aut_oken : "+ auth_token)
+    // Vérifier et extraire le jeton d'authentification
+    const userAuthToken = auth_token ? auth_token.split(' ')[1] : null;
+    console.log("userAuthToken: "+ userAuthToken)
+
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
 
@@ -82,8 +91,7 @@ exports.createCheckOutSession = async (req, res) => {
     // Variables pour la récupération des préférences du joueur
     let stringId= null;
     let stringRope = null;
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
+
     const buyList = datas.articleList;
 
     for (const item of buyList) {
@@ -99,8 +107,6 @@ exports.createCheckOutSession = async (req, res) => {
         break;
       }
     }
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
 
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
@@ -139,6 +145,7 @@ exports.createCheckOutSession = async (req, res) => {
         metadata: {
           email: email,
           orders_id: idOrder,
+          auth_token: userAuthToken
         },
       },
 

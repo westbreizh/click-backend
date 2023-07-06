@@ -42,13 +42,12 @@ CREATE TABLE `player` (
     `email`         varchar(255) NOT NULL,
     `password`      varchar(255) NOT NULL,
     `telephone`     varchar(20) DEFAULT NULL,
-    `string_id`     int DEFAULT NULL,
+    `string_id`     varchar(100) DEFAULT NULL,
     `string_rope`   int DEFAULT NULL,
     `hub`           varchar(100) DEFAULT NULL,
     `hubBack`       varchar(100) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`),
-    FOREIGN KEY (`string_id`) REFERENCES `string`(`id`)
 ) ;
 
 
