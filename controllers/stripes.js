@@ -64,14 +64,6 @@ exports.createCheckOutSession = async (req, res) => {
 
   try {
 
-
-    // Récupérer le jeton d'authentification de l'en-tête de la requête
-    const auth_token = req.headers.authorization;
-    console.log("aut_oken : "+ auth_token)
-    // Vérifier et extraire le jeton d'authentification
-    const userAuthToken = auth_token ? auth_token.split(' ')[1] : null;
-    console.log("userAuthToken: "+ userAuthToken)
-
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
 
@@ -87,7 +79,7 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
     const token = datas.token;
-    console.log("token" + token)
+    console.log("token : " + token)
 
     // Variables pour la récupération des préférences du joueur
     let stringId= null;
