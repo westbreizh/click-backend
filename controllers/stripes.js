@@ -18,7 +18,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
   // fonction de modification des preferences joueurs dans la table payer
 function savePreferencePlayerToDatabase( hub, hubBack, stringId, email) {
   return new Promise((resolve, reject) => {
-    console.log(stringId)
+    console.log("stringId"+ stringId)
     // Construisez la requête SQL pour modifier les données dans la table player
     const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?  WHERE email = ?';
 
@@ -81,7 +81,7 @@ exports.createCheckOutSession = async (req, res) => {
     // Variables pour la récupération des préférences du joueur
     let stringId= 4;
     let stringRopeChoice = 5;
-
+    console.log("stringId"+ stringId)
     const buyList = datas.articleList;
 
     for (const item of buyList) {
@@ -97,11 +97,11 @@ exports.createCheckOutSession = async (req, res) => {
         break;
       }
     }
-
+    console.log("stringId"+ stringId)
 
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
-    console.log(email)
+
     // On enregistre les données dans la table `player`
     savePreferencePlayerToDatabase( hub, hubBack, email ) 
 
