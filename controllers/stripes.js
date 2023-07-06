@@ -16,13 +16,13 @@ function calculPriceFromArticleListForOneElement(articleList) {
 
 
   // fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, email) {
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, email) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, stringId = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, email], (error, results) => {
+    db.query(query, [hub, hubBack, stringId, email], (error, results) => {
       if (error) {
         console.error('Erreur lors de la modification des préférences joueur :', error);
         reject(error);
@@ -78,7 +78,7 @@ exports.createCheckOutSession = async (req, res) => {
 
 
     // Variables pour la récupération des préférences du joueur
-    let stringChoiceId = null;
+    let stringId= "hello";
     let stringRopeChoice = null;
 
     const buyList = datas.articleList;
@@ -92,7 +92,7 @@ exports.createCheckOutSession = async (req, res) => {
     
     for (const item of buyList) {
       if (item.stringChoice && item.stringChoice.id) {
-        stringChoiceId = item.stringChoice.id;
+        stringId= item.stringChoice.id;
         break;
       }
     }
