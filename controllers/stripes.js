@@ -88,8 +88,7 @@ exports.createCheckOutSession = async (req, res) => {
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
       metadata: {
-        email: "exampleemail@email",
-        orders_id: 2,
+        data: "exampleemail@email"
       },
     });
 
