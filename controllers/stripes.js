@@ -58,6 +58,8 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 }
   
 
+
+
 // Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` et la table player
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
