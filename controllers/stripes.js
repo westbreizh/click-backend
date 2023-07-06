@@ -64,6 +64,7 @@ exports.createCheckOutSession = async (req, res) => {
 
   try {
 
+    console.log(req.body.datas);
 
     // Récupérer le jeton d'authentification de l'en-tête de la requête
     const auth_token = req.headers.authorization;
