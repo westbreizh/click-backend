@@ -30,7 +30,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
   
       if (result && result.length > 0) {
         // Le résultat de la requête est défini et contient des données
-        const updateQuery = `UPDATE player SET hub = '${hub}', hubBack = '${hubBack}', string_id = ${stringChoiceId}, string_rope = ${stringRopeChoice} WHERE email='${email}'`;
+        const updateQuery = `UPDATE player SET hub = "${hub}", hubBack = "${hubBack}", string_id = ${stringChoiceId}, string_rope = ${stringRopeChoice} WHERE email='${email}'`;
         db.query(updateQuery, (err, results) => {
           if (err) {
             console.error('Erreur lors de la modification des préférences joueur :', err);
