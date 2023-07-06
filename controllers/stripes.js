@@ -41,7 +41,6 @@ exports.createCheckOutSession = async (req, res) => {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
 
-
     // données pour l'enregirement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     const orderDate = new Date();
@@ -57,16 +56,10 @@ exports.createCheckOutSession = async (req, res) => {
     // données pour stripe et enregistrement de la facture et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
 
-
-  
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
     // Récupérer l'ID généré à partir de `insertId`
     const idOrder = savedOrder.insertId; 
-    console.log("idOrder"+idOrder)
-    console.log("email"+ email)
-
-    
 
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
@@ -99,9 +92,6 @@ exports.createCheckOutSession = async (req, res) => {
 
     });
 
-
-
-
     console.log("Je suis dans Stripe avant redirection");
     res.redirect(303, session.url);
 
@@ -119,7 +109,6 @@ function saveInvoiceToDatabase(paymentIntent) {
   const customerEmail = metadata.email;
   const orders_id = metadata.orders_id;
   const customer_name = paymentIntent.billing_details.name;
-
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
   const status = 'paid'; // Définissez le statut approprié pour une facture payée
   const createdDate = new Date(paymentIntent.created * 1000); // Convertissez la date UNIX en date JavaScript
@@ -139,27 +128,24 @@ function saveInvoiceToDatabase(paymentIntent) {
 }
 
 
-
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
 webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
 exports.actionAfterPaiement = async (req, res) => {
 
+  const sig = req.headers['stripe-signature'];
+  
+  let event;
+  
+  try {
+    event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
+  } catch (err) {
+    // On error, log and return the error message
+    console.log(`❌ Error message: ${err.message}`);
+    return res.status(400).send(`Webhook Error: ${err.message}`);
+  }
 
-
-    const sig = req.headers['stripe-signature'];
-  
-    let event;
-  
-    try {
-      event = stripe.webhooks.constructEvent(req.body, sig, webhookSecret);
-    } catch (err) {
-      // On error, log and return the error message
-      console.log(`❌ Error message: ${err.message}`);
-      return res.status(400).send(`Webhook Error: ${err.message}`);
-    }
-  
-    // Successfully constructed event
-    console.log('✅ Success:', event.id);
+  // Successfully constructed event
+  console.log('✅ Success:', event.id);
 
   // Traitement de l'événement en fonction de son type
   switch (event.type) {
@@ -170,22 +156,12 @@ exports.actionAfterPaiement = async (req, res) => {
     case 'charge.succeeded':
       console.log(`charge, paiement réalisé avec succes : ${event.type}`);
 
-      console.log("event.data"+event.data)
-      const metadata = event.data.object.metadata;
-      console.log("metadata"+metadata)
-      const objet1 = metadata[0]
-      console.log('objet1:', objet1);
-      const email = metadata.email;
-      console.log('Email:', email);
-      const orders_id = metadata.orders_id;
-      console.log('Order ID:', orders_id);
-
-
       saveInvoiceToDatabase(event.data.object);
 
       const paymentMethod = await stripe.paymentMethods.retrieve(event.data.object.payment_method);
       const fullName = event.data.object.billing_details.name;
       const firstName = fullName.split(' ')[0];
+
       try {
         await sendEmail(event.data.object.billing_details.email, 'Confirmation de paiement', {
           customerName: firstName,
@@ -214,7 +190,6 @@ exports.actionAfterPaiement = async (req, res) => {
 
   // Renvoyer une réponse 200 pour accuser réception de l'événement
   res.sendStatus(200);
-
   ;
 }
 
