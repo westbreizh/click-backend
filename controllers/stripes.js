@@ -115,9 +115,9 @@ exports.createCheckOutSession = async (req, res) => {
 // fonction d'enregistrement de la facture
 function saveInvoiceToDatabase(paymentIntent) {
 
-
-  
-  const customerEmail = email;
+  const metadata = paymentIntent.metadata;
+  const customerEmail = metadata.email;
+  const orders_id = metadata.orders_id;
   const customer_name = paymentIntent.billing_details.name;
 
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
