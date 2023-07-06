@@ -71,6 +71,7 @@ exports.createCheckOutSession = async (req, res) => {
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'paypal'], // Ajoutez 'paypal' pour activer PayPal
+
       line_items: [
         {
           price_data: {
@@ -83,14 +84,23 @@ exports.createCheckOutSession = async (req, res) => {
           quantity: 1,
         },
       ],
+
       mode: 'payment',
       success_url: `${YOUR_DOMAIN}/paiement-accepte`,
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
-      metadata: {
-        "data": "exampleemail@email"
+
+      payment_intent_data: {
+        metadata: {
+          email: email,
+          orders_id: idOrder,
+        },
       },
+
     });
+
+
+
 
     console.log("Je suis dans Stripe avant redirection");
     res.redirect(303, session.url);
