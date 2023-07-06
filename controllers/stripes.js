@@ -84,7 +84,6 @@ exports.createCheckOutSession = async (req, res) => {
     for (const item of buyList) {
       if (item.stringRopeChoice) {
         stringRopeChoice = item.stringRopeChoice;
-        console.log('stringRopeChoice:', stringRopeChoice);
         break;
       }
     }
@@ -92,7 +91,6 @@ exports.createCheckOutSession = async (req, res) => {
     for (const item of buyList) {
       if (item.stringChoice && item.stringChoice.id) {
         stringChoiceId = item.stringChoice.id;
-        console.log('stringChoice ID:', stringChoiceId);
         break;
       }
     }
@@ -100,7 +98,7 @@ exports.createCheckOutSession = async (req, res) => {
 
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
-
+    console.log(email)
     // On enregistre les données dans la table `player`
     savePreferencePlayerToDatabase( hub, hubBack, stringChoiceId, stringRopeChoice, email ) 
 
