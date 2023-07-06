@@ -33,7 +33,7 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 }
   
 
-// Fonction de création d'une session Stripe et enregistrement des données dans la table `orders`
+// Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` et la table player
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
 
@@ -52,6 +52,10 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
+
+    // données pour la récupération des préférence joueur
+    const buyList = datas.articleList
+    console.log(buyList)
 
     // données pour stripe et enregistrement de la facture et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
