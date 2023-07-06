@@ -23,7 +23,13 @@ function calculPriceFromArticleListForOneElement(articleList) {
   // fonction de modification des preferences joueurs dans la table payer
   function savePreferencePlayerToDatabase(email, hub, hubBack, stringChoiceId, stringRopeChoice) {
     db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
-      if (result.length > 0) {
+      if (err) {
+        console.error('Erreur lors de la récupération des données joueur :', err);
+        return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
+      }
+  
+      if (result && result.length > 0) {
+        // Le résultat de la requête est défini et contient des données
         const updateQuery = `UPDATE player SET hub = '${hub}', hubBack = '${hubBack}', string_id = ${stringChoiceId}, string_rope = ${stringRopeChoice} WHERE email='${email}'`;
         db.query(updateQuery, (err, results) => {
           if (err) {
@@ -35,11 +41,9 @@ function calculPriceFromArticleListForOneElement(articleList) {
       } else {
         return res.status(404).json({ message: "Le joueur n'a pas été retrouvé dans la table player !" });
       }
-      if (err) {
-        return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
-      }
     });
   }
+  
   
   
 // fonction de sauvegarde de la commande dans la base de données
