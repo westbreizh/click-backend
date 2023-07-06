@@ -66,6 +66,8 @@ exports.createCheckOutSession = async (req, res) => {
     console.log("idOrder"+idOrder)
     console.log("email"+ email)
 
+    
+
     // On crée une session Stripe
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card', 'paypal'], // Ajoutez 'paypal' pour activer PayPal
@@ -86,8 +88,8 @@ exports.createCheckOutSession = async (req, res) => {
       cancel_url: `${YOUR_DOMAIN}/paiement-refuse`,
       automatic_tax: { enabled: false },
       metadata: {
-        email: email,
-        orders_id: idOrder,
+        email: "exampleemail@email",
+        orders_id: 2,
       },
     });
 
