@@ -63,8 +63,8 @@ exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
 
   try {
-
-    console.log(req.body.datas);
+    console.log("req.body : " + req.body);
+    console.log( "req.body.datas : " +req.body.datas);
 
     // Récupérer le jeton d'authentification de l'en-tête de la requête
     const auth_token = req.headers.authorization;
