@@ -58,15 +58,12 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 }
   
 
-
-
 // Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` et la table player
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
 
   try {
-    console.log("req.body : " + req.body);
-    console.log( "req.body.datas : " +req.body.datas);
+
 
     // Récupérer le jeton d'authentification de l'en-tête de la requête
     const auth_token = req.headers.authorization;
@@ -89,7 +86,8 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
-
+    const token = datas.token;
+    console.log("token" + token)
 
     // Variables pour la récupération des préférences du joueur
     let stringId= null;
@@ -148,7 +146,7 @@ exports.createCheckOutSession = async (req, res) => {
         metadata: {
           email: email,
           orders_id: idOrder,
-          auth_token: userAuthToken
+          auth_token: token
         },
       },
 
