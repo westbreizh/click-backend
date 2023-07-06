@@ -13,6 +13,27 @@ function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
   }
 
+
+// fonction de modification des preferences joueurs dans la table payer
+function savePreferencePlayerToDatabase(email, hub, hubBack, stringChoice, stringRopeChoice) {
+  return new Promise((resolve, reject) => {
+    // Construisez la requête SQL pour modifier les données dans la table player
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ? WHERE email = ?';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [hub, hubBack, stringChoice, stringRopeChoice, email], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la modification des préférences joueur :', error);
+        reject(error);
+      } else {
+        console.log('Préférences joueur modifiées avec succès');
+        resolve(results);
+      }
+    });
+  });
+}
+
+  
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
@@ -53,29 +74,35 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
 
-    // données pour la récupération des préférence joueur
-    const buyList = datas.articleList
-    console.log(buyList)
+
+    // Variables pour la récupération des préférences du joueur
+    let stringChoiceId = null;
+    let stringRopeChoice = null;
+
+    const buyList = datas.articleList;
 
     for (const item of buyList) {
       if (item.stringRopeChoice) {
-        const stringRopeChoice = item.stringRopeChoice;
+        stringRopeChoice = item.stringRopeChoice;
         console.log('stringRopeChoice:', stringRopeChoice);
         break;
       }
     }
     
     for (const item of buyList) {
-        if (item.stringChoice && item.stringChoice.id) {
-        const stringChoiceId = item.stringChoice.id;
+      if (item.stringChoice && item.stringChoice.id) {
+        stringChoiceId = item.stringChoice.id;
         console.log('stringChoice ID:', stringChoiceId);
         break;
       }
     }
 
 
-    // données pour stripe et enregistrement de la facture et envoie email, traitement pour le webhook
+    // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
+
+    // On enregistre les données dans la table `player`
+    savePreferencePlayerToDatabase( hub, hubBack, stringChoice, stringRopeChoice, email ) 
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
