@@ -88,7 +88,7 @@ exports.createCheckOutSession = async (req, res) => {
 
     for (const item of buyList) {
       if (item.stringRopeChoice) {
-        stringChoice = item.stringRopeChoice;
+        stringRope = item.stringRopeChoice;
         break;
       }
     }
