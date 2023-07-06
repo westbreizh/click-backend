@@ -57,6 +57,23 @@ exports.createCheckOutSession = async (req, res) => {
     const buyList = datas.articleList
     console.log(buyList)
 
+    for (const item of buyList) {
+      if (item.stringRopeChoice) {
+        const stringRopeChoice = item.stringRopeChoice;
+        console.log('stringRopeChoice:', stringRopeChoice);
+        break;
+      }
+    }
+    
+    for (const item of buyList) {
+        if (item.stringChoice && item.stringChoice.id) {
+        const stringChoiceId = item.stringChoice.id;
+        console.log('stringChoice ID:', stringChoiceId);
+        break;
+      }
+    }
+
+
     // données pour stripe et enregistrement de la facture et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
 
