@@ -15,34 +15,24 @@ function calculPriceFromArticleListForOneElement(articleList) {
 
 
 
-
-
-
-
-
   // fonction de modification des preferences joueurs dans la table payer
-  function savePreferencePlayerToDatabase(email, hub, hubBack, stringChoiceId, stringRopeChoice) {
-    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
-      if (err) {
-        console.error('Erreur lors de la récupération des données joueur :', err);
-        return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
-      }
-  
-      if (result && result.length > 0) {
-        // Le résultat de la requête est défini et contient des données
-        const updateQuery = `UPDATE player SET hub = "${hub}", hubBack = "${hubBack}", string_id = ${stringChoiceId}, string_rope = ${stringRopeChoice} WHERE email='${email}'`;
-        db.query(updateQuery, (err, results) => {
-          if (err) {
-            console.error('Erreur lors de la modification des préférences joueur :', err);
-            return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
-          }
-          return res.status(201).json({ message: 'Les préférences joueur ont été modifiées !' });
-        });
+function savePreferencePlayerToDatabase( hub, email) {
+  return new Promise((resolve, reject) => {
+    // Construisez la requête SQL pour modifier les données dans la table player
+    const query = 'UPDATE player SET hub = ? WHERE email = ?';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [hub, email], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la modification des préférences joueur :', error);
+        reject(error);
       } else {
-        return res.status(404).json({ message: "Le joueur n'a pas été retrouvé dans la table player !" });
+        console.log('Préférences joueur modifiées avec succès');
+        resolve(results);
       }
     });
-  }
+  });
+}
   
   
   
@@ -112,7 +102,7 @@ exports.createCheckOutSession = async (req, res) => {
     const email = datas.userInfo.email;
     console.log(email)
     // On enregistre les données dans la table `player`
-    savePreferencePlayerToDatabase(email, hub, hubBack, stringChoiceId, stringRopeChoice ) 
+    savePreferencePlayerToDatabase( hub, email ) 
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
