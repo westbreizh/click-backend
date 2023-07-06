@@ -178,7 +178,6 @@ exports.actionAfterPaiement = async (req, res) => {
       // Traiter l'événement de charge réussie
       break;
 
-
     case 'payment_intent.created':
       // Traiter l'événement de création d'un nouvel intent de paiement
       console.log(`intention de paiement crée : ${event.type}`);
@@ -192,6 +191,21 @@ exports.actionAfterPaiement = async (req, res) => {
   res.sendStatus(200);
   ;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
