@@ -78,6 +78,7 @@ exports.createCheckOutSession = async (req, res) => {
     const totalPriceString = datas.totalPrice;    
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
+    console.log("unitAmount " + unitAmount)
     const token = datas.token;
     console.log("token : " + token)
 
@@ -227,7 +228,7 @@ exports.actionAfterPaiement = async (req, res) => {
         return res.sendStatus(500);
       }      
 
-      // Traiter l'événement de charge réussie
+
       break;
 
     case 'payment_intent.created':
@@ -238,6 +239,37 @@ exports.actionAfterPaiement = async (req, res) => {
     default:
       console.log(`Type d'événement non géré : ${event.type}`);
   }
+
+                db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
+                (err, result) => {
+                  const userId = result[0].id;
+                  const token = jwt.sign(        
+                    { userId: userId },
+                    Token_Secret_Key, 
+                    { expiresIn: '24h' }
+                  );
+                  delete (result[0].password);
+                  const userInfo = result[0];
+
+                  //on essaie de retrouver l'adresse du joueur si elle est renseigné
+                  db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, 
+                  (err, result) => {
+                    const userAddress = result[0]
+                    console.log(userAddress)
+                    console.log(userInfo)
+
+
+                    //on retourne des datas et le message
+                    return res.status(201).json(data = {
+                      userInfo: userInfo,
+                      userAddress: userAddress,
+                      token: token,
+                      message: 'connexion au site réussie !'
+                    });
+                  })
+                }
+              )
+
 
   // Renvoyer une réponse 200 pour accuser réception de l'événement
   res.sendStatus(200);
