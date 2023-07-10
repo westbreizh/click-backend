@@ -400,6 +400,7 @@ exports.sendOrderLog = (req, res, next) => {
 exports.sendOneOrder = (req, res, next) => {
   console.log("req.body", req.body);
   const orderId = req.body.orderId
+  console.log("req.body.orderId", req.body.orderId);
     db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
       if (err) {
         console.error(err);
