@@ -357,7 +357,7 @@ exports.sendEmailToResetPassword = (req, res ) => {
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
 
-  db.query(`SELECT orders_id FROM invoices WHERE customer_email='${req.body.email}'`, (err, result) => {
+  db.query(`SELECT order_id FROM invoices WHERE customer_email='${req.body.email}'`, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
