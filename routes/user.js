@@ -19,6 +19,8 @@ router.post('/changeEmail', auth, userCtrl.changeEmail);
 router.post('/changePassword', auth, userCtrl.changePassword);
 
 router.post('/orderLog', auth, userCtrl.sendOrderLog);
+router.post('/oneOrder', auth, userCtrl.sendOneOrder);
+
 
 router.delete('/:id', auth, userCtrl.deleteUser);
 

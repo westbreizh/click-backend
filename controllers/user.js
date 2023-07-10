@@ -371,7 +371,7 @@ exports.sendOrderLog = (req, res, next) => {
     let count = 0;
 
     ordersId.forEach((orderId) => {
-      db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
         count++;
 
         if (err) {
@@ -394,6 +394,25 @@ exports.sendOrderLog = (req, res, next) => {
       });
     });
   });
+};
+
+
+exports.sendOneOrder = (req, res, next) => {
+  console.log("req.body", req.body);
+  const orderId = req.body.orderId
+    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
+        return res.status(201).json({
+          data: {
+            orderInfo: orderInfo
+          },
+          message: 'Données de commande récupérées avec succès!'
+        });
+      }
+    });
 };
 
 
