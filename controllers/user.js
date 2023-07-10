@@ -357,25 +357,44 @@ exports.sendEmailToResetPassword = (req, res ) => {
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
 
-  // Récupération des informations depuis la table "invoices" en utilisant l'email
   db.query(`SELECT orders_id FROM invoices WHERE customer_email='${req.body.email}'`, (err, result) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
     }
-    console.log("result", result);
+
     const ordersId = result.map((row) => row.orders_id);
     console.log("ordersId", ordersId);
 
-    // Envoi des données et du message au frontend
-    return res.status(201).json({
-      data: {
-        ordersId: ordersId
-      },
-      message: 'Données de commande récupérées avec succès!'
+    // Récupération des informations associées à chaque orderId
+    const ordersInfo = [];
+    let count = 0;
+
+    ordersId.forEach((orderId) => {
+      db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+        count++;
+
+        if (err) {
+          console.error(err);
+        } else {
+          ordersInfo.push(result[0]); // Ajouter les informations de la commande à la liste ordersInfo
+        }
+
+        // Vérifier si toutes les requêtes ont été traitées
+        if (count === ordersId.length) {
+          // Envoi des données et du message au frontend
+          return res.status(201).json({
+            data: {
+              ordersInfo: ordersInfo
+            },
+            message: 'Données de commande récupérées avec succès!'
+          });
+        }
+      });
     });
   });
 };
+
 
 
 
