@@ -8,7 +8,6 @@ CREATE TABLE `order` (
   `serviceBackDate` DATE,
   `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
-  `email` VARCHAR(255),
   `userInfo` TEXT,
   `hub` TEXT,
   `hubBack` TEXT,
@@ -27,7 +26,7 @@ CREATE TABLE IF NOT EXISTS invoices (
   status VARCHAR(50) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   payment_due_date DATE,
-  FOREIGN KEY (order_id) REFERENCES `order`(id)
+ FOREIGN KEY (order_id) REFERENCES `orders`(id) ON DELETE CASCADE
 );
 
 
