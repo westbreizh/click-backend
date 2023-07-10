@@ -6,7 +6,6 @@ const http = require('http'); // Import du package http (https requiert un certi
 const app = require('./app');
 
 
-const app = express();
 // gestion des différentes origines de communications back frontend
 const cors = require('cors');
 app.use(cors());
