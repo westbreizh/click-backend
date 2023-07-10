@@ -22,11 +22,8 @@ const db = require("../BDD/database-connect")
 const sendEmail = require("../email/sendEmail")
 
 
-
-
 // création ou modification  de l'adresse et téléphone
 // payload : l'adresse et téléphone
-
 exports.createOrUploadCoordinate= (req, res ) => {
 
   db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`,
@@ -87,13 +84,10 @@ exports.createOrUploadCoordinate= (req, res ) => {
       })
     }
   )
-
 }
 
 
-
 // fonction de creation d'un compte 
-
 exports.signup = (req, res ) => {
 
   // verifie que l'email est disponible
@@ -142,9 +136,7 @@ exports.signup = (req, res ) => {
 } 
 
 
-
 //fonction de connexion,
-
 exports.login = (req, res, next) => {
 
   // on essaie de récupèrer le joueur dans la bdd
@@ -208,7 +200,6 @@ exports.login = (req, res, next) => {
 
 //changement d'e-mail 
 // payload l'ancien et le nouveau e-mail
-
 exports.changeEmail = (req, res ) => {
 
   db.query(`SELECT * FROM player WHERE email='${req.body.email}'`,
@@ -285,7 +276,6 @@ exports.changePassword = (req, res, next) => {
 }
 
 
-
 // fonction qui enregistre les prérences du joueur pour le cordage
 
 exports.registerPreferencePlayer = (req, res ) => {
@@ -305,7 +295,6 @@ console.log("preference jouer email trouvé")
     }
   )
 }
-
 
 
 //envoie d'un email pour réinitialisation du mot de passe
@@ -363,6 +352,34 @@ exports.sendEmailToResetPassword = (req, res ) => {
     }
   })
 }
+
+
+
+
+exports.login = (req, res, next) => {
+  console.log("req.body", req.body);
+
+  // Récupération des informations depuis la table "invoices" en utilisant l'email
+  db.query(`SELECT orders_id FROM invoices WHERE customers_email='${req.body.email}'`, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
+    }
+    console.log("result", result);
+    const ordersId = result.map((row) => row.orders_id);
+    console.log("ordersId", ordersId);
+
+    // Envoi des données et du message au frontend
+    return res.status(201).json({
+      data: {
+        ordersId: ordersId
+      },
+      message: 'Données de commande récupérées avec succès!'
+    });
+  });
+};
+
+
 
 
 

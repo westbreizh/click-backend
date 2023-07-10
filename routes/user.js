@@ -24,6 +24,7 @@ router.post('/createOrUploadCoordinate', auth, userCtrl.createOrUploadCoordinate
 router.post('/changeEmail', auth, userCtrl.changeEmail);
 router.post('/changePassword', auth, userCtrl.changePassword);
 
+router.post('/orderLog', auth, userCtrl.sendOrderLog);
 
 router.delete('/:id', auth, userCtrl.deleteUser);
 
