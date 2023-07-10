@@ -376,6 +376,7 @@ exports.sendOrderLog = (req, res, next) => {
 
         if (err) {
           console.error(err);
+          
         } else {
           ordersInfo.push(result[0]); // Ajouter les informations de la commande à la liste ordersInfo
         }
