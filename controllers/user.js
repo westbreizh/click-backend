@@ -382,11 +382,9 @@ exports.sendOrderLog = (req, res, next) => {
 
         // Vérifier si toutes les requêtes ont été traitées
         if (count === ordersId.length) {
-          console.log("ordersInfo", ordersInfo);
           // Envoi des données et du message au frontend
           return res.status(201).json({
             data: {
-              
               ordersInfo: ordersInfo
             },
             message: 'Données de commande récupérées avec succès!'
