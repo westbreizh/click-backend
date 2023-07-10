@@ -6,7 +6,16 @@ const http = require('http'); // Import du package http (https requiert un certi
 const app = require('./app');
 
 
-
+const app = express();
+// gestion des différentes origines de communications back frontend
+const cors = require('cors');
+app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 //La fonction normalizePort renvoie un port valide (numéro ou chaîne)
 //Cela configure le port de connection en fonction de l'environnement
