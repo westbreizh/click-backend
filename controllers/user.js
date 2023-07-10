@@ -363,7 +363,7 @@ exports.sendOrderLog = (req, res, next) => {
       return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
     }
 
-    const ordersId = result.map((row) => row.orders_id);
+    const ordersId = result.map((row) => row.order_id);
     console.log("ordersId", ordersId);
 
     // Récupération des informations associées à chaque orderId
