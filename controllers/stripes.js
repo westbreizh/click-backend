@@ -138,7 +138,7 @@ exports.createCheckOutSession = async (req, res) => {
       payment_intent_data: {
         metadata: {
           email: email,
-          orders_id: idOrder,
+          order_id: idOrder,
           auth_token: token
         },
       },
@@ -160,7 +160,7 @@ function saveInvoiceToDatabase(paymentIntent) {
 
   const metadata = paymentIntent.metadata;
   const customerEmail = metadata.email;
-  const orders_id = metadata.orders_id;
+  const order_id = metadata.order_id;
   const customer_name = paymentIntent.billing_details.name;
   const amount = paymentIntent.amount / 100; // Stripe utilise des montants en cents, vous pouvez ajuster cela selon votre configuration
   const status = 'paid'; // Définissez le statut approprié pour une facture payée
@@ -168,10 +168,10 @@ function saveInvoiceToDatabase(paymentIntent) {
   const paymentDueDate = null; // Remplacez cette valeur par la date d'échéance de paiement appropriée
 
   // Construisez la requête SQL pour insérer les données dans la table
-  const query = `INSERT INTO invoices (orders_id, customer_name, customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO invoices (order_id, customer_name, customer_email, amount, status, created_at, payment_due_date) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
   // Exécutez la requête SQL en utilisant le module mysql2
-  db.query(query, [orders_id, customer_name, customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
+  db.query(query, [order_id, customer_name, customerEmail, amount, status, createdDate, paymentDueDate], (error, results) => {
     if (error) {
       console.error('Erreur lors de l\'enregistrement de la facture :', error);
     } else {
