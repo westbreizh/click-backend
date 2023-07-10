@@ -356,7 +356,7 @@ exports.sendEmailToResetPassword = (req, res ) => {
 
 
 
-exports.login = (req, res, next) => {
+exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
 
   // Récupération des informations depuis la table "invoices" en utilisant l'email
