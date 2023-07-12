@@ -7,6 +7,7 @@ const app = require('./app');
 
 
 // gestion des différentes origines de communications back frontend
+// 
 const cors = require('cors');
 app.use(cors());
 app.use((req, res, next) => {
