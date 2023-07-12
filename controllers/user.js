@@ -206,57 +206,60 @@ exports.createOrUploadCoordinate= (req, res ) => {
 
 
 //envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
-exports.sendEmailToResetPassword = (req, res ) => {
+exports.sendEmailToResetPassword = (req, res) => {
+  const email = req.body.email;
 
-  const email = req.body.email
-
-  db.query(`SELECT * FROM player WHERE email='${email}'`,
-    (err, result) => {
-
-      // email trouvé
-      if (result.length > 0) {          
-        
-        // on génère un nouveau token 
-        let resetToken = crypto.randomBytes(32).toString("hex");
-        // on le hash pour pouvoir le stocker dans la table token
-        bcryptjs.hash(resetToken, Number(bcryptSalt))
-        .then(cryptedPassword => {
-        })
-
-        
-        const link = `${clientURL}/passwordReset/token=${resetToken}/id=${result[0].id}`;
-        console.log(link)
-        console.log(resetToken)
-
-
-        sendEmail(
-          email,
-          "réinitialisation du mot de passe, l'équipe Click & Raquette",
-          {
-            name: result[0].forename,
-            link: link,
-          },
-           "./email/template/emailToResetPassword.handlebars"
-        );
-        
-        return res.status(201).json(data = {
-          userId: result[0].id,
-          token: resetToken,
-          message: 'un email de réinitialisation a été envoyé !'
-        });
-
-
-
-      } else {          //email non trouvé
-        res.status(404).json({
-            message: 'L\'email est inconnu sorry try again!!'
-      })}
-
+  db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
     if (err) {
-      return res.status(500).json({message :"une erreur avec le serveur s'est produite!"});
+      return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
     }
-  })
-}
+
+    if (result.length > 0) {
+      let resetToken = crypto.randomBytes(32).toString("hex");
+
+      bcryptjs
+        .hash(resetToken, Number(bcryptSalt))
+        .then((hashedToken) => {
+          // Enregistrement du token hashé dans la table player
+          const playerId = result[0].id;
+          db.query(
+            `UPDATE player SET resetToken='${hashedToken}' WHERE id=${playerId}`,
+            (updateErr) => {
+              if (updateErr) {
+                return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du token de réinitialisation." });
+              }
+
+              const link = `${clientURL}/passwordReset/token=${resetToken}/id=${playerId}`;
+
+              sendEmail(
+                email,
+                "Réinitialisation du mot de passe - L'équipe Click & Raquette",
+                {
+                  name: result[0].forename,
+                  link: link,
+                },
+                "./email/template/emailToResetPassword.handlebars"
+              );
+
+              return res.status(201).json({
+                userId: playerId,
+                token: resetToken,
+                message: "Un email de réinitialisation a été envoyé !",
+              });
+            }
+          );
+        })
+        .catch((error) => {
+          return res.status(500).json({ message: "Une erreur s'est produite lors du hachage du token." });
+        });
+    } else {
+      res.status(404).json({
+        message: "L'email est inconnu. Veuillez réessayer.",
+      });
+    }
+  });
+};
+
 
 
 // fonction qui renvoit la liste des commandes effectué son historique
@@ -473,6 +476,7 @@ exports.getOneUser = (req, res, next) => {
 
 
   
+  //En résumé, pour les tokens "normaux" tels que les JWT, le stockage du token lui-même n'est généralement pas nécessaire car toutes les informations nécessaires sont incluses dans le token. Cependant, il peut y avoir des cas où le stockage de certaines informations associées au token est souhaitable pour des raisons spécifiques.
 
 
 
