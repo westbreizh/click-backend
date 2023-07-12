@@ -5,17 +5,20 @@ const YOUR_DOMAIN = 'https://click-and-raquette.com';
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 
+
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
+
+
+
 
 // fonction qui calcule le prix d'un element de articleList
 function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
-  }
+ }
 
 
-
-  // fonction de modification des preferences joueurs dans la table payer
+// fonction de modification des preferences joueurs dans la table payer
 function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email) {
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
@@ -36,8 +39,7 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, ema
   });
 }
   
-  
-  
+   
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {

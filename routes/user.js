@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const auth = require('../middleware/auth'); 
+const authenticateJWT = require('../middleware/authenticateJWT'); 
 const userCtrl = require('../controllers/user');
 
 
@@ -14,15 +14,15 @@ router.post('/login', userCtrl.login);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 
-router.post('/createOrUploadCoordinate', auth, userCtrl.createOrUploadCoordinate);
-router.post('/changeEmail', auth, userCtrl.changeEmail);
-router.post('/changePassword', auth, userCtrl.changePassword);
+router.post('/createOrUploadCoordinate', authenticateJWT, userCtrl.createOrUploadCoordinate);
+router.post('/changeEmail', authenticateJWT, userCtrl.changeEmail);
+router.post('/changePassword', authenticateJWT, userCtrl.changePassword);
 
-router.post('/orderLog', auth, userCtrl.sendOrderLog);
-router.post('/oneOrder', auth, userCtrl.sendOneOrder);
+router.post('/orderLog', authenticateJWT, userCtrl.sendOrderLog);
+router.post('/oneOrder', authenticateJWT, userCtrl.sendOneOrder);
 
 
-router.delete('/:id', auth, userCtrl.deleteUser);
+router.delete('/:id', authenticateJWT, userCtrl.deleteUser);
 
 
 module.exports = router;

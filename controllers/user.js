@@ -1,11 +1,3 @@
-// extension pour crytpé, décrypté comparé le mot de passe
-const bcryptjs = require('bcryptjs');  
-
-const crypto = require("crypto");
-
-// module pour générer un jeton, un token 
-const jwt = require('jsonwebtoken');
-
 // charge les variables d'environnement du fichier .env dans process.env
 const dotenv = require("dotenv");   
 dotenv.config();
@@ -13,78 +5,26 @@ const bcryptSalt = process.env.bcryptSalt;
 const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
 
+
+// extension pour crytpé, décrypté comparé le mot de passe
+const bcryptjs = require('bcryptjs');  
+const crypto = require("crypto");
+
+
+// module pour générer un jeton, un token 
+const jwt = require('jsonwebtoken');
+
+
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
+const sendEmail = require("../email/sendEmail")
+
 
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 
-const sendEmail = require("../email/sendEmail")
 
 
-// création ou modification  de l'adresse et téléphone
-// payload : l'adresse et téléphone
-exports.createOrUploadCoordinate= (req, res ) => {
-
-  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`,
-    (err, result) => {
-
-      // l'utilisateur a été retrouvé dans la table address on modifie l'addrese et le telephone
-      if (result.length > 0) { 
-        console.log("on va modifié")
-        db.query(
-          `UPDATE player 
-           SET telephone =  '${req.body.telephone}' 
-           WHERE id = ${req.body.playerId}  `
-          )
-        db.query(
-          `UPDATE address
-            SET road =  '${req.body.road}',
-            city = '${req.body.city}',
-            postalCode = '${req.body.postalCode}'
-            WHERE inHabitant = ${req.body.playerId}  `
-          )
-                          
-      // l'utilisateur n'a pas été retrouvé dans la table address on crée l'adresse et ajoute ou modifie le téléphone
-      }else{ 
-        db.query(
-        `UPDATE player 
-         SET telephone =  '${req.body.telephone}' 
-         WHERE id = ${req.body.playerId}  `
-        )
-        db.query(
-          `INSERT INTO address
-          (road, city, postalCode, inHabitant) 
-          VALUES ( '${req.body.road}','${req.body.city}', '${req.body.postalCode}','${req.body.playerId}' )`
-        )
-      }
-  })
-
-  // une fois les données enregistrées dans les tables on les récupères pour les retournées au frontend ...
-  //table player
-  db.query(`SELECT * FROM player WHERE id='${req.body.playerId}'`, 
-    (err, result) => {
-
-      delete (result[0].password);
-      const userInfo = result[0];
-
-      //table adress
-      db.query(`SELECT * FROM address WHERE inHabitant='${req.body.playerId}'`, 
-      (err, result) => {
-        const userAddress = result[0]
-        console.log(userAddress)
-        console.log(userInfo)
-
-        //on retourne des datas et le message
-        return res.status(201).json(data = {
-          userInfo: userInfo,
-          userAddress: userAddress,
-          message: 'modification de coordonnées réussie !'
-        });
-      })
-    }
-  )
-}
 
 
 // fonction de creation d'un compte 
@@ -161,9 +101,12 @@ exports.login = (req, res, next) => {
                 (err, result) => {
                   const userId = result[0].id;
                   const token = jwt.sign(        
-                    { userId: userId },
-                    Token_Secret_Key, 
-                    { expiresIn: '24h' }
+                  // 1ère argument : Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
+                  { userId: userId },
+                  // 2ème argument : La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
+                  Token_Secret_Key,
+                  // 3ème argument : Options du JWT, ici vous spécifiez que le token expire après 4 heures
+                  { expiresIn: '4h' }
                   );
                   delete (result[0].password);
                   const userInfo = result[0];
@@ -195,6 +138,222 @@ exports.login = (req, res, next) => {
           })
         }
   })
+}
+
+
+// création ou modification  de l'adresse et téléphone, payload : l'adresse et téléphone
+exports.createOrUploadCoordinate= (req, res ) => {
+
+  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`,
+    (err, result) => {
+
+      // l'utilisateur a été retrouvé dans la table address on modifie l'addrese et le telephone
+      if (result.length > 0) { 
+        console.log("on va modifié")
+        db.query(
+          `UPDATE player 
+           SET telephone =  '${req.body.telephone}' 
+           WHERE id = ${req.body.playerId}  `
+          )
+        db.query(
+          `UPDATE address
+            SET road =  '${req.body.road}',
+            city = '${req.body.city}',
+            postalCode = '${req.body.postalCode}'
+            WHERE inHabitant = ${req.body.playerId}  `
+          )
+                          
+      // l'utilisateur n'a pas été retrouvé dans la table address on crée l'adresse et ajoute ou modifie le téléphone
+      }else{ 
+        db.query(
+        `UPDATE player 
+         SET telephone =  '${req.body.telephone}' 
+         WHERE id = ${req.body.playerId}  `
+        )
+        db.query(
+          `INSERT INTO address
+          (road, city, postalCode, inHabitant) 
+          VALUES ( '${req.body.road}','${req.body.city}', '${req.body.postalCode}','${req.body.playerId}' )`
+        )
+      }
+  })
+
+  // une fois les données enregistrées dans les tables on les récupères pour les retournées au frontend ...
+  //table player
+  db.query(`SELECT * FROM player WHERE id='${req.body.playerId}'`, 
+    (err, result) => {
+
+      delete (result[0].password);
+      const userInfo = result[0];
+
+      //table adress
+      db.query(`SELECT * FROM address WHERE inHabitant='${req.body.playerId}'`, 
+      (err, result) => {
+        const userAddress = result[0]
+        console.log(userAddress)
+        console.log(userInfo)
+
+        //on retourne des datas et le message
+        return res.status(201).json(data = {
+          userInfo: userInfo,
+          userAddress: userAddress,
+          message: 'modification de coordonnées réussie !'
+        });
+      })
+    }
+  )
+}
+
+
+//envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
+exports.sendEmailToResetPassword = (req, res ) => {
+
+  const email = req.body.email
+
+  db.query(`SELECT * FROM player WHERE email='${email}'`,
+    (err, result) => {
+
+      // email trouvé
+      if (result.length > 0) {          
+        
+        // on génère un nouveau token 
+        let resetToken = crypto.randomBytes(32).toString("hex");
+        // on le hash pour pouvoir le stocker dans la table token
+        bcryptjs.hash(resetToken, Number(bcryptSalt))
+        .then(cryptedPassword => {
+        })
+
+        
+        const link = `${clientURL}/passwordReset/token=${resetToken}/id=${result[0].id}`;
+        console.log(link)
+        console.log(resetToken)
+
+
+        sendEmail(
+          email,
+          "réinitialisation du mot de passe, l'équipe Click & Raquette",
+          {
+            name: result[0].forename,
+            link: link,
+          },
+           "./email/template/emailToResetPassword.handlebars"
+        );
+        
+        return res.status(201).json(data = {
+          userId: result[0].id,
+          token: resetToken,
+          message: 'un email de réinitialisation a été envoyé !'
+        });
+
+
+
+      } else {          //email non trouvé
+        res.status(404).json({
+            message: 'L\'email est inconnu sorry try again!!'
+      })}
+
+    if (err) {
+      return res.status(500).json({message :"une erreur avec le serveur s'est produite!"});
+    }
+  })
+}
+
+
+// fonction qui renvoit la liste des commandes effectué son historique
+exports.sendOrderLog = (req, res, next) => {
+  console.log("req.body", req.body);
+
+  db.query(`SELECT order_id FROM invoices WHERE customer_email='${req.body.email}'`, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
+    }
+
+    const ordersId = result.map((row) => row.order_id);
+    console.log("ordersId", ordersId);
+
+    // Récupération des informations associées à chaque orderId
+    const ordersInfo = [];
+    let count = 0;
+
+    ordersId.forEach((orderId) => {
+      db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
+        count++;
+
+        if (err) {
+          console.error(err);
+          
+        } else {
+          ordersInfo.push(result[0]); // Ajouter les informations de la commande à la liste ordersInfo
+        }
+
+        // Vérifier si toutes les requêtes ont été traitées
+        if (count === ordersId.length) {
+          // Envoi des données et du message au frontend
+          return res.status(201).json({
+            data: {
+              ordersInfo: ordersInfo
+            },
+            message: 'Données de commande récupérées avec succès!'
+          });
+        }
+      });
+    });
+  });
+};
+
+
+// fonction qui renvoit une commande précise
+exports.sendOneOrder = (req, res, next) => {
+  const orderId = req.body.orderId
+  console.log("req.body.orderId", orderId);
+    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
+        return res.status(201).json({
+          data: {
+            orderInfo: orderInfo
+          },
+          message: 'Données de commande récupérées avec succès!'
+        });
+      }
+    });
+};
+
+
+
+
+
+
+
+
+
+// suprresion utilisateur de la DB
+exports.deleteUser = (req, res, next) => {
+  let userId = req.params.id
+  userId= userId.substring(1)
+  db.query(`DELETE FROM users WHERE id = ${userId}`, 
+  (error, result) => {
+
+    db.query(`DELETE FROM posts WHERE id_user = ${userId}`, 
+    (error, result) => {
+
+        db.query(`DELETE FROM comments WHERE id_user = ${userId}`, 
+        (error, result) => {
+            if (error) {
+            return res.status(400).json({
+                error
+            });
+            }
+            return res.status(200).json({
+                message : "le compte a bien été supprimé de user ainsi que les post et les commentaires !"
+            });
+        })
+    })
+        
+  });
 }
 
 
@@ -240,7 +399,6 @@ exports.changeEmail = (req, res ) => {
 
 //changement de mot de passe  
 //payload l'email, l'ancien et le nouveau mot de passe
-
 exports.changePassword = (req, res, next) => {
 
   db.query(`SELECT * FROM player WHERE email='${req.body.email}'`,
@@ -277,7 +435,6 @@ exports.changePassword = (req, res, next) => {
 
 
 // fonction qui enregistre les prérences du joueur pour le cordage
-
 exports.registerPreferencePlayer = (req, res ) => {
 
   console.log(req.body)
@@ -297,218 +454,25 @@ console.log("preference jouer email trouvé")
 }
 
 
-//envoie d'un email pour réinitialisation du mot de passe
-// payload l'email associé au compte
-
-exports.sendEmailToResetPassword = (req, res ) => {
-
-  const email = req.body.email
-
-  db.query(`SELECT * FROM player WHERE email='${email}'`,
-    (err, result) => {
-
-      // email trouvé
-      if (result.length > 0) {          
-        
-        // on génère un nouveau token 
-        let resetToken = crypto.randomBytes(32).toString("hex");
-        // on le hash pour pouvoir le stocker dans la table token
-        bcryptjs.hash(resetToken, Number(bcryptSalt))
-        .then(cryptedPassword => {
-
-        })
-
-        
-        const link = `${clientURL}/passwordReset/token=${resetToken}/id=${result[0].id}`;
-        console.log(link)
-        console.log(resetToken)
-
-
-        sendEmail(
-          email,
-          "réinitialisation du mot de passe, l'équipe Click & Raquette",
-          {
-            name: result[0].forename,
-            link: link,
-          },
-           "./email/template/emailToResetPassword.handlebars"
-        );
-        
-        return res.status(201).json(data = {
-          userId: result[0].id,
-          token: resetToken,
-          message: 'un email de réinitialisation a été envoyé !'
-        });
-
-
-
-      } else {          //email non trouvé
-        res.status(404).json({
-            message: 'L\'email est inconnu sorry try again!!'
-      })}
-
-    if (err) {
-      return res.status(500).json({message :"une erreur avec le serveur s'est produite!"});
-    }
-  })
-}
-
-
-exports.sendOrderLog = (req, res, next) => {
-  console.log("req.body", req.body);
-
-  db.query(`SELECT order_id FROM invoices WHERE customer_email='${req.body.email}'`, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
-    }
-
-    const ordersId = result.map((row) => row.order_id);
-    console.log("ordersId", ordersId);
-
-    // Récupération des informations associées à chaque orderId
-    const ordersInfo = [];
-    let count = 0;
-
-    ordersId.forEach((orderId) => {
-      db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
-        count++;
-
-        if (err) {
-          console.error(err);
-          
-        } else {
-          ordersInfo.push(result[0]); // Ajouter les informations de la commande à la liste ordersInfo
-        }
-
-        // Vérifier si toutes les requêtes ont été traitées
-        if (count === ordersId.length) {
-          // Envoi des données et du message au frontend
-          return res.status(201).json({
-            data: {
-              ordersInfo: ordersInfo
-            },
-            message: 'Données de commande récupérées avec succès!'
+// obtenir un user via l'id 
+exports.getOneUser = (req, res, next) => {
+  let userId = req.params.id
+  userId= userId.substring(1)
+  db.query(`SELECT * FROM users   WHERE id = ${userId}`, 
+            (error, result) => {
+    if (error) {
+          return res.status(400).json({
+              error
           });
-        }
-      });
-    });
-  });
-};
-
-
-exports.sendOneOrder = (req, res, next) => {
-  const orderId = req.body.orderId
-  console.log("req.body.orderId", orderId);
-    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
-      if (err) {
-        console.error(err);
-      } else {
-        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
-        return res.status(201).json({
-          data: {
-            orderInfo: orderInfo
-          },
-          message: 'Données de commande récupérées avec succès!'
-        });
       }
-    });
+      return res.status(200).json(
+          result);
+      });
 };
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  // obtenir un user via l'id 
-  exports.getOneUser = (req, res, next) => {
-    let userId = req.params.id
-    userId= userId.substring(1)
-    db.query(`SELECT * FROM users   WHERE id = ${userId}`, 
-              (error, result) => {
-      if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json(
-            result);
-        });
-  };
-
-
-// Modifier un profil utilisateur. 
-exports.modifyOneUser = (req, res, next) => {
-    let userId = req.params.id
-    userId= userId.substring(1)
-
-    if (req.body.file) {  // si j'ai un fichier image dans la requete
-        imageUrl = `${req.protocol}://${req.get("host")}/images/${req.body.file.filename}`;  // req.protocol renvoie le http ou https,  req.get ('host') => donne le host de notre serveur (ici localhost 3001 en réel racine de notre serveur) ensuite dossier images et le nom du fichi
-        console.log("je suis la ! ")
-        console.log(imageUrl)
-    }
-    else {
-        imageUrl = req.body.imageUrl; 
-        console.log("je suis ici")
-    }
-
-    db.query(`UPDATE users 
-    SET username = '${req.body.username}', texte = '${req.body.texte}', lastName = '${req.body.lastName}', forName = '${req.body.forName}', email = '${req.body.email}' 
-    WHERE id = ${userId}`, 
-    (error, result) => {
-        console.log("juste après avoir enregistrer")
-
-        if (error) {
-            return res.status(400).json({
-                error
-            });
-        }
-        return res.status(200).json({
-        message: 'Votre profil à été modifié !'
-    })});
-    };
   
 
 
 
-// suprresion utilisateur de la DB
-exports.deleteUser = (req, res, next) => {
-  let userId = req.params.id
-  userId= userId.substring(1)
-  db.query(`DELETE FROM users WHERE id = ${userId}`, 
-  (error, result) => {
-
-    db.query(`DELETE FROM posts WHERE id_user = ${userId}`, 
-    (error, result) => {
-
-        db.query(`DELETE FROM comments WHERE id_user = ${userId}`, 
-        (error, result) => {
-            if (error) {
-            return res.status(400).json({
-                error
-            });
-            }
-            return res.status(200).json({
-                message : "le compte a bien été supprimé de user ainsi que les post et les commentaires !"
-            });
-        })
-    })
-        
-  });
-}
