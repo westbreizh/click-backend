@@ -265,6 +265,7 @@ exports.sendEmailToResetPassword = (req, res) => {
 exports.saveResetPassword = (req, res) => {
   console.log("req.body"+req.body)
   const userId = req.body.userId;
+  console.log("userId"+req.body.userId)
   const resetToken = req.body.resetToken;
   const newPassword = req.body.newPassword;
 
