@@ -13,6 +13,7 @@ router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
+router.post('/saveResetPassword', userCtrl.saveResetPassword);
 
 router.post('/createOrUploadCoordinate', authenticateJWT, userCtrl.createOrUploadCoordinate);
 router.post('/changeEmail', authenticateJWT, userCtrl.changeEmail);

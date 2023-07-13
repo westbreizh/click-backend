@@ -261,6 +261,51 @@ exports.sendEmailToResetPassword = (req, res) => {
 };
 
 
+//enregistrement du nouveau mot de passe réinitialisé, payload fourni : le mot de passe, id et le token
+exports.saveResetPassword = (req, res) => {
+  console.log("req.body"+req.body)
+  const userId = req.body.userId;
+  const resetToken = req.body.resetToken;
+  const newPassword = req.body.newPassword;
+
+  // Vérifier si l'utilisateur existe dans la base de données
+  db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, result) => {
+    if (err) {
+      return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
+    }
+
+    // Vérifier si l'utilisateur a le même resetToken que celui stocké dans la base de données
+    const storedResetToken = result[0].resetToken;
+    bcryptjs.compare(resetToken, storedResetToken, (compareErr, isMatch) => {
+      if (compareErr) {
+        return res.status(500).json({ message: "Une erreur de comparaison s'est produite." });
+      }
+
+      if (!isMatch) {
+        return res.status(400).json({ message: "Le token de réinitialisation est invalide." });
+      }
+
+      // Hacher le nouveau mot de passe
+      bcryptjs.hash(newPassword, Number(bcryptSalt))
+        .then((hashedPassword) => {
+          // Mettre à jour le mot de passe dans la base de données
+          db.query(`UPDATE player SET password='${hashedPassword}', resetToken=NULL WHERE id='${userId}'`, (updateErr) => {
+            if (updateErr) {
+              return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du mot de passe." });
+            }
+
+            return res.status(200).json({ message: "Le mot de passe a été réinitialisé avec succès." });
+          });
+        })
+        .catch((hashErr) => {
+          return res.status(500).json({ message: "Une erreur s'est produite lors du hachage du mot de passe." });
+        });
+    });
+  });
+};
+
+
+
 
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
