@@ -395,7 +395,7 @@ console.log("prenom",req.body.referent_forename)
           '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
           (err, result) => {        
             //recupère l'id pour création du token
-            db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
+            db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
               (err, result) => {
                 const userId = result[0].id;
                 const token = jwt.sign(        
