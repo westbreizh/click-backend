@@ -6,6 +6,8 @@ const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
 
 
+
+
 // extension pour crytpé, décrypté comparé le mot de passe
 const bcryptjs = require('bcryptjs');  
 const crypto = require("crypto");
@@ -306,8 +308,6 @@ exports.saveResetPassword = (req, res) => {
 };
 
 
-
-
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
@@ -372,6 +372,52 @@ exports.sendOneOrder = (req, res, next) => {
 };
 
 
+// fonction de creation d'un compte hub
+exports.signupHub = (req, res ) => {
+
+  // verifie que l'email est disponible
+  db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
+  (err, results) => {
+
+    // email deja utilisé
+    if (results.length > 0) {                           
+        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
+
+    // email disponible
+    }else{  
+
+      bcryptjs.hash(req.body.password, Number(bcryptSalt))
+      .then(cryptedPassword => {
+        
+        //implemente la base de donnée
+        db.query(`INSERT INTO hub (enterprise_name, referent_forname, referent_lastname, email, password_hash, address, postal_code, city, telephone   ) VALUES
+          ( '${req.body.enterprise_name}','${req.body.referent_forname}', '${req.body.referent_lastname}', 
+          '${req.body.email}', '${cryptedPassword}', '${req.body.address}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
+          (err, result) => {        
+            //recupère l'id pour création du token
+            db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
+              (err, result) => {
+                const userId = result[0].id;
+                const token = jwt.sign(        
+                  { userId: userId },
+                  Token_Secret_Key, 
+                  { expiresIn: '24h' }
+                );
+                delete (result[0].password);
+                //on retourne des datas et le message
+                return res.status(201).json(data = {
+                  userInfo: result[0],
+                  token: token,
+                  message: 'Votre compte hub a bien été crée !'
+                });
+
+            })
+          }
+        )
+      })
+    }    
+  })
+} 
 
 
 

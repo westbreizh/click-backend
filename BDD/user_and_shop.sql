@@ -1,4 +1,28 @@
 
+DROP TABLE IF EXISTS `hub`;
+
+CREATE TABLE hub (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  enterprise_name VARCHAR(100) NOT NULL,
+  referent_forname VARCHAR(100),
+  referent_lastname VARCHAR(100),
+  email VARCHAR(100),
+  password_hash VARCHAR(255) NOT NULL,
+  address VARCHAR(255),
+  postal_code VARCHAR(10),
+  city VARCHAR(100),
+  telephone VARCHAR(20),
+  userRole ENUM('client', 'administrator', 'hub') NOT NULL DEFAULT 'hub'
+);
+
+
+
+
+
+
+
+
+
 DROP TABLE IF EXISTS `order`;
 
 CREATE TABLE `order` (
