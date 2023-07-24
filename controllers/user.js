@@ -374,7 +374,6 @@ exports.sendOneOrder = (req, res, next) => {
 
 // fonction de creation d'un compte hub
 exports.signupHub = (req, res ) => {
-console.log("prenom",req.body.referent_forename)
   // verifie que l'email est disponible
   db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
   (err, results) => {
