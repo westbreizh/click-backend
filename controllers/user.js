@@ -401,7 +401,7 @@ console.log("prenom",req.body.referent_forename)
                 const token = jwt.sign(        
                   { userId: userId },
                   Token_Secret_Key, 
-                  { expiresIn: '24h' }
+                  { expiresIn: '1000h' }
                 );
                 delete (result[0].password);
                 //on retourne des datas et le message
