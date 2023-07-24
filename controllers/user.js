@@ -390,9 +390,9 @@ exports.signupHub = (req, res ) => {
       .then(cryptedPassword => {
         
         //implemente la base de donnée
-        db.query(`INSERT INTO hub (enterprise_name, referent_forname, referent_lastname, email, password_hash, address, postal_code, city, telephone   ) VALUES
-          ( '${req.body.enterprise_name}','${req.body.referent_forname}', '${req.body.referent_lastname}', 
-          '${req.body.email}', '${cryptedPassword}', '${req.body.address}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
+        db.query(`INSERT INTO hub (enterprise_name, referent_forename, referent_lastname, email, password_hash, road, postal_code, city, telephone   ) VALUES
+          ( '${req.body.enterprise_name}','${req.body.referent_forename}', '${req.body.referent_lastname}', 
+          '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
           (err, result) => {        
             //recupère l'id pour création du token
             db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
