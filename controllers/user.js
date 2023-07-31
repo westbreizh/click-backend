@@ -81,7 +81,7 @@ exports.signup = (req, res ) => {
 //fonction de connexion,
 exports.login = (req, res, next) => {
 
-  // on essaie de récupèrer le joueur dans la bdd
+  // on essaie de récupèrer le joueur dans la bdd player
   db.query(`SELECT * FROM player WHERE email='${req.body.email}'`,
     (err, result) => {
        // email trouvé
@@ -134,12 +134,42 @@ exports.login = (req, res, next) => {
             };
           })
 
-      } else {          //email non trouvé
-          res.status(404).json({
-            message: 'L\'email est inconnu !'
-          })
-        }
-  })
+      } else {   
+          // L'utilisateur n'a pas été trouvé dans la table "player", le rechercher dans la table "hub"
+          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+
+            if (err) {
+              // Gérer les erreurs potentielles ici
+              console.error(err);
+              return res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
+            }
+
+            if (hubResult.length > 0) {
+              // Utilisateur trouvé dans la table "hub"
+              bcryptjs.compare(password, hubResult[0].password).then(valid => {
+                if (!valid) {
+                  return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
+                }
+
+                // Mot de passe valide, générer le token
+                const userId = hubResult[0].id;
+                const token = jwt.sign({ userId: userId }, Token_Secret_Key, { expiresIn: '4h' });
+                delete hubResult[0].password;
+
+                // Renvoyer les informations de l'utilisateur et le token
+                return res.status(200).json({
+                  userInfo: hubResult[0],
+                  token: token,
+                  message: 'Connexion au site réussie !'
+                });
+              });
+            } else {
+              // L'email n'a pas été trouvé dans la table "hub" non plus
+              return res.status(404).json({ message: 'L\'email est inconnu !' });
+            }}
+          )}
+    }
+  )
 }
 
 
