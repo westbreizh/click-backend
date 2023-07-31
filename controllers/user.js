@@ -136,7 +136,7 @@ exports.login = (req, res, next) => {
 
       } else {   
           // L'utilisateur n'a pas été trouvé dans la table "player", le rechercher dans la table "hub"
-          db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, (err, hubResult) => {
+          db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, (err, result) => {
 
             if (err) {
               // Gérer les erreurs potentielles ici
@@ -171,23 +171,13 @@ exports.login = (req, res, next) => {
                         );
                         delete (result[0].password);
                         const userInfo = result[0];
-      
-                        //on essaie de retrouver l'adresse du joueur si elle est renseigné
-                        db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, 
-                        (err, result) => {
-                          const userAddress = result[0]
-                          console.log(userAddress)
-                          console.log(userInfo)
-      
-      
+
                           //on retourne des datas et le message
-                          return res.status(201).json(data = {
-                            userInfo: userInfo,
-                            userAddress: userAddress,
-                            token: token,
-                            message: 'connexion au site réussie !'
-                          });
-                        })
+                        return res.status(201).json(data = {
+                          userInfo: userInfo,
+                          token: token,
+                          message: 'connexion au site réussie !'
+                        });
                       }
                     )
                   };
