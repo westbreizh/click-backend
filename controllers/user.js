@@ -136,7 +136,7 @@ exports.login = (req, res, next) => {
 
       } else {   
           // L'utilisateur n'a pas été trouvé dans la table "player", le rechercher dans la table "hub"
-          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+          db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, (err, hubResult) => {
 
             if (err) {
               // Gérer les erreurs potentielles ici
