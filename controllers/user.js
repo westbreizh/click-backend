@@ -134,7 +134,7 @@ exports.login = (req, res, next) => {
           const user = result[0];
     
           // Vérifier le mot de passe
-          bcryptjs.compare(password, user.password).then((valid) => {
+          bcryptjs.compare(password, user.password_hash).then((valid) => {
             // Mot de passe non valide
             if (!valid) {
               return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
