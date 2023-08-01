@@ -78,9 +78,7 @@ exports.signup = (req, res ) => {
 } 
 
 
-//fonction de connexion,
-const jwt = require('jsonwebtoken');
-const bcryptjs = require('bcryptjs');
+
 
 // Fonction de connexion
 exports.login = (req, res, next) => {
