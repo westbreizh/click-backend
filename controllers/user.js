@@ -78,10 +78,106 @@ exports.signup = (req, res ) => {
 } 
 
 
-//fonction de connexion,
-exports.login = (req, res, next) => {
 
-  // on essaie de récupèrer le joueur dans la bdd player
+exports.login = (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  // Vérification si l'e-mail appartient à un joueur
+  db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResults) => {
+    if (err) {
+      // Gérer les erreurs de la requête
+      return res.status(500).json({
+        message: 'Une erreur est survenue lors de la connexion.'
+      });
+    }
+
+    if (playerResults.length > 0) {
+      // Email trouvé dans la table "player"
+      const player = playerResults[0];
+
+      bcryptjs.compare(password, player.password).then((valid) => {
+        if (!valid) {
+          // Mot de passe incorrect
+          return res.status(401).json({
+            message: 'Le mot de passe est incorrect !'
+          });
+        }
+
+        // Supprimer le mot de passe du résultat
+        delete player.password;
+
+        // Création du token
+        const token = jwt.sign(
+          { userId: player.id },
+          Token_Secret_Key,
+          { expiresIn: '4h' }
+        );
+
+        // Retourner les informations de l'utilisateur et le token
+        return res.status(201).json({
+          userInfo: player,
+          token: token,
+          message: 'Connexion au site réussie !'
+        });
+      });
+    } else {
+      // L'e-mail n'appartient pas à un joueur, vérifier dans la table "hub"
+      db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResults) => {
+        if (err) {
+          // Gérer les erreurs de la requête
+          return res.status(500).json({
+            message: 'Une erreur est survenue lors de la connexion.'
+          });
+        }
+
+        if (hubResults.length > 0) {
+          // Email trouvé dans la table "hub"
+          const hub = hubResults[0];
+
+          bcryptjs.compare(password, hub.password).then((valid) => {
+            if (!valid) {
+              // Mot de passe incorrect
+              return res.status(401).json({
+                message: 'Le mot de passe est incorrect !'
+              });
+            }
+
+            // Supprimer le mot de passe du résultat
+            delete hub.password;
+
+            // Création du token
+            const token = jwt.sign(
+              { userId: hub.id },
+              Token_Secret_Key,
+              { expiresIn: '104h' }
+            );
+
+            // Retourner les informations de l'utilisateur (hub) et le token
+            return res.status(201).json({
+              userInfo: hub,
+              token: token,
+              message: 'Connexion au site réussie !'
+            });
+          });
+        } else {
+          // L'e-mail n'appartient à aucun joueur ni hub
+          return res.status(404).json({
+            message: 'L\'email est inconnu !'
+          });
+        }
+      });
+    }
+  });
+};
+
+
+
+
+//fonction de connexion,
+exports.login2 = (req, res, next) => {
+
+  // on essaie de récupèrer le joueur dans la bdd
   db.query(`SELECT * FROM player WHERE email='${req.body.email}'`,
     (err, result) => {
        // email trouvé
@@ -134,64 +230,60 @@ exports.login = (req, res, next) => {
             };
           })
 
-      } else {   
-          // L'utilisateur n'a pas été trouvé dans la table "player", le rechercher dans la table "hub"
-          db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, (err, result) => {
-
-            if (err) {
-              // Gérer les erreurs potentielles ici
-              console.error(err);
-              return res.status(500).json({ message: 'Erreur serveur lors de la connexion.' });
-            }
-
-            if (result.length > 0) { 
-              bcryptjs.compare(req.body.password, result[0].password) 
-                .then(valid => {
-      
-                  // mot de passe non valide
-                  if (!valid) {         
-                    res.status(401).json({
-                    message: 'Le mot de passe est incorrect !'
-                     });
-      
-                  // mot de passe ok
-                  }else {          
-      
-                    //recupère l'id pour création du token
-                    db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
-                      (err, result) => {
-                        const userId = result[0].id;
-                        const token = jwt.sign(        
-                        // 1ère argument : Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
-                        { userId: userId },
-                        // 2ème argument : La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
-                        Token_Secret_Key,
-                        // 3ème argument : Options du JWT, ici vous spécifiez que le token expire après 4 heures
-                        { expiresIn: '4h' }
-                        );
-                        delete (result[0].password);
-                        const userInfo = result[0];
-
-                          //on retourne des datas et le message
+      } else {  
+        
+        //email non trouvé dans player
+        db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`,
+        (err, result) => {
+           // email trouvé
+          if (result.length > 0) { 
+            bcryptjs.compare(req.body.password, result[0].password) 
+              .then(valid => {
+    
+                // mot de passe non valide
+                if (!valid) {         
+                  res.status(401).json({
+                  message: 'Le mot de passe est incorrect !'
+                   });
+    
+                // mot de passe ok
+                }else {          
+    
+                  //recupère l'id pour création du token
+                  db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
+                    (err, result) => {
+                      const userId = result[0].id;
+                      const token = jwt.sign(        
+                      // 1ère argument : Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
+                      { userId: userId },
+                      // 2ème argument : La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
+                      Token_Secret_Key,
+                      // 3ème argument : Options du JWT, ici vous spécifiez que le token expire après 4 heures
+                      { expiresIn: '104h' }
+                      );
+                      delete (result[0].password);
+                      const userInfo = result[0];
+  
+                        //on retourne des datas et le message
                         return res.status(201).json(data = {
                           userInfo: userInfo,
                           token: token,
                           message: 'connexion au site réussie !'
                         });
-                      }
-                    )
-                  };
+                      })
+                    }
+                  )
+                };
+              }) else {          //email non trouvé
+                res.status(404).json({
+                  message: 'L\'email est inconnu !'
                 })
-      
             }
-              else {
-              // L'email n'a pas été trouvé dans la table "hub" non plus
-              return res.status(404).json({ message: 'L\'email est inconnu !' });
-            }}
-          )}
+      }
     }
-  )
-}
+  )}
+    
+
 
 
 // création ou modification  de l'adresse et téléphone, payload : l'adresse et téléphone
