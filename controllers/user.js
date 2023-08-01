@@ -125,8 +125,48 @@ exports.login = (req, res, next) => {
           });
         });
       });
-    } else { // Email non trouvé
-      res.status(404).json({ message: 'L\'email est inconnu !' });
+    } else { 
+      
+
+      db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, result) => {
+        // Email trouvé
+        if (result.length > 0) {
+          const user = result[0];
+    
+          // Vérifier le mot de passe
+          bcryptjs.compare(password, user.password).then((valid) => {
+            // Mot de passe non valide
+            if (!valid) {
+              return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
+            }
+    
+            // Mot de passe correct, créer un token
+            const userId = user.id;
+            const token = jwt.sign(
+              // Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
+              { userId: userId },
+              // La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
+              Token_Secret_Key,
+              // Options du JWT, ici vous spécifiez que le token expire après 4 heures
+              { expiresIn: '4h' }
+            );
+    
+            // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+            delete user.password;
+    
+              // Retourner les données et le message
+              return res.status(201).json({
+                userInfo: user,
+                token: token,
+                message: 'Connexion au site réussie !',
+              });
+
+          });
+        } else { // Email non trouvé
+          res.status(404).json({ message: 'L\'email est inconnu !' });
+        }
+      });
+    
     }
   });
 };
