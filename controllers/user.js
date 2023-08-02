@@ -26,7 +26,7 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-// fonction de creation d'un compte joueur 
+// fonction de creation d'un compte joueur    debugage
 exports.signup = (req, res ) => {
 
   // verifie que l'email est disponible
