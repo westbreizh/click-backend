@@ -26,10 +26,7 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-
-
-
-// fonction de creation d'un compte 
+// fonction de creation d'un compte joueur 
 exports.signup = (req, res ) => {
 
   // verifie que l'email est disponible
@@ -47,7 +44,7 @@ exports.signup = (req, res ) => {
       .then(cryptedPassword => {
         
         //implemente la base de donnée
-        db.query(`INSERT INTO player (civilite, lastname, forename, email, password) VALUES
+        db.query(`INSERT INTO player (civilite, lastname, forename, email, password_hash) VALUES
            ( '${req.body.civilite}','${req.body.lastname}', '${req.body.forename}', 
            '${req.body.email}', '${cryptedPassword}' )`,
           (err, result) => {        
@@ -77,100 +74,97 @@ exports.signup = (req, res ) => {
   })
 } 
 
+// fonction de creation d'un compte hub
+exports.signupHub = (req, res ) => {
+  // verifie que l'email est disponible
+  db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
+  (err, results) => {
 
+    // email deja utilisé
+    if (results.length > 0) {                           
+        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
 
+    // email disponible
+    }else{  
 
-// Fonction de connexion
-exports.login = (req, res, next) => {
-  const email = req.body.email;
-  const password = req.body.password;
+      bcryptjs.hash(req.body.password, Number(bcryptSalt))
+      .then(cryptedPassword => {
+        
+        //implemente la base de donnée
+        db.query(`INSERT INTO hub (enterprise_name, referent_forename, referent_lastname, email, password_hash, road, postal_code, city, telephone   ) VALUES
+          ( '${req.body.enterprise_name}','${req.body.referent_forename}', '${req.body.referent_lastname}', 
+          '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
+          (err, result) => {        
+            //recupère l'id pour création du token
+            db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
+              (err, result) => {
+                const userId = result[0].id;
+                const token = jwt.sign(        
+                  { userId: userId },
+                  Token_Secret_Key, 
+                  { expiresIn: '1000h' }
+                );
+                delete (result[0].password);
+                //on retourne des datas et le message
+                return res.status(201).json(data = {
+                  userInfo: result[0],
+                  token: token,
+                  message: 'Votre compte hub a bien été crée !'
+                });
 
-  // On essaie de récupérer le joueur dans la bdd
-  db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
-    // Email trouvé
-    if (result.length > 0) {
-      const user = result[0];
+            })
+          }
+        )
+      })
+    }    
+  })
+} 
 
-      // Vérifier le mot de passe
-      bcryptjs.compare(password, user.password).then((valid) => {
-        // Mot de passe non valide
-        if (!valid) {
-          return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
-        }
+// fonction de creation d'un compte cordeur
+exports.signupStringer = (req, res ) => {
+  // verifie que l'email est disponible
+  db.query(`SELECT * FROM stringer WHERE email='${req.body.email}'`, 
+  (err, results) => {
 
-        // Mot de passe correct, créer un token
-        const userId = user.id;
-        const token = jwt.sign(
-          // Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
-          { userId: userId },
-          // La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
-          Token_Secret_Key,
-          // Options du JWT, ici vous spécifiez que le token expire après 4 heures
-          { expiresIn: '4h' }
-        );
+    // email deja utilisé
+    if (results.length > 0) {                           
+        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
 
-        // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-        delete user.password;
+    // email disponible
+    }else{  
 
-        // On essaie de retrouver l'adresse du joueur s'il est renseigné
-        db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
-          const userAddress = addressResult[0];
-          
-          // Retourner les données et le message
-          return res.status(201).json({
-            userInfo: user,
-            userAddress: userAddress,
-            token: token,
-            message: 'Connexion au site réussie !',
-          });
-        });
-      });
-    } else { 
-      
+      bcryptjs.hash(req.body.password, Number(bcryptSalt))
+      .then(cryptedPassword => {
+        
+        //implemente la base de donnée
+        db.query(`INSERT INTO stringer (enterprise_name, referent_forename, referent_lastname, email, password_hash, road, postal_code, city, telephone   ) VALUES
+          ( '${req.body.enterprise_name}','${req.body.referent_forename}', '${req.body.referent_lastname}', 
+          '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
+          (err, result) => {        
+            //recupère l'id pour création du token
+            db.query(`SELECT * FROM stringer WHERE email='${req.body.email}'`, 
+              (err, result) => {
+                const userId = result[0].id;
+                const token = jwt.sign(        
+                  { userId: userId },
+                  Token_Secret_Key, 
+                  { expiresIn: '1000h' }
+                );
+                delete (result[0].password);
+                //on retourne des datas et le message
+                return res.status(201).json(data = {
+                  userInfo: result[0],
+                  token: token,
+                  message: 'Votre compte cordeur a bien été crée !'
+                });
 
-      db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, result) => {
-        // Email trouvé
-        if (result.length > 0) {
-          const user = result[0];
-    
-          // Vérifier le mot de passe
-          bcryptjs.compare(password, user.password_hash).then((valid) => {
-            // Mot de passe non valide
-            if (!valid) {
-              return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
-            }
-    
-            // Mot de passe correct, créer un token
-            const userId = user.id;
-            const token = jwt.sign(
-              // Les données que vous souhaitez inclure dans le JWT, ici l'identifiant de l'utilisateur
-              { userId: userId },
-              // La clé secrète utilisée pour signer le JWT (vous devez définir votre propre clé secrète)
-              Token_Secret_Key,
-              // Options du JWT, ici vous spécifiez que le token expire après 4 heures
-              { expiresIn: '4h' }
-            );
-    
-            // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-            delete user.password;
-    
-              // Retourner les données et le message
-              return res.status(201).json({
-                userInfo: user,
-                token: token,
-                message: 'Connexion au site réussie !',
-              });
-
-          });
-        } else { // Email non trouvé
-          res.status(404).json({ message: 'L\'email est inconnu !' });
-        }
-      });
-    
-    }
-  });
-};
-
+            })
+          }
+        )
+      })
+    }    
+  })
+} 
 
 
 // création ou modification  de l'adresse et téléphone, payload : l'adresse et téléphone
@@ -402,85 +396,6 @@ exports.sendOneOrder = (req, res, next) => {
 };
 
 
-// fonction de creation d'un compte hub
-exports.signupHub = (req, res ) => {
-  // verifie que l'email est disponible
-  db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
-  (err, results) => {
-
-    // email deja utilisé
-    if (results.length > 0) {                           
-        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
-
-    // email disponible
-    }else{  
-
-      bcryptjs.hash(req.body.password, Number(bcryptSalt))
-      .then(cryptedPassword => {
-        
-        //implemente la base de donnée
-        db.query(`INSERT INTO hub (enterprise_name, referent_forename, referent_lastname, email, password_hash, road, postal_code, city, telephone   ) VALUES
-          ( '${req.body.enterprise_name}','${req.body.referent_forename}', '${req.body.referent_lastname}', 
-          '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
-          (err, result) => {        
-            //recupère l'id pour création du token
-            db.query(`SELECT * FROM hub WHERE email='${req.body.email}'`, 
-              (err, result) => {
-                const userId = result[0].id;
-                const token = jwt.sign(        
-                  { userId: userId },
-                  Token_Secret_Key, 
-                  { expiresIn: '1000h' }
-                );
-                delete (result[0].password);
-                //on retourne des datas et le message
-                return res.status(201).json(data = {
-                  userInfo: result[0],
-                  token: token,
-                  message: 'Votre compte hub a bien été crée !'
-                });
-
-            })
-          }
-        )
-      })
-    }    
-  })
-} 
-
-
-
-
-
-
-
-// suprresion utilisateur de la DB
-exports.deleteUser = (req, res, next) => {
-  let userId = req.params.id
-  userId= userId.substring(1)
-  db.query(`DELETE FROM users WHERE id = ${userId}`, 
-  (error, result) => {
-
-    db.query(`DELETE FROM posts WHERE id_user = ${userId}`, 
-    (error, result) => {
-
-        db.query(`DELETE FROM comments WHERE id_user = ${userId}`, 
-        (error, result) => {
-            if (error) {
-            return res.status(400).json({
-                error
-            });
-            }
-            return res.status(200).json({
-                message : "le compte a bien été supprimé de user ainsi que les post et les commentaires !"
-            });
-        })
-    })
-        
-  });
-}
-
-
 //changement d'e-mail 
 // payload l'ancien et le nouveau e-mail
 exports.changeEmail = (req, res ) => {
@@ -595,9 +510,121 @@ exports.getOneUser = (req, res, next) => {
 };
 
 
+// Fonction pour récupérer l'utilisateur à partir de l'adresse e-mail
+const getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (playerResult.length > 0) {
+          resolve({ userType: 'player', user: playerResult[0] });
+        } else {
+          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', user: hubResult[0] });
+              } else {
+                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+};
+
+// Fonction pour vérifier le mot de passe
+const verifyPassword = (password, hashedPassword) => {
+  return bcryptjs.compare(password, hashedPassword);
+};
+
+// Fonction pour créer le jeton JWT
+const createToken = (userId) => {
+  return jwt.sign(
+    { userId: userId },
+    Token_Secret_Key,
+    { expiresIn: '4h' }
+  );
+};
+
+// Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
+const getUserAddress = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(addressResult.length > 0 ? addressResult[0] : null);
+      }
+    });
+  });
+};
+
+// Fonction de connexion
+exports.login = async (req, res, next) => {
+  const email = req.body.email;
+  const password = req.body.password;
+
+  try {
+    // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
+      return res.status(404).json({ message: 'L\'email est inconnu !' });
+    }
+
+    // Vérifier le mot de passe
+    const validPassword = await verifyPassword(password, user.user.password_hash);
+
+    if (!validPassword) {
+      // Si le mot de passe n'est pas valide, renvoyer une erreur 401
+      return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
+    }
+
+    // Mot de passe correct, créer un token
+    const userId = user.user.id;
+    const token = createToken(userId);
+
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    delete user.user.password_hash;
+
+    // On essaie de retrouver l'adresse du joueur s'il est renseigné
+    const userAddress = await getUserAddress(userId);
+
+    // Retourner les données et le message
+    return res.status(201).json({
+      userInfo: user.user,
+      userAddress: userAddress,
+      token: token,
+      message: 'Connexion au site réussie !',
+    });
+  } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
+  }
+};
+
+
+
+
+
 
   
-  //En résumé, pour les tokens "normaux" tels que les JWT, le stockage du token lui-même n'est généralement pas nécessaire car toutes les informations nécessaires sont incluses dans le token. Cependant, il peut y avoir des cas où le stockage de certaines informations associées au token est souhaitable pour des raisons spécifiques.
 
 
 
