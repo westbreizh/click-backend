@@ -44,12 +44,12 @@ exports.signup = (req, res ) => {
       .then(cryptedPassword => {
         
         //implemente la base de donnée
-        db.query(`INSERT INTO player (civilite, lastname, forename, email, password_hash) VALUES
+        db.query(`INSERT INTO player (civilite, lastname, forename, email, password_hash ) VALUES
            ( '${req.body.civilite}','${req.body.lastname}', '${req.body.forename}', 
            '${req.body.email}', '${cryptedPassword}' )`,
           (err, result) => {        
 
-            //recupère l'id pour création du token
+            //recupère l'id pour création du token ...
             db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
               (err, result) => {
                 const userId = result[0].id;
