@@ -1,3 +1,44 @@
+DROP TABLE IF EXISTS `player`;
+
+CREATE TABLE `player` (
+    `id`                    int NOT NULL AUTO_INCREMENT,
+    `civilite`              varchar(100) DEFAULT NULL,
+    `lastname`              varchar(100) DEFAULT NULL,
+    `forename`              varchar(100) DEFAULT NULL,
+    `email`                 varchar(255) NOT NULL,
+    `password_hash `        varchar(255) NOT NULL,
+    `telephone`             varchar(20) DEFAULT NULL,
+    `string_id`             varchar(100) DEFAULT NULL,
+    `string_rope`           int DEFAULT NULL,
+    `hub`                   varchar(100) DEFAULT NULL,
+    `hubBack`               varchar(100) DEFAULT NULL,
+    `userRole`              VARCHAR(50) NOT NULL DEFAULT 'player', 
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `email` (`email`)
+);
+
+
+
+
+
+DROP TABLE IF EXISTS `stringer`;
+
+CREATE TABLE stringer (
+  id INT AUTO_INCREMENT   PRIMARY KEY,
+  enterprise_name         VARCHAR(100) NOT NULL,
+  referent_forename       VARCHAR(100),
+  referent_lastname       VARCHAR(100),
+  email                   VARCHAR(100),
+  password_hash           VARCHAR(255) NOT NULL,
+  road                    VARCHAR(255),
+  postal_code             VARCHAR(10),
+  city                    VARCHAR(100),
+  telephone               VARCHAR(20),
+  userRole                VARCHAR(50) NOT NULL DEFAULT 'stringer'
+);
+
+
+
 
 DROP TABLE IF EXISTS `hub`;
 
@@ -12,14 +53,8 @@ CREATE TABLE hub (
   postal_code VARCHAR(10),
   city VARCHAR(100),
   telephone VARCHAR(20),
-  userRole ENUM('client', 'administrator', 'hub') NOT NULL DEFAULT 'hub'
+  userRole VARCHAR(50) NOT NULL DEFAULT 'hub'
 );
-
-
-
-
-
-
 
 
 
@@ -42,36 +77,21 @@ CREATE TABLE `order` (
 DROP TABLE IF EXISTS `invoices`;
 
 CREATE TABLE IF NOT EXISTS invoices (
-  id INT AUTO_INCREMENT PRIMARY KEY,
-  order_id INT,
-  customer_name VARCHAR(255) NOT NULL,
-  customer_email VARCHAR(255) NOT NULL,
-  amount DECIMAL(10,2) NOT NULL,
-  status VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  payment_due_date DATE,
+  id INT AUTO_INCREMENT     PRIMARY KEY,
+  order_id                  INT,
+  customer_name             VARCHAR(255) NOT NULL,
+  customer_email            VARCHAR(255) NOT NULL,
+  amount                    DECIMAL(10,2) NOT NULL,
+  status                    VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
+  payment_due_              date DATE,
  FOREIGN KEY (order_id) REFERENCES `orders`(id) ON DELETE CASCADE
 );
 
 
 
-DROP TABLE IF EXISTS `player`;
 
-CREATE TABLE `player` (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `civilite`      varchar(100) DEFAULT NULL,
-    `lastname`      varchar(100) DEFAULT NULL,
-    `forename`      varchar(100) DEFAULT NULL,
-    `email`         varchar(255) NOT NULL,
-    `password`      varchar(255) NOT NULL,
-    `telephone`     varchar(20) DEFAULT NULL,
-    `string_id`     varchar(100) DEFAULT NULL,
-    `string_rope`   int DEFAULT NULL,
-    `hub`           varchar(100) DEFAULT NULL,
-    `hubBack`       varchar(100) DEFAULT NULL,
-    PRIMARY KEY (`id`),
-    UNIQUE KEY `email` (`email`),
-) ;
+
 
 
 DROP TABLE IF EXISTS `address`;
