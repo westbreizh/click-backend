@@ -24,7 +24,7 @@ router.post('/orderLog', authenticateJWT, userCtrl.sendOrderLog);
 router.post('/oneOrder', authenticateJWT, userCtrl.sendOneOrder);
 
 
-router.delete('/:id', authenticateJWT, userCtrl.deleteUser);
+//router.delete('/:id', authenticateJWT, userCtrl.deleteUser);
 
 
 module.exports = router;
