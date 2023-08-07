@@ -285,6 +285,46 @@ exports.productSelected = (req, res ) => {
   )
 }
 
+// on recherche la liste des dépôts de collecte dans la BDD
+exports.listHubCollect = (req, res) => {
+  db.query(`SELECT * FROM hub WHERE collect = 1;`, 
+    (error, results) => {
+      if (error) {          
+        res.status(500).json({
+          message: 'Erreur avec la base de données'
+        });
+      } else {
+        const listHubCollect = results;
+        return res.status(200).json({
+          listHubCollect: listHubCollect,
+          message: 'La liste des dépôts de collecte a été récupérée!'
+        });
+      }
+    } 
+  );
+}
+
+
+// on recherche la liste des dépôts de retrait dans la BDD
+exports.listHubWithdrawal = (req, res) => {
+  db.query(`SELECT * FROM hub WHERE withdrawal = 1;`, 
+    (error, results) => {
+      if (error) {          
+        res.status(500).json({
+          message: 'Erreur avec la base de données'
+        });
+      } else {
+        const listHubWithdrawal = results;
+        return res.status(200).json({
+          listHubWithdrawal: listHubWithdrawal,
+          message: 'La liste des dépôts de retrait a été récupérée!'
+        });
+      }
+    } 
+  );
+}
+
+
 
 
 

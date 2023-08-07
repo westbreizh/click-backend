@@ -6,7 +6,7 @@ CREATE TABLE `player` (
     `lastname`              varchar(100) DEFAULT NULL,
     `forename`              varchar(100) DEFAULT NULL,
     `email`                 varchar(255) NOT NULL,
-    `password_hash `        varchar(255) NOT NULL,
+    `password_hash`        varchar(255) NOT NULL,
     `telephone`             varchar(20) DEFAULT NULL,
     `string_id`             varchar(100) DEFAULT NULL,
     `string_rope`           int DEFAULT NULL,
@@ -53,8 +53,11 @@ CREATE TABLE hub (
   postal_code VARCHAR(10),
   city VARCHAR(100),
   telephone VARCHAR(20),
-  userRole VARCHAR(50) NOT NULL DEFAULT 'hub'
+  userRole VARCHAR(50) NOT NULL DEFAULT 'hub',
+  collect BOOLEAN,
+  withdrawal BOOLEAN
 );
+
 
 
 
