@@ -1,11 +1,9 @@
-
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
-
 
 
 
@@ -40,7 +38,6 @@ exports.productListRandom = (req, res ) => {
 
 // retourne la liste des cordages en filtant sur la base des données
 // via les paramètres fournit
-
 exports.stringListFiltered = (req, res) => {
   console.log( "le payload fournit à productListFiltered  est" );   console.log( req.body ) ;
 
@@ -112,7 +109,6 @@ exports.stringListFiltered = (req, res) => {
 
 // retourne la liste des balles en filtant sur la base des données
 // via les paramètres fournit
-
 exports.ballListFiltered = (req, res) => {
   console.log( "le payload fournit à ballListFiltered  est" );   console.log( req.body ) ;
 
@@ -183,10 +179,8 @@ exports.ballListFiltered = (req, res) => {
 };
 
 
-
 // retourne la liste des balles en filtant sur la base des données
 // via les paramètres fournit
-
 exports.accessoriesListFiltered = (req, res) => {
   console.log( "le payload fournit à accessoriesListFiltered  est" );   console.log( req.body ) ;
 
@@ -285,6 +279,7 @@ exports.productSelected = (req, res ) => {
   )
 }
 
+
 // on recherche la liste des dépôts de collecte dans la BDD
 exports.listHubCollect = (req, res) => {
   db.query(`SELECT * FROM hub WHERE collect = 1;`, 
@@ -325,6 +320,111 @@ exports.listHubWithdrawal = (req, res) => {
 }
 
 
+
+//logique pour enregistrement de la commande et preferences joueur
+
+// fonction de modification des preferences joueurs dans la table payer
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email) {
+  return new Promise((resolve, reject) => {
+    console.log("stringId"+ stringId)
+    console.log("stringRope"+ stringRope)
+    // Construisez la requête SQL pour modifier les données dans la table player
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?  WHERE email = ?';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [hub, hubBack, stringId, stringRope, email], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la modification des préférences joueur :', error);
+        reject(error);
+      } else {
+        console.log('Préférences joueur modifiées avec succès');
+        resolve(results);
+      }
+    });
+  });
+}
+
+// fonction de sauvegarde de la commande dans la base de données
+function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
+  return new Promise((resolve, reject) => {
+    // Construisez la requête SQL pour insérer les données dans la table
+    const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de l\'enregistrement de la commande :', error);
+        reject(error);
+      } else {
+        console.log('Commande enregistrée avec succès');
+        resolve(results);
+      }
+    });
+  });
+}
+
+// Fonction d'enregistrement des données dans la table `orders` et la table player
+exports.saveOrderAndPreferencePlayer = async (req, res) => {
+  console.log("Je rentre dans le backend pour enregistrement de la commande");
+
+  try {
+    // On récupère les données du frontend depuis le corps de la requête
+    const datas = JSON.parse(req.body.datas);
+    console.log("datas" + datas);
+
+    // Données pour l'enregistrement de la commande
+    const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
+    const orderDate = new Date();
+    const serviceBackDate = new Date();
+    const statusOrder = "initié";
+    const userInfo = JSON.stringify(datas.userInfo);
+    const hub = JSON.stringify(datas.hubChoice);
+    const hubBack = JSON.stringify(datas.hubBackChoice);
+    const totalPriceString = datas.totalPrice;
+    const totalPrice = Number(totalPriceString.replace(",", "."));
+    const unitAmount = Math.round(totalPrice * 100);
+    console.log("unitAmount " + unitAmount);
+    const token = datas.token;
+    console.log("token : " + token);
+
+    // Variables pour la récupération des préférences du joueur
+    let stringId = null;
+    let stringRope = null;
+
+    const buyList = datas.articleList;
+
+    for (const item of buyList) {
+      if (item.stringRopeChoice) {
+        stringRope = item.stringRopeChoice;
+        break;
+      }
+    }
+
+    for (const item of buyList) {
+      if (item.stringChoice && item.stringChoice.id) {
+        stringId = item.stringChoice.id;
+        break;
+      }
+    }
+
+    // Enregistrement de la facture, recherche table player, et envoi d'email
+    const email = datas.userInfo.email;
+
+    // On enregistre les données dans la table `player`
+    await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, email);
+
+    // On enregistre les données dans la table `orders`
+    const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
+    // Récupérer l'ID généré à partir de `insertId`
+    const idOrder = savedOrder.insertId;
+
+    // Si tout s'est bien passé, renvoyer un message de succès
+    res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
+  } catch (error) {
+    console.error('Erreur lors de l\'enregistrement de la commande', error);
+    res.status(500).json({ error: 'Erreur lors de l\'enregistrement de la commande' });
+  }
+};
 
 
 

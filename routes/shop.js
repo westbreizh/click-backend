@@ -12,6 +12,10 @@ router.post('/accessoriesListFiltered', shopCtrl.accessoriesListFiltered);
 router.post('/productSelected', shopCtrl.productSelected);
 router.post('/listHubCollect', shopCtrl.listHubCollect);
 router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
+router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
+router.post('/paiement-in-shop', shopCtrl.saveOrderAndPreferencePlayer);
+
+
 
 module.exports = router;
 
