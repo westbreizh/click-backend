@@ -366,11 +366,10 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 // Fonction d'enregistrement des données dans la table `orders` et la table player
 exports.saveOrderAndPreferencePlayer = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
-
+  console.log("datas" + req.body.datas)
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
-    console.log("datas" + datas);
 
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
