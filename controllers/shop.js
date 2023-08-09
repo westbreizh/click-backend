@@ -372,7 +372,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
   try {
     // On récupère les données du frontend depuis le corps de la requête
-    const datas = JSON.parse(req.body.datas);
+    const datas = req.body;
 
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
@@ -409,7 +409,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       }
     }
 
-    // Enregistrement de la facture, recherche table player, et envoi d'email
     const email = datas.userInfo.email;
 
     // On enregistre les données dans la table `player`
