@@ -334,32 +334,25 @@ exports.saveResetPassword = (req, res) => {
 
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
-  // Affiche les données reçues dans req.body (à des fins de débogage)
   console.log("req.body", req.body);
 
-  // Récupère l'adresse e-mail à partir de req.body
   const email = req.body.email;
 
-  // Effectue une requête SQL pour récupérer les IDs de commandes associées à l'adresse e-mail
   db.query(
-    `SELECT id FROM orders WHERE userInfo IN (SELECT id, email FROM user_info WHERE email = ?)`,
+    `SELECT id FROM orders WHERE userInfo.email = ?`,
     [email],
     (err, result) => {
       if (err) {
-        // En cas d'erreur lors de l'exécution de la requête, renvoie une réponse d'erreur
         console.error(err);
         return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
       }
 
-      // Extrait les IDs de commande à partir des résultats de la requête
       const ordersId = result.map((row) => row.id);
       console.log("ordersId", ordersId);
 
-      // Initialise un tableau pour stocker les informations de commande
       const ordersInfo = [];
       let count = 0;
 
-      // Pour chaque ID de commande, effectue une requête SQL pour obtenir les informations détaillées
       ordersId.forEach((orderId) => {
         db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
           count++;
@@ -367,11 +360,9 @@ exports.sendOrderLog = (req, res, next) => {
           if (err) {
             console.error(err);
           } else {
-            // Ajoute les informations de la commande à la liste ordersInfo
             ordersInfo.push(result[0]);
           }
 
-          // Si toutes les requêtes ont été traitées, envoie la réponse au frontend
           if (count === ordersId.length) {
             return res.status(201).json({
               data: {
@@ -385,6 +376,7 @@ exports.sendOrderLog = (req, res, next) => {
     }
   );
 };
+
 
 
 
