@@ -77,8 +77,10 @@ exports.createCheckOutSession = async (req, res) => {
     const userInfo = JSON.stringify(datas.userInfo);
     const hub = JSON.stringify(datas.hubChoice);
     const hubBack = JSON.stringify(datas.hubBackChoice);
-    const totalPriceString = datas.totalPrice;    
+    const totalPriceString = datas.totalPriceProducts;
+    console.log("totalPriceString", totalPriceString)
     const totalPrice = Number(totalPriceString.replace(",", "."));
+
     const unitAmount = Math.round(totalPrice * 100);
     console.log("unitAmount " + unitAmount)
     const token = datas.token;
