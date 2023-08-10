@@ -334,46 +334,58 @@ exports.saveResetPassword = (req, res) => {
 
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
+  // Affiche les données reçues dans req.body (à des fins de débogage)
   console.log("req.body", req.body);
 
-  db.query(`SELECT id FROM orders WHERE userInfo.email='${req.body.email}'`, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
-    }
+  // Récupère l'adresse e-mail à partir de req.body
+  const email = req.body.email;
 
-    const ordersId = result.map((row) => row.order_id);
-    console.log("ordersId", ordersId);
+  // Effectue une requête SQL pour récupérer les IDs de commandes associées à l'adresse e-mail
+  db.query(
+    `SELECT id FROM orders WHERE userInfo IN (SELECT id, email FROM user_info WHERE email = ?)`,
+    [email],
+    (err, result) => {
+      if (err) {
+        // En cas d'erreur lors de l'exécution de la requête, renvoie une réponse d'erreur
+        console.error(err);
+        return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
+      }
 
-    // Récupération des informations associées à chaque orderId
-    const ordersInfo = [];
-    let count = 0;
+      // Extrait les IDs de commande à partir des résultats de la requête
+      const ordersId = result.map((row) => row.id);
+      console.log("ordersId", ordersId);
 
-    ordersId.forEach((orderId) => {
-      db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
-        count++;
+      // Initialise un tableau pour stocker les informations de commande
+      const ordersInfo = [];
+      let count = 0;
 
-        if (err) {
-          console.error(err);
-          
-        } else {
-          ordersInfo.push(result[0]); // Ajouter les informations de la commande à la liste ordersInfo
-        }
+      // Pour chaque ID de commande, effectue une requête SQL pour obtenir les informations détaillées
+      ordersId.forEach((orderId) => {
+        db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
+          count++;
 
-        // Vérifier si toutes les requêtes ont été traitées
-        if (count === ordersId.length) {
-          // Envoi des données et du message au frontend
-          return res.status(201).json({
-            data: {
-              ordersInfo: ordersInfo
-            },
-            message: 'Données de commande récupérées avec succès!'
-          });
-        }
+          if (err) {
+            console.error(err);
+          } else {
+            // Ajoute les informations de la commande à la liste ordersInfo
+            ordersInfo.push(result[0]);
+          }
+
+          // Si toutes les requêtes ont été traitées, envoie la réponse au frontend
+          if (count === ordersId.length) {
+            return res.status(201).json({
+              data: {
+                ordersInfo: ordersInfo
+              },
+              message: 'Données de commande récupérées avec succès!'
+            });
+          }
+        });
       });
-    });
-  });
+    }
+  );
 };
+
 
 
 // fonction qui renvoit une commande précise
