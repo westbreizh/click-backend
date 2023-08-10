@@ -339,7 +339,7 @@ exports.sendOrderLog = (req, res, next) => {
   const email = req.body.email;
 
   db.query(
-    `SELECT id FROM orders WHERE userInfo.email = ?`,
+    `SELECT id FROM orders WHERE JSON_UNQUOTE(JSON_EXTRACT(userInfo, '$.email')) = ?`,
     [email],
     (err, result) => {
       if (err) {
@@ -376,6 +376,7 @@ exports.sendOrderLog = (req, res, next) => {
     }
   );
 };
+
 
 
 
