@@ -67,10 +67,10 @@ exports.createCheckOutSession = async (req, res) => {
 
     // On récupère les données du frontend depuis le corps de la requête
     const datas = JSON.parse(req.body.datas);
-
+    console.log("dtas", datas)
     // données pour l'enregirement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
-    console.log("totalPriceString", totalPriceString)
+
     const orderDate = new Date();
     const serviceBackDate = new Date();
     const statusOrder ="inité"
