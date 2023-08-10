@@ -11,7 +11,6 @@ const db = require("../BDD/database-connect")
 
 
 
-
 // fonction qui calcule le prix d'un element de articleList
 function calculPriceFromArticleListForOneElement(articleList) {
   //voire a transmettre au backend lors de la commande l'id du produit 
@@ -71,6 +70,7 @@ exports.createCheckOutSession = async (req, res) => {
 
     // données pour l'enregirement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
+    console.log("totalPriceString", totalPriceString)
     const orderDate = new Date();
     const serviceBackDate = new Date();
     const statusOrder ="inité"
@@ -78,7 +78,6 @@ exports.createCheckOutSession = async (req, res) => {
     const hub = JSON.stringify(datas.hubChoice);
     const hubBack = JSON.stringify(datas.hubBackChoice);
     const totalPriceString = datas.totalPriceProducts;
-    console.log("totalPriceString", totalPriceString)
     const totalPrice = Number(totalPriceString.replace(",", "."));
 
     const unitAmount = Math.round(totalPrice * 100);
