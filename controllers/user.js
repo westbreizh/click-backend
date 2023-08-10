@@ -167,68 +167,7 @@ exports.signupStringer = (req, res ) => {
 } 
 
 
-// création ou modification  de l'adresse et téléphone, payload : l'adresse et téléphone
-exports.createOrUploadCoordinate= (req, res ) => {
 
-  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`,
-    (err, result) => {
-
-      // l'utilisateur a été retrouvé dans la table address on modifie l'addrese et le telephone
-      if (result.length > 0) { 
-        console.log("on va modifié")
-        db.query(
-          `UPDATE player 
-           SET telephone =  '${req.body.telephone}' 
-           WHERE id = ${req.body.playerId}  `
-          )
-        db.query(
-          `UPDATE address
-            SET road =  '${req.body.road}',
-            city = '${req.body.city}',
-            postalCode = '${req.body.postalCode}'
-            WHERE inHabitant = ${req.body.playerId}  `
-          )
-                          
-      // l'utilisateur n'a pas été retrouvé dans la table address on crée l'adresse et ajoute ou modifie le téléphone
-      }else{ 
-        db.query(
-        `UPDATE player 
-         SET telephone =  '${req.body.telephone}' 
-         WHERE id = ${req.body.playerId}  `
-        )
-        db.query(
-          `INSERT INTO address
-          (road, city, postalCode, inHabitant) 
-          VALUES ( '${req.body.road}','${req.body.city}', '${req.body.postalCode}','${req.body.playerId}' )`
-        )
-      }
-  })
-
-  // une fois les données enregistrées dans les tables on les récupères pour les retournées au frontend ...
-  //table player
-  db.query(`SELECT * FROM player WHERE id='${req.body.playerId}'`, 
-    (err, result) => {
-
-      delete (result[0].password);
-      const userInfo = result[0];
-
-      //table adress
-      db.query(`SELECT * FROM address WHERE inHabitant='${req.body.playerId}'`, 
-      (err, result) => {
-        const userAddress = result[0]
-        console.log(userAddress)
-        console.log(userInfo)
-
-        //on retourne des datas et le message
-        return res.status(201).json(data = {
-          userInfo: userInfo,
-          userAddress: userAddress,
-          message: 'modification de coordonnées réussie !'
-        });
-      })
-    }
-  )
-}
 
 
 //envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
@@ -376,9 +315,6 @@ exports.sendOrderLog = (req, res, next) => {
     }
   );
 };
-
-
-
 
 
 // fonction qui renvoit une commande précise
@@ -629,7 +565,161 @@ exports.login = async (req, res, next) => {
 
 
 
+
+
+
+// création ou modification  de l'adresse et téléphone, payload : l'adresse et téléphone
+exports.createOrUploadCoordinat2= (req, res ) => {
+
+  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`,
+    (err, result) => {
+
+      // l'utilisateur a été retrouvé dans la table address on modifie l'addrese et le telephone
+      if (result.length > 0) { 
+        console.log("on va modifié")
+        db.query(
+          `UPDATE player 
+           SET telephone =  '${req.body.telephone}' 
+           WHERE id = ${req.body.playerId}  `
+          )
+        db.query(
+          `UPDATE address
+            SET road =  '${req.body.road}',
+            city = '${req.body.city}',
+            postalCode = '${req.body.postalCode}'
+            WHERE inHabitant = ${req.body.playerId}  `
+          )
+                          
+      // l'utilisateur n'a pas été retrouvé dans la table address on crée l'adresse et ajoute ou modifie le téléphone
+      }else{ 
+        db.query(
+        `UPDATE player 
+         SET telephone =  '${req.body.telephone}' 
+         WHERE id = ${req.body.playerId}  `
+        )
+        db.query(
+          `INSERT INTO address
+          (road, city, postalCode, inHabitant) 
+          VALUES ( '${req.body.road}','${req.body.city}', '${req.body.postalCode}','${req.body.playerId}' )`
+        )
+      }
+  })
+
+  // une fois les données enregistrées dans les tables on les récupères pour les retournées au frontend ...
+  //table player
+  db.query(`SELECT * FROM player WHERE id='${req.body.playerId}'`, 
+    (err, result) => {
+
+      delete (result[0].password);
+      const userInfo = result[0];
+
+      //table adress
+      db.query(`SELECT * FROM address WHERE inHabitant='${req.body.playerId}'`, 
+      (err, result) => {
+        const userAddress = result[0]
+        console.log(userAddress)
+        console.log(userInfo)
+
+        //on retourne des datas et le message
+        return res.status(201).json(data = {
+          userInfo: userInfo,
+          userAddress: userAddress,
+          message: 'modification de coordonnées réussie !'
+        });
+      })
+    }
+  )
+}
+
   
 
 
+exports.createOrUploadCoordinate = (req, res) => {
+  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données." });
+    }
+
+    if (result.length > 0) {
+      console.log("on va modifier");
+      // Mise à jour de l'utilisateur existant
+      db.query(
+        `UPDATE player 
+         SET telephone = '${req.body.telephone}' 
+         WHERE id = ${req.body.playerId}`,
+        (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+          }
+
+          // Mise à jour de l'adresse existante
+          db.query(
+            `UPDATE address
+             SET road = '${req.body.road}',
+             city = '${req.body.city}',
+             postalCode = '${req.body.postalCode}'
+             WHERE inHabitant = ${req.body.playerId}`,
+            (err) => {
+              if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+              }
+
+              // Récupération des informations mises à jour
+              getUserInfoAndAddress(req.body.playerId, res);
+            }
+          );
+        }
+      );
+    } else {
+      console.log("on va créer");
+      // Mise à jour du téléphone de l'utilisateur
+      db.query(
+        `UPDATE player 
+         SET telephone = '${req.body.telephone}' 
+         WHERE id = ${req.body.playerId}`,
+        (err) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+          }
+
+          // Création d'une nouvelle adresse
+          db.query(
+            `INSERT INTO address
+             (road, city, postalCode, inHabitant) 
+             VALUES ('${req.body.road}', '${req.body.city}', '${req.body.postalCode}', '${req.body.playerId}')`,
+            (err) => {
+              if (err) {
+                console.error(err);
+                return res.status(500).json({ message: "Une erreur s'est produite lors de la création des données." });
+              }
+
+              // Récupération des informations mises à jour
+              getUserInfoAndAddress(req.body.playerId, res);
+            }
+          );
+        }
+      );
+    }
+  });
+};
+
+// Fonction pour récupérer les informations de l'utilisateur et son adresse
+const getUserInfoAndAddress = (playerId, res) => {
+  Promise.all([getUserInfo(playerId), getUserAddress(playerId)])
+    .then(([userInfo, userAddress]) => {
+      return res.status(201).json({
+        userInfo: userInfo,
+        userAddress: userAddress,
+        message: 'Modification de coordonnées réussie !'
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+      return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données." });
+    });
+};
 
