@@ -345,13 +345,12 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, ema
 }
 
 // fonction de sauvegarde de la commande dans la base de données
-function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
+function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
     const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack], (error, results) => {
+    db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPriceProducts, userInfo, hub, hubBack], (error, results) => {
       if (error) {
         console.error('Erreur lors de l\'enregistrement de la commande :', error);
         reject(error);
@@ -382,7 +381,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const userInfo = JSON.stringify(datas.userInfo);
     const hub = JSON.stringify(datas.hubChoice);
     const hubBack = JSON.stringify(datas.hubBackChoice);
-    const totalPriceString = datas.totalPrice;
+    const totalPriceString = datas.totalPriceProducts;
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
     console.log("unitAmount " + unitAmount);
