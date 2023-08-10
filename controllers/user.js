@@ -632,8 +632,6 @@ exports.createOrUploadCoordinat2= (req, res ) => {
 }
 
   
-
-
 exports.createOrUploadCoordinate = (req, res) => {
   db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`, (err, result) => {
     if (err) {
@@ -709,7 +707,7 @@ exports.createOrUploadCoordinate = (req, res) => {
 
 // Fonction pour récupérer les informations de l'utilisateur et son adresse
 const getUserInfoAndAddress = (playerId, res) => {
-  Promise.all([getUserInfo(playerId), getUserAddress(playerId)])
+  Promise.all([getUserInfo(playerId), getUserAddress2(playerId)])
     .then(([userInfo, userAddress]) => {
       return res.status(201).json({
         userInfo: userInfo,
@@ -722,4 +720,34 @@ const getUserInfoAndAddress = (playerId, res) => {
       return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données." });
     });
 };
+
+// Fonction pour récupérer les informations de l'utilisateur
+const getUserInfo = (playerId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE id='${playerId}'`, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        delete result[0].password;
+        resolve(result[0]);
+      }
+    });
+  });
+};
+
+// Fonction pour récupérer l'adresse de l'utilisateur
+const getUserAddress2 = (playerId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM address WHERE inHabitant='${playerId}'`, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result[0]);
+      }
+    });
+  });
+};
+
+
+
 
