@@ -330,7 +330,7 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, rac
     console.log("stringRope"+ stringRope)
     console.log("raqueete joeuer"+ racquetPlayer)
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, , racquet_player = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
     db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
