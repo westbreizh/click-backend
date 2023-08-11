@@ -111,7 +111,7 @@ exports.createCheckOutSession = async (req, res) => {
     const email = datas.userInfo.email;
 
     // On enregistre les données dans la table `player`
-    savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email ) 
+    savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email ) 
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
