@@ -324,7 +324,7 @@ exports.listHubWithdrawal = (req, res) => {
 //logique pour enregistrement de la commande et preferences joueur
 
 // fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email) {
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
     console.log("stringRope"+ stringRope)
@@ -366,9 +366,6 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 // Fonction d'enregistrement des données dans la table `orders` et la table player
 exports.saveOrderAndPreferencePlayer = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
-  console.log("req" + req)
-  console.log("body" + req.body)
-  console.log("datas" + req.body.datas)
 
   try {
     // On récupère les données du frontend depuis le corps de la requête
