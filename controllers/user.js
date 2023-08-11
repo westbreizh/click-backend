@@ -560,9 +560,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
-
-
-  
+ 
 exports.createOrUploadCoordinate = (req, res) => {
   db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`, (err, result) => {
     if (err) {

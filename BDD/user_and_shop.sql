@@ -13,6 +13,7 @@ CREATE TABLE `player` (
     `hub`                   varchar(100) DEFAULT NULL,
     `hubBack`               varchar(100) DEFAULT NULL,
     `userRole`              VARCHAR(50) NOT NULL DEFAULT 'player', 
+    `racquet_player`        VARCHAR(255),
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 );
@@ -90,9 +91,6 @@ CREATE TABLE IF NOT EXISTS invoices (
   payment_due_              date DATE,
  FOREIGN KEY (order_id) REFERENCES `orders`(id) ON DELETE CASCADE
 );
-
-
-
 
 
 

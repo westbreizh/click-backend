@@ -18,15 +18,16 @@ function calculPriceFromArticleListForOneElement(articleList) {
 
 
 // fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, email) {
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
     console.log("stringRope"+ stringRope)
+    console.log("raquette joeuer"+ racquetPlayer)
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, email], (error, results) => {
+    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
       if (error) {
         console.error('Erreur lors de la modification des préférences joueur :', error);
         reject(error);
@@ -37,7 +38,7 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, ema
     });
   });
 }
-  
+
    
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
@@ -62,7 +63,7 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 // Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` et la table player
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
-
+  
   try {
 
     // On récupère les données du frontend depuis le corps de la requête
@@ -86,6 +87,7 @@ exports.createCheckOutSession = async (req, res) => {
     console.log("token : " + token)
 
     // Variables pour la récupération des préférences du joueur
+    let racquetPlayer = JSON.stringify(datas.racquetPlayer);
     let stringId= null;
     let stringRope = null;
 
