@@ -328,11 +328,12 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, ema
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
     console.log("stringRope"+ stringRope)
+    console.log("raqueete joeuer"+ racquetPlayer)
     // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?  WHERE email = ?';
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, , racquet_player = ?  WHERE email = ?';
 
     // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, email], (error, results) => {
+    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
       if (error) {
         console.error('Erreur lors de la modification des préférences joueur :', error);
         reject(error);
@@ -391,6 +392,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Variables pour la récupération des préférences du joueur
     let stringId = null;
     let stringRope = null;
+    let racquetPlayer = null;
 
     const buyList = datas.articleList;
 
@@ -411,7 +413,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const email = datas.userInfo.email;
 
     // On enregistre les données dans la table `player`
-    await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, email);
+    await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, racquetPlayer, email);
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
