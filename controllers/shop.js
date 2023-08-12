@@ -433,7 +433,7 @@ exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
-    SELECT * FROM order
+    SELECT * FROM orders
     WHERE statusOrder = '${statusToRetrieve}';
   `;
 
