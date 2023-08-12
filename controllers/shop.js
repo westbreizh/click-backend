@@ -6,7 +6,6 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-
 // retourne l'ensemble  des cordage de manière aléatoire
 exports.productListRandom = (req, res ) => {
 
@@ -345,6 +344,7 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, rac
   });
 }
 
+
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
@@ -363,7 +363,8 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
   });
 }
 
-// Fonction d'enregistrement des données dans la table `orders` et la table player
+
+// Fonction d'enregistrement des données dans la table `orders` et la table player suite à la commande avec règlement en magazin
 exports.saveOrderAndPreferencePlayer = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
 
@@ -426,6 +427,74 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 };
 
 
+
+// fonction qui renvoit la liste des raquettes à recuperer dans les club
+exports.racquetToTakeLog = (req, res, next) => {
+  const statusToRetrieve = "initié";
+
+  const sqlQuery = `
+    SELECT * FROM order
+    WHERE statusOrder = '${statusToRetrieve}';
+  `;
+
+  // Ici, vous exécuteriez la requête SQL2 dans votre base de données pour obtenir les résultats
+  // Assurez-vous que les résultats de la requête sont stockés dans la variable queryResults
+
+  db.query(sqlQuery, (err, queryResults) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({
+        message: 'Erreur lors de la récupération des données.'
+      });
+    }
+
+    const racquetsByHub = {};
+
+    for (const result of queryResults) {
+      const hub = result.hub;
+
+      if (!racquetsByHub[hub]) {
+        racquetsByHub[hub] = [];
+      }
+
+      racquetsByHub[hub].push(result);
+    }
+
+    const ordersInfoByHub = {};
+
+    for (const hub in racquetsByHub) {
+      ordersInfoByHub[hub] = racquetsByHub[hub].map(order => ({
+        orderInfo: order
+      }));
+    }
+
+    res.status(200).json({
+      message: "List of racquets to take retrieved successfully",
+      ordersInfoByHub: ordersInfoByHub
+    });
+  });
+};
+
+
+
+// fonction qui renvoit une commande précise
+exports.sendOneOrder = (req, res, next) => {
+  const orderId = req.body.orderId
+  console.log("req.body.orderId", orderId);
+    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
+        return res.status(201).json({
+          data: {
+            orderInfo: orderInfo
+          },
+          message: 'Données de commande récupérées avec succès!'
+        });
+      }
+    });
+};
 
 
 

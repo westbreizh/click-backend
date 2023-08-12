@@ -6,8 +6,6 @@ const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
 
 
-
-
 // extension pour crytpé, décrypté comparé le mot de passe
 const bcryptjs = require('bcryptjs');  
 const crypto = require("crypto");
@@ -26,7 +24,7 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-// fonction de creation d'un compte joueur    debugage
+// fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
 
   // verifie que l'email est disponible
@@ -167,9 +165,6 @@ exports.signupStringer = (req, res ) => {
 } 
 
 
-
-
-
 //envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
 exports.sendEmailToResetPassword = (req, res) => {
   const email = req.body.email;
@@ -268,72 +263,6 @@ exports.saveResetPassword = (req, res) => {
         });
     });
   });
-};
-
-
-// fonction qui renvoit la liste des commandes effectué son historique
-exports.sendOrderLog = (req, res, next) => {
-  console.log("req.body", req.body);
-
-  const email = req.body.email;
-
-  db.query(
-    `SELECT id FROM orders WHERE JSON_UNQUOTE(JSON_EXTRACT(userInfo, '$.email')) = ?`,
-    [email],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
-      }
-
-      const ordersId = result.map((row) => row.id);
-      console.log("ordersId", ordersId);
-
-      const ordersInfo = [];
-      let count = 0;
-
-      ordersId.forEach((orderId) => {
-        db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
-          count++;
-
-          if (err) {
-            console.error(err);
-          } else {
-            ordersInfo.push(result[0]);
-          }
-
-          if (count === ordersId.length) {
-            return res.status(201).json({
-              data: {
-                ordersInfo: ordersInfo
-              },
-              message: 'Données de commande récupérées avec succès!'
-            });
-          }
-        });
-      });
-    }
-  );
-};
-
-
-// fonction qui renvoit une commande précise
-exports.sendOneOrder = (req, res, next) => {
-  const orderId = req.body.orderId
-  console.log("req.body.orderId", orderId);
-    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
-      if (err) {
-        console.error(err);
-      } else {
-        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
-        return res.status(201).json({
-          data: {
-            orderInfo: orderInfo
-          },
-          message: 'Données de commande récupérées avec succès!'
-        });
-      }
-    });
 };
 
 
@@ -515,6 +444,7 @@ const getUserAddress = (userId) => {
   });
 };
 
+
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
@@ -677,6 +607,71 @@ const getUserAddress2 = (playerId) => {
   });
 };
 
+
+// fonction qui renvoit la liste des commandes effectué son historique
+exports.sendOrderLog = (req, res, next) => {
+  console.log("req.body", req.body);
+
+  const email = req.body.email;
+
+  db.query(
+    `SELECT id FROM orders WHERE JSON_UNQUOTE(JSON_EXTRACT(userInfo, '$.email')) = ?`,
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
+      }
+
+      const ordersId = result.map((row) => row.id);
+      console.log("ordersId", ordersId);
+
+      const ordersInfo = [];
+      let count = 0;
+
+      ordersId.forEach((orderId) => {
+        db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
+          count++;
+
+          if (err) {
+            console.error(err);
+          } else {
+            ordersInfo.push(result[0]);
+          }
+
+          if (count === ordersId.length) {
+            return res.status(201).json({
+              data: {
+                ordersInfo: ordersInfo
+              },
+              message: 'Données de commande récupérées avec succès!'
+            });
+          }
+        });
+      });
+    }
+  );
+};
+
+
+// fonction qui renvoit une commande précise
+exports.sendOneOrder = (req, res, next) => {
+  const orderId = req.body.orderId
+  console.log("req.body.orderId", orderId);
+    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
+        return res.status(201).json({
+          data: {
+            orderInfo: orderInfo
+          },
+          message: 'Données de commande récupérées avec succès!'
+        });
+      }
+    });
+};
 
 
 
