@@ -447,26 +447,28 @@ exports.racquetToTakeLog = (req, res, next) => {
         message: 'Erreur lors de la récupération des données.'
       });
     }
-    console.log("queryresult", queryResults);
+  
     const racquetsData = [];
-
+  
     for (const result of queryResults) {
+      const hubObject = JSON.parse(result.hub);
+      const userInfoObject = JSON.parse(result.userInfo);
+  
       racquetsData.push({
         id: result.id,
         orderDate: result.orderDate,
-        hub: result.hub.enterprise_name,
-
-        userInfo: result.userInfo.racquet_player
+        hub: hubObject.enterprise_name, // Accès à enterprise_name de l'objet hub
+        userInfo: userInfoObject.racquet_player // Accès à racquet_player de l'objet userInfo
       });
     }
-
+  
     res.status(200).json({
       message: "List of racquets to take retrieved successfully",
       racquetsData: racquetsData
     });
   });
-};
-
+  
+}
 
 
 
