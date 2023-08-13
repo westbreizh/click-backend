@@ -428,7 +428,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
-eexports.racquetToTakeLog = (req, res, next) => {
+exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
