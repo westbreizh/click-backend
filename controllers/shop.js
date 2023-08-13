@@ -428,16 +428,16 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
-// fonction qui renvoit la liste des raquettes à recuperer dans les club
 exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
-    SELECT * FROM orders
+    SELECT id, orderDate, hub.entreprise_name, userInfo.racquet_player
+    FROM orders
     WHERE statusOrder = '${statusToRetrieve}';
   `;
 
-  // Ici, vous exécuteriez la requête SQL2 dans votre base de données pour obtenir les résultats
+  // Ici, vous exécuteriez la requête SQL dans votre base de données pour obtenir les résultats
   // Assurez-vous que les résultats de la requête sont stockés dans la variable queryResults
 
   db.query(sqlQuery, (err, queryResults) => {
@@ -451,29 +451,26 @@ exports.racquetToTakeLog = (req, res, next) => {
     const racquetsByHub = {};
 
     for (const result of queryResults) {
-      const hub = result.hub;
+      const hub = result.entreprise_name; // Utiliser le nom de l'entreprise comme clé de hub
 
       if (!racquetsByHub[hub]) {
         racquetsByHub[hub] = [];
       }
 
-      racquetsByHub[hub].push(result);
-    }
-
-    const ordersInfoByHub = {};
-
-    for (const hub in racquetsByHub) {
-      ordersInfoByHub[hub] = racquetsByHub[hub].map(order => ({
-        orderInfo: order
-      }));
+      racquetsByHub[hub].push({
+        id: result.id,
+        orderDate: result.orderDate,
+        racquet_player: result.racquet_player
+      });
     }
 
     res.status(200).json({
       message: "List of racquets to take retrieved successfully",
-      ordersInfoByHub: ordersInfoByHub
+      racquetsByHub: racquetsByHub
     });
   });
 };
+
 
 
 
