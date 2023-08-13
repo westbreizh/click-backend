@@ -432,7 +432,7 @@ exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
-    SELECT id, orderDate, hub.entreprise_name, userInfo.racquet_player
+    SELECT id, orderDate, hub, userInfo
     FROM orders
     WHERE statusOrder = '${statusToRetrieve}';
   `;
@@ -451,16 +451,16 @@ exports.racquetToTakeLog = (req, res, next) => {
     const racquetsByHub = {};
 
     for (const result of queryResults) {
-      const hub = result.entreprise_name; // Utiliser le nom de l'entreprise comme clé de hub
+      const hubName = result.hub.enterprise_name; // Utiliser enterprise_name du hub
 
-      if (!racquetsByHub[hub]) {
-        racquetsByHub[hub] = [];
+      if (!racquetsByHub[hubName]) {
+        racquetsByHub[hubName] = [];
       }
 
-      racquetsByHub[hub].push({
+      racquetsByHub[hubName].push({
         id: result.id,
         orderDate: result.orderDate,
-        racquet_player: result.racquet_player
+        userInfo: result.userInfo.racquet_player // Utilisation de racquet_player depuis userInfo
       });
     }
 
@@ -470,6 +470,7 @@ exports.racquetToTakeLog = (req, res, next) => {
     });
   });
 };
+
 
 
 
