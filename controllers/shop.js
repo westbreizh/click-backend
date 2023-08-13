@@ -428,7 +428,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
-exports.racquetToTakeLog = (req, res, next) => {
+eexports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
@@ -448,28 +448,24 @@ exports.racquetToTakeLog = (req, res, next) => {
       });
     }
 
-    const racquetsByHub = {};
+    const racquetsData = [];
 
     for (const result of queryResults) {
-      const hubName = result.hub.enterprise_name; // Utiliser enterprise_name du hub
-
-      if (!racquetsByHub[hubName]) {
-        racquetsByHub[hubName] = [];
-      }
-
-      racquetsByHub[hubName].push({
+      racquetsData.push({
         id: result.id,
         orderDate: result.orderDate,
-        userInfo: result.userInfo.racquet_player // Utilisation de racquet_player depuis userInfo
+        hub: result.hub.enterprise_name,
+        userInfo: result.userInfo.racquet_player
       });
     }
 
     res.status(200).json({
       message: "List of racquets to take retrieved successfully",
-      racquetsByHub: racquetsByHub
+      racquetsData: racquetsData
     });
   });
 };
+
 
 
 
