@@ -17,7 +17,7 @@ router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
 router.post('/paiement-in-shop', shopCtrl.saveOrderAndPreferencePlayer);
 
 router.post('/racquetToTakeLog', shopCtrl.racquetToTakeLog);
-router.post('/oneOrder', authenticateJWT, shopCtrl.sendOneOrder);
+router.post('/oneOrder',  shopCtrl.sendOneOrder);
 
 
 module.exports = router;
