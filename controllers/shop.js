@@ -428,6 +428,11 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
+
+
+
+
+
 exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
