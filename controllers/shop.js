@@ -503,6 +503,7 @@ const getUserById = (userId) => {
         reject(err);
       } else {
         if (playerResult.length > 0) {
+          console.log("playerResult", playerResult)
           resolve({ userType: 'player', user: playerResult[0] });
         } else {
           db.query(`SELECT * FROM hub WHERE id='${userId}'`, (err, hubResult) => {
@@ -539,6 +540,7 @@ const getUserAddress = (userId) => {
       if (err) {
         reject(err);
       } else {
+        console.log("adressResult", addressResult)
         resolve(addressResult.length > 0 ? addressResult[0] : null);
       }
     });
@@ -554,7 +556,7 @@ exports.sendOnePlayer = async (req, res, next) => {
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
     const user = await getUserById(userId);
-
+    console.log("user", user)
     if (!user) {
       // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
       return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
@@ -567,17 +569,16 @@ exports.sendOnePlayer = async (req, res, next) => {
 
     // On essaie de retrouver l'adresse du joueur s'il est renseigné
     const userAddress = await getUserAddress(userId);
-
+    console.log("usserAdress",userAddress)
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.user,
       userAddress: userAddress,
-      token: token,
       message: 'récupération des données joueurs réussies !',
     });
   } catch (err) {
     // En cas d'erreur, renvoyer une erreur 500
-    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la recuperation des données.' });
   }
 };
 
