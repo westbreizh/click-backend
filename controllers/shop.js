@@ -430,9 +430,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
-
-
-
+// fonction qui renvoit la liste des commandes des raquettes à récuperer
 exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
@@ -476,9 +474,6 @@ exports.racquetToTakeLog = (req, res, next) => {
 }
 
 
-
-
-
 // fonction qui renvoit une commande précise
 exports.sendOneOrder = (req, res, next) => {
   const orderId = req.body.orderId
@@ -500,11 +495,91 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
-
+// Fonction pour récupérer l'utilisateur à partir de l'id
+const getUserById = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, playerResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (playerResult.length > 0) {
+          resolve({ userType: 'player', user: playerResult[0] });
+        } else {
+          db.query(`SELECT * FROM hub WHERE id='${userId}'`, (err, hubResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', user: hubResult[0] });
+              } else {
+                db.query(`SELECT * FROM stringer WHERE id='${userId}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+};
      
+// Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
+const getUserAddress = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(addressResult.length > 0 ? addressResult[0] : null);
+      }
+    });
+  });
+};
+
+
+// Fonction de récupération des infos du joueur 
+exports.sendOnePlayer = async (req, res, next) => {
+  const userId = req.body.userId;
+
+
+  try {
+    // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    const user = await getUserById(userId);
+
+    if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
+      return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
+    }
 
 
 
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    //delete user.user.password_hash;
+
+    // On essaie de retrouver l'adresse du joueur s'il est renseigné
+    const userAddress = await getUserAddress(userId);
+
+    // Retourner les données et le message
+    return res.status(201).json({
+      userInfo: user.user,
+      userAddress: userAddress,
+      token: token,
+      message: 'récupération des données joueurs réussies !',
+    });
+  } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
+  }
+};
 
  
 
