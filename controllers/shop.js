@@ -602,6 +602,27 @@ exports.sendOnePlayer = async (req, res, next) => {
  
 
 
+// Fonction d'enregistrement de la commande  avec paiement en boutique 
+exports.racquetTaken = async (req, res) => {
+  console.log("Je rentre dans le backend pour enregistrement de la commande");
+
+  try {
+    // On récupère les données du frontend depuis le corps de la requête
+    const datas = req.body;
+    console.log("datsa", datas)
+    const raquetTakenList = JSON.stringify(datas);
+
+    console.log("raquetTakenList", raquetTakenList)
+    
+    // Si tout s'est bien passé, renvoyer un message de succès
+    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', orderId: idOrder });
+
+  } catch (error) {
+    console.error('Erreur lors de la validation des raquettes récupérées', error);
+    res.status(500).json({ error: 'Erreur lors de la validation des raquettes récupérées' });
+  }
+};
+
 
 
 
