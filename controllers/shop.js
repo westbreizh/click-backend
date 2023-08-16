@@ -603,6 +603,8 @@ exports.sendOnePlayer = async (req, res, next) => {
 // fonction de modification de la table orders après avoir récupérée les raquettes
 function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
   return new Promise((resolve, reject) => {
+    console.log("date de recup racquet",racquetTakenDate)
+    console.log("liste de racquet recup",racquetTakenList)
     // Construire la requête SQL pour mettre à jour les données dans la table
     const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id IN (?)';
 
