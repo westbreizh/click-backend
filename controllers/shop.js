@@ -632,14 +632,14 @@ exports.racquetTaken = async (req, res) => {
     const racquetTakenList = JSON.stringify(datas.selectedOrders);
     const racquetTakenDate = new Date();
 
-    console.log("raquetTakenList", racquetTakenList)
+    console.log("racquetTakenList", racquetTakenList)
 
     // On modifie la table orders 
     await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
 
     
     // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', raquetTakenList: raquetTakenList });
+    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', racquetTakenList: racquetTakenList });
 
   } catch (error) {
     console.error('Erreur lors de la validation des raquettes récupérées', error);
