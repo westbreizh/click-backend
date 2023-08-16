@@ -607,9 +607,8 @@ function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
     const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id IN (?)';
 
     const statusToUpdate = 'prêt à corder'; // Nouveau statut à définir
-    const idsToUpdate = racquetTakenList.map(order => order.id); // Liste des IDs à mettre à jour
 
-    db.query(query, [statusToUpdate, racquetTakenDate, idsToUpdate], (error, results) => {
+    db.query(query, [statusToUpdate, racquetTakenDate, racquetTakenList], (error, results) => {
       if (error) {
         console.error('Erreur lors de la mise à jour de la commande :', error);
         reject(error);
@@ -620,6 +619,7 @@ function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
     });
   });
 }
+
 
 // Fonction pour valider la recupération des raquettes
 exports.racquetTaken = async (req, res) => {
