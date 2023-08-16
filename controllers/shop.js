@@ -346,12 +346,12 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, rac
 
 
 // fonction de sauvegarde de la commande dans la base de données
-function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
+function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
-    const query = 'INSERT INTO orders (articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO orders (articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
 
-    db.query(query, [articleList, orderDate, serviceBackDate, statusOrder, totalPriceProducts, userInfo, hub, hubBack], (error, results) => {
+    db.query(query, [articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack], (error, results) => {
       if (error) {
         console.error('Erreur lors de l\'enregistrement de la commande :', error);
         reject(error);
@@ -414,7 +414,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, racquetPlayer, email);
 
     // On enregistre les données dans la table `orders`
-    const savedOrder = await saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrder, totalPrice, userInfo, hub, hubBack);
+    const savedOrder = await saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack);
     // Récupérer l'ID généré à partir de `insertId`
     const idOrder = savedOrder.insertId;
 
