@@ -349,7 +349,7 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, rac
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
-    const query = 'INSERT INTO orders (articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO orders (articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack) VALUES ( ?, ?, ?, ?, ?, ?, ?)';
 
     db.query(query, [articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack], (error, results) => {
       if (error) {
