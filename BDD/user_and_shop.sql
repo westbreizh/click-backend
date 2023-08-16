@@ -75,7 +75,7 @@ CREATE TABLE `orders` (
   `totalPrice` DECIMAL(10, 2),
   `userInfo` TEXT,
   `hub` TEXT,
-  `hubBack` TEXT,
+  `hubBack` TEXT
 );
 
 
@@ -83,16 +83,17 @@ CREATE TABLE `orders` (
 DROP TABLE IF EXISTS `invoices`;
 
 CREATE TABLE IF NOT EXISTS invoices (
-  id INT AUTO_INCREMENT     PRIMARY KEY,
-  order_id                  INT,
-  customer_name             VARCHAR(255) NOT NULL,
-  customer_email            VARCHAR(255) NOT NULL,
-  amount                    DECIMAL(10,2) NOT NULL,
-  status                    VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP      DEFAULT CURRENT_TIMESTAMP,
-  payment_due_              date DATE,
- FOREIGN KEY (order_id) REFERENCES `orders`(id) ON DELETE CASCADE
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  order_id INT,
+  customer_name VARCHAR(255) NOT NULL,
+  customer_email VARCHAR(255) NOT NULL,
+  amount DECIMAL(10,2) NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  payment_due_ DATE,
+  FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE
 );
+
 
 
 
