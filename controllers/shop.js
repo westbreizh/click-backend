@@ -424,8 +424,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     try {
       await sendEmail(email, 'Confirmation de commande', {
         customerName: firstName,
-        amount: totalPrice,
-        paymentDate: new Date().toLocaleDateString('fr-FR'),
       }, 'email/template/confirmationOrderEmail.handlebars');
 
       console.log('E-mail de confirmation envoyé avec succès à', email);
