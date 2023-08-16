@@ -604,18 +604,18 @@ exports.sendOnePlayer = async (req, res, next) => {
 
 // Fonction d'enregistrement de la commande  avec paiement en boutique 
 exports.racquetTaken = async (req, res) => {
-  console.log("Je rentre dans le backend pour enregistrement de la commande");
+  console.log("Je rentre dans le backend pour valider la recupération des raquettes");
 
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
     console.log("datsa", datas)
-    const raquetTakenList = JSON.stringify(datas);
+    const raquetTakenList = JSON.stringify(datas.selectedOrders);
 
     console.log("raquetTakenList", raquetTakenList)
     
     // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', orderId: idOrder });
+    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', raquetTakenList: raquetTakenList });
 
   } catch (error) {
     console.error('Erreur lors de la validation des raquettes récupérées', error);
