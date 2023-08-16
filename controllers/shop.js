@@ -600,27 +600,36 @@ exports.sendOnePlayer = async (req, res, next) => {
 
 
 
-// fonction de modification de la table orders après avoir récupérée les raquettes
+// fonction de modification de la table orders après avoir récupéré les raquettes
 function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
   return new Promise((resolve, reject) => {
-    console.log("date de recup racquet",racquetTakenDate)
-    console.log("liste de racquet recup",racquetTakenList)
+    console.log("date de recup racquet", racquetTakenDate);
+    console.log("liste de racquet recup", racquetTakenList);
+
     // Construire la requête SQL pour mettre à jour les données dans la table
-    const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id IN (?)';
+    const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id = ?';
 
     const statusToUpdate = 'prêt à corder'; // Nouveau statut à définir
 
-    db.query(query, [statusToUpdate, racquetTakenDate, racquetTakenList], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la mise à jour de la commande :', error);
-        reject(error);
-      } else {
-        console.log('Statut et date mis à jour avec succès');
-        resolve(results);
-      }
-    });
+    // Boucle pour exécuter la mise à jour pour chaque élément
+    for (const orderId of racquetTakenList) {
+      db.query(query, [statusToUpdate, racquetTakenDate, orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la mise à jour de la commande :', error);
+          reject(error);
+          return;
+        } else {
+          console.log(`Statut et date mis à jour avec succès pour la commande ${orderId}`);
+          if (orderId === racquetTakenList[racquetTakenList.length - 1]) {
+            // Si c'est la dernière commande, résoudre la promesse
+            resolve(results);
+          }
+        }
+      });
+    }
   });
 }
+
 
 
 // Fonction pour valider la recupération des raquettes
