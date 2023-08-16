@@ -364,7 +364,7 @@ function saveOrderToDatabase(articleList, orderDate, serviceBackDate, statusOrde
 }
 
 
-// Fonction d'enregistrement des données dans la table `orders` et la table player suite à la commande avec règlement en magazin
+// Fonction d'enregistrement de la commande  avec paiement en boutique 
 exports.saveOrderAndPreferencePlayer = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
 
@@ -378,6 +378,9 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const serviceBackDate = new Date();
     const statusOrder = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
+    console.log("userInfo", userInfo)
+    const firstName = userInfo.firstName;
+    const email = datas.userInfo.email;
     const hub = JSON.stringify(datas.hubChoice);
     const hubBack = JSON.stringify(datas.hubBackChoice);
     const totalPriceString = datas.totalPriceProducts;
@@ -408,7 +411,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       }
     }
 
-    const email = datas.userInfo.email;
+
 
     // On enregistre les données dans la table `player`
     await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, racquetPlayer, email);
@@ -418,8 +421,23 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Récupérer l'ID généré à partir de `insertId`
     const idOrder = savedOrder.insertId;
 
+    try {
+      await sendEmail(email, 'Confirmation de commande', {
+        customerName: firstName,
+        amount: totalPrice,
+        paymentDate: new Date().toLocaleDateString('fr-FR'),
+      }, 'email/template/confirmationOrderEmail.handlebars');
+      
+      console.log('E-mail de confirmation envoyé avec succès à', email);
+    } catch (error) {
+      console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+      // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
+      return res.sendStatus(500);
+    }
+    
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
+
   } catch (error) {
     console.error('Erreur lors de l\'enregistrement de la commande', error);
     res.status(500).json({ error: 'Erreur lors de l\'enregistrement de la commande' });
