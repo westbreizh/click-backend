@@ -375,7 +375,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     const orderDate = new Date();
-    const serviceBackDate = new Date();
     const statusOrder = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
     console.log("userInfo", userInfo)
@@ -410,8 +409,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
         break;
       }
     }
-
-
 
     // On enregistre les données dans la table `player`
     await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, racquetPlayer, email);
@@ -602,7 +599,29 @@ exports.sendOnePlayer = async (req, res, next) => {
  
 
 
-// Fonction d'enregistrement de la commande  avec paiement en boutique 
+
+// fonction de modification de la table orders après avoir récupérée les raquettes
+function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
+  return new Promise((resolve, reject) => {
+    // Construire la requête SQL pour mettre à jour les données dans la table
+    const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id IN (?)';
+
+    const statusToUpdate = 'prêt à corder'; // Nouveau statut à définir
+    const idsToUpdate = racquetTakenList.map(order => order.id); // Liste des IDs à mettre à jour
+
+    db.query(query, [statusToUpdate, racquetTakenDate, idsToUpdate], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la mise à jour de la commande :', error);
+        reject(error);
+      } else {
+        console.log('Statut et date mis à jour avec succès');
+        resolve(results);
+      }
+    });
+  });
+}
+
+// Fonction pour valider la recupération des raquettes
 exports.racquetTaken = async (req, res) => {
   console.log("Je rentre dans le backend pour valider la recupération des raquettes");
 
@@ -610,9 +629,14 @@ exports.racquetTaken = async (req, res) => {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
     console.log("datsa", datas)
-    const raquetTakenList = JSON.stringify(datas.selectedOrders);
+    const racquetTakenList = JSON.stringify(datas.selectedOrders);
+    const racquetTakenDate = new Date();
 
-    console.log("raquetTakenList", raquetTakenList)
+    console.log("raquetTakenList", racquetTakenList)
+
+    // On modifie la table orders 
+    await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
+
     
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', raquetTakenList: raquetTakenList });

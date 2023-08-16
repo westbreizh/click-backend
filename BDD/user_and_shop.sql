@@ -62,13 +62,15 @@ CREATE TABLE hub (
 
 
 
-DROP TABLE IF EXISTS `order`;
+DROP TABLE IF EXISTS `orders`;
 
-CREATE TABLE `order` (
+CREATE TABLE `orders` (
   `id` INT PRIMARY KEY AUTO_INCREMENT,
   `articleList` TEXT,
   `orderDate` DATE,
-  `serviceBackDate` DATE,
+  `racquetTakenDate` DATE,
+  `orderReadyDate` DATE,
+  `orderToPlayerDate` DATE,
   `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
   `userInfo` TEXT,
