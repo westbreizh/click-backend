@@ -427,7 +427,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
         amount: totalPrice,
         paymentDate: new Date().toLocaleDateString('fr-FR'),
       }, 'email/template/confirmationOrderEmail.handlebars');
-      
+
       console.log('E-mail de confirmation envoyé avec succès à', email);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
@@ -443,6 +443,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l\'enregistrement de la commande' });
   }
 };
+
 
 
 
