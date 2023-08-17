@@ -394,7 +394,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Variables pour la récupération des préférences du joueur
     let stringId = null;
     let stringRope = null;
-    let racquetPlayer = JSON.stringify(datas.racquetPlayer);
+    let racquetPlayer = datas.racquetPlayer;
     console.log("raquette joueur"+ racquetPlayer)
     const buyList = datas.articleList;
 
