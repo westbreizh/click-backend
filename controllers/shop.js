@@ -429,7 +429,7 @@ exports.racquetToTakeLog = (req, res, next) => {
   
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
-      const articleListObject = JSON.parse(result.userInfo);
+      const articleListObject = JSON.parse(result.articleList);
   
       racquetsDataToTake.push({
         id: result.id,
