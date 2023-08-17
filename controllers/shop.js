@@ -6,6 +6,10 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
+
+//----------- ensemble des fonctions liées aux produits ---------------//
+
+
 // retourne l'ensemble  des cordage de manière aléatoire
 exports.productListRandom = (req, res ) => {
 
@@ -319,15 +323,17 @@ exports.listHubWithdrawal = (req, res) => {
 }
 
 
+//----------- ensemble des fonctions liées aux commandes ---------------//
 
-//logique pour enregistrement de la commande et preferences joueur
+
+//logique pour enregistrement de la commande et preferences joueur//
 
 // fonction de modification des preferences joueurs dans la table payer
 function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
   return new Promise((resolve, reject) => {
     console.log("stringId"+ stringId)
     console.log("stringRope"+ stringRope)
-    console.log("raqueete joeuer"+ racquetPlayer)
+    console.log("raquete joeuer"+ racquetPlayer)
     // Construisez la requête SQL pour modifier les données dans la table player
     const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
@@ -343,8 +349,6 @@ function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, rac
     });
   });
 }
-
-
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
@@ -362,8 +366,6 @@ function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPricePro
     });
   });
 }
-
-
 // Fonction d'enregistrement de la commande  avec paiement en boutique 
 exports.saveOrderAndPreferencePlayer = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
@@ -393,7 +395,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     let stringId = null;
     let stringRope = null;
     let racquetPlayer = JSON.stringify(datas.racquetPlayer);
-
+    console.log("raquette joueur"+ racquetPlayer)
     const buyList = datas.articleList;
 
     for (const item of buyList) {
@@ -438,9 +440,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de l\'enregistrement de la commande' });
   }
 };
-
-
-
 
 
 
@@ -545,8 +544,7 @@ const getUserById = (userId) => {
       }
     });
   });
-};
-     
+};     
 // Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
 const getUserAddress = (userId) => {
   return new Promise((resolve, reject) => {
@@ -560,8 +558,6 @@ const getUserAddress = (userId) => {
     });
   });
 };
-
-
 // Fonction de récupération des infos du joueur 
 exports.sendOnePlayer = async (req, res, next) => {
   const userId = req.body.userId;
@@ -597,9 +593,6 @@ exports.sendOnePlayer = async (req, res, next) => {
 };
 
  
-
-
-
 // fonction de modification de la table orders après avoir récupéré les raquettes
 function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
   return new Promise((resolve, reject) => {
@@ -629,9 +622,6 @@ function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
     }
   });
 }
-
-
-
 // Fonction pour valider la recupération des raquettes
 exports.racquetTaken = async (req, res) => {
   console.log("Je rentre dans le backend pour valider la recupération des raquettes");
