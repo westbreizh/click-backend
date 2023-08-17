@@ -427,16 +427,25 @@ exports.racquetToTakeLog = (req, res, next) => {
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
       const articleList = JSON.parse(result.articleList);
-      const racquetPlayer = articleList[0].racquetPlayer
-      console.log("list article",articleList)
-      console.log("raquet",racquetPlayer)
+      
+      const racquetPlayerList = []; // Tableau pour stocker les valeurs racquetPlayer
+      
+      for (const article of articleList) {
+        if (article.racquetPlayer) {
+          racquetPlayerList.push(article.racquetPlayer);
+        }
+      }
+      
+      console.log("list article", articleList);
+      console.log("racquetPlayerList", racquetPlayerList);
+      
       racquetsDataToTake.push({
         id: result.id,
         hub: hubObject.enterprise_name, 
-        racquetPlayer: racquetPlayer 
-        
+        racquetPlayerList: racquetPlayerList
       });
     }
+    
   
     res.status(200).json({
       message: "List of racquets to take retrieved successfully",
