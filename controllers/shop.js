@@ -426,13 +426,14 @@ exports.racquetToTakeLog = (req, res, next) => {
   
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
-      const racquetPlayer = JSON.parse(result.articleList.racquetPlayer);
+      const articleList = result.articleList;
+      const racquetPlayer = articleList.racquetPlayer
       console.log("list article",articleListObject)
-      console.log("racquet",racquetPlayer)
+      console.log("raquet",racquetPlayer)
       racquetsDataToTake.push({
         id: result.id,
-        hub: hubObject.enterprise_name, // Accès à enterprise_name de l'objet hub
-        racquetPlayer: racquetPlayer // Accès à racquet_player de l'objet userInfo
+        hub: hubObject.enterprise_name, 
+        racquetPlayer: racquetPlayer 
         
       });
     }
