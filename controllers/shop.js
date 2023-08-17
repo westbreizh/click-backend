@@ -408,14 +408,11 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 // fonction qui renvoit la liste des commandes des raquettes à récuperer
 exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
-
   const sqlQuery = `
     SELECT id, hub, articleList
     FROM orders
     WHERE statusOrder = '${statusToRetrieve}';
   `;
-
-
 
   db.query(sqlQuery, (err, queryResults) => {
     if (err) {
@@ -430,12 +427,13 @@ exports.racquetToTakeLog = (req, res, next) => {
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
       const articleListObject = JSON.parse(result.articleList);
-  
+      console.log("list article",articleListObject)
+      console.log("racquet",articleListObject.racquetPlayer)
       racquetsDataToTake.push({
         id: result.id,
-        orderDate: result.orderDate,
         hub: hubObject.enterprise_name, // Accès à enterprise_name de l'objet hub
         racquetPlayer: articleListObject.racquetPlayer // Accès à racquet_player de l'objet userInfo
+        
       });
     }
   
