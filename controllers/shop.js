@@ -580,7 +580,7 @@ function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
           reject(error);
           return;
         } else {
-          console.log(`Statut et date mis à jour avec succès pour la commande ${orderId}`);
+          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
           if (orderId === racquetTakenList[racquetTakenList.length - 1]) {
             // Si c'est la dernière commande, résoudre la promesse
             resolve(results);
