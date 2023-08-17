@@ -598,10 +598,10 @@ exports.racquetTaken = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-    console.log("datsa", datas)
-    const racquetTakenList = JSON.stringify(datas.selectedOrders);
-    console.log("racquetTakenList", racquetTakenList)
-    console.log("type racquetTakenList", typeof(racquetTakenList))
+    console.log("datsa", datas);
+    const racquetTakenList = datas.selectedOrders; // Utilisez le tableau brut ici
+    console.log("racquetTakenList", racquetTakenList);
+    console.log("type racquetTakenList", typeof racquetTakenList);
     const racquetTakenDate = new Date();
 
     // On modifie la table orders 
