@@ -387,12 +387,29 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
         customerName: firstName,
       }, 'email/template/confirmationOrderEmail.handlebars');
 
-      console.log('E-mail de confirmation envoyé avec succès à', email);
+      console.log('E-mail de confirmation  envoyé avec succès à', email);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
       // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
       return res.sendStatus(500);
     }
+
+    const emailStringer = "herbreteauaurelien@tutanota.com"
+    try {
+      await sendEmail(emailStringer, 'nouvelle commande', {
+        hub: hub,
+        idOrder : idOrder, 
+      }, 'email/template/newOrderEmail.handlebars');
+
+      console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
+    } catch (error) {
+      console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
+      // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
+      return res.sendStatus(500);
+    }
+
+
+
     
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
@@ -616,6 +633,22 @@ exports.racquetTaken = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la validation des raquettes récupérées' });
   }
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
