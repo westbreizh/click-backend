@@ -374,26 +374,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const token = datas.token;
     console.log("token : " + token);
 
-    // Variables pour la récupération des préférences du joueur
-    let stringId = null;
-    let stringRope = null;
-    let racquetPlayer = null;
-
-    const buyList = datas.articleList;
-
-    for (const item of buyList) {
-      if (item.stringRopeChoice) {
-        stringRope = item.stringRopeChoice;
-        break;
-      }
-    }
-
-    for (const item of buyList) {
-      if (item.stringChoice && item.stringChoice.id) {
-        stringId = item.stringChoice.id;
-        break;
-      }
-    }
+  
 
 
     // On enregistre les données dans la table `orders`
