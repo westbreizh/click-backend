@@ -404,7 +404,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 };
 
 
-
 // fonction qui renvoit la liste des commandes des raquettes à récuperer
 exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
@@ -436,8 +435,8 @@ exports.racquetToTakeLog = (req, res, next) => {
         }
       }
       
-      console.log("list article", articleList);
-      console.log("racquetPlayerList", racquetPlayerList);
+     // console.log("list article", articleList);
+    //console.log("racquetPlayerList", racquetPlayerList);
       
       racquetsDataToTake.push({
         id: result.id,
