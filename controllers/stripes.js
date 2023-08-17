@@ -5,21 +5,12 @@ const YOUR_DOMAIN = 'https://click-and-raquette.com';
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 
-
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 
 
 
-// fonction qui calcule le prix d'un element de articleList
-function calculPriceFromArticleListForOneElement(articleList) {
-  //voire a transmettre au backend lors de la commande l'id du produit 
- }
-
-
-
-
-   
+ 
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
@@ -39,8 +30,7 @@ function saveOrderToDatabase(articleList, orderDate, statusOrder, totalPrice, us
   });
 }
   
-
-// Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` et la table player
+// Fonction de création d'une session Stripe et enregistrement des données dans la table `orders` 
 exports.createCheckOutSession = async (req, res) => {
   console.log("Je rentre dans le backend de Stripe");
   
@@ -51,7 +41,6 @@ exports.createCheckOutSession = async (req, res) => {
     console.log("dtas", datas)
     // données pour l'enregirement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
-
     const orderDate = new Date();
     const serviceBackDate = new Date();
     const statusOrder ="inité"
@@ -66,13 +55,8 @@ exports.createCheckOutSession = async (req, res) => {
     const token = datas.token;
     console.log("token : " + token)
 
-  
-
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
-
-    // On enregistre les données dans la table `player`
-    savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email ) 
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack);
@@ -145,7 +129,6 @@ function saveInvoiceToDatabase(paymentIntent) {
     }
   });
 }
-
 
 // Endpoint de webhook pour recevoir les événements de Stripe et enclencher les actions appropriées
 webhookSecret = "whsec_Ke9pttMulkrvQP9cs81ARzNP3rw3eLqV";
