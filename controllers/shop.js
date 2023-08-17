@@ -328,27 +328,9 @@ exports.listHubWithdrawal = (req, res) => {
 
 //logique pour enregistrement de la commande et preferences joueur//
 
-// fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
-  return new Promise((resolve, reject) => {
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
-    console.log("raquete joeuer"+ racquetPlayer)
-    // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la modification des préférences joueur :', error);
-        reject(error);
-      } else {
-        console.log('Préférences joueur modifiées avec succès');
-        resolve(results);
-      }
-    });
-  });
-}
+
+
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
@@ -373,9 +355,10 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-
+    console.log("datas", datas)
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
+    console.log("articleList", articleList)
     const orderDate = new Date();
     const statusOrder = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
@@ -394,8 +377,8 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Variables pour la récupération des préférences du joueur
     let stringId = null;
     let stringRope = null;
-    let racquetPlayer = datas.racquetPlayer;
-    console.log("raquette joueur"+ racquetPlayer)
+    let racquetPlayer = null;
+
     const buyList = datas.articleList;
 
     for (const item of buyList) {
@@ -412,8 +395,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       }
     }
 
-    // On enregistre les données dans la table `player`
-    await savePreferencePlayerToDatabase(hub, hubBack, stringId, stringRope, racquetPlayer, email);
 
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack);
@@ -657,4 +638,25 @@ exports.racquetTaken = async (req, res) => {
 
 
 
+// fonction de modification des preferences joueurs dans la table payer
+function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
+  return new Promise((resolve, reject) => {
+    console.log("stringId"+ stringId)
+    console.log("stringRope"+ stringRope)
+    console.log("raquete joeuer"+ racquetPlayer)
+    // Construisez la requête SQL pour modifier les données dans la table player
+    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
+
+    // Exécutez la requête SQL en utilisant le module mysql2
+    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la modification des préférences joueur :', error);
+        reject(error);
+      } else {
+        console.log('Préférences joueur modifiées avec succès');
+        resolve(results);
+      }
+    });
+  });
+}
 
