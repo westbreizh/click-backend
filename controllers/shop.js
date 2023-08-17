@@ -600,6 +600,7 @@ exports.racquetTaken = async (req, res) => {
     const datas = req.body;
     console.log("datsa", datas)
     const racquetTakenList = JSON.stringify(datas.selectedOrders);
+    console.log("racquetTakenList", racquetTakenList)
     const racquetTakenDate = new Date();
 
     console.log("racquetTakenList", racquetTakenList)
