@@ -17,27 +17,7 @@ function calculPriceFromArticleListForOneElement(articleList) {
  }
 
 
-// fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
-  return new Promise((resolve, reject) => {
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
-    console.log("raquette joeuer"+ racquetPlayer)
-    // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la modification des préférences joueur :', error);
-        reject(error);
-      } else {
-        console.log('Préférences joueur modifiées avec succès');
-        resolve(results);
-      }
-    });
-  });
-}
 
    
 // fonction de sauvegarde de la commande dans la base de données
@@ -86,26 +66,7 @@ exports.createCheckOutSession = async (req, res) => {
     const token = datas.token;
     console.log("token : " + token)
 
-    // Variables pour la récupération des préférences du joueur
-    let racquetPlayer = JSON.stringify(datas.racquetPlayer);
-    let stringId= null;
-    let stringRope = null;
-
-    const buyList = datas.articleList;
-
-    for (const item of buyList) {
-      if (item.stringRopeChoice) {
-        stringRope = item.stringRopeChoice;
-        break;
-      }
-    }
-    
-    for (const item of buyList) {
-      if (item.stringChoice && item.stringChoice.id) {
-        stringId= item.stringChoice.id;
-        break;
-      }
-    }
+  
 
     // données pour stripe et enregistrement de la facture, recherche table player, et envoie email, traitement pour le webhook
     const email = datas.userInfo.email;
