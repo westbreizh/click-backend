@@ -426,7 +426,7 @@ exports.racquetToTakeLog = (req, res, next) => {
   
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
-      const articleList = JSON.parse(result.articleList);
+      const articleList = JSON.parse(result.articleList[0]);
       const racquetPlayer = articleList.racquetPlayer
       console.log("list article",articleList)
       console.log("raquet",racquetPlayer)
