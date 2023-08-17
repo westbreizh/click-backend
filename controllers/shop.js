@@ -601,9 +601,8 @@ exports.racquetTaken = async (req, res) => {
     console.log("datsa", datas)
     const racquetTakenList = JSON.stringify(datas.selectedOrders);
     console.log("racquetTakenList", racquetTakenList)
+    console.log("type racquetTakenList", typeof(racquetTakenList))
     const racquetTakenDate = new Date();
-
-    console.log("racquetTakenList", racquetTakenList)
 
     // On modifie la table orders 
     await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
