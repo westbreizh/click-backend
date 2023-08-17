@@ -382,6 +382,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     // Récupérer l'ID généré à partir de `insertId`
     const idOrder = savedOrder.insertId;
 
+    // envoie d'email au client
     try {
       await sendEmail(email, 'Confirmation de commande', {
         customerName: firstName,
@@ -393,7 +394,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
       return res.sendStatus(500);
     }
-
+    // envoie d'email au cordeur
     const emailStringer = "herbreteauaurelien@tutanota.com"
     try {
       await sendEmail(emailStringer, 'nouvelle commande', {
@@ -404,13 +405,9 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
-      // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
       return res.sendStatus(500);
     }
 
-
-
-    
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
 
@@ -608,6 +605,40 @@ function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
     }
   });
 }
+// fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
+// payload tableau des id de la table orders
+function takeInfosFromOrdersToSendEmails(racquetTakenList, racquetTakenDate) {
+  return new Promise((resolve, reject) => {
+    console.log("date de recup racquet", racquetTakenDate);
+    console.log("liste de racquet recup", racquetTakenList);
+
+    // Construire la requête SQL pour mettre à jour les données dans la table
+    
+    const query = 'SELECT * FROM player  WHERE id = ?';
+
+    const arrayInfosForSendEmail =[]
+
+    // Boucle pour récupérer à les infos pour chaque élément
+    for (const orderId of racquetTakenList) {
+      db.query(query, [ orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
+          reject(error);
+          return;
+        } else {
+          arrayInfosForSendEmail.push(results.userInfo)
+          
+          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
+          if (orderId === racquetTakenList[racquetTakenList.length - 1]) {
+            // Si c'est la dernière commande, résoudre la promesse
+            console.log(arrayInfosForSendEmail)
+            resolve(results);
+          }
+        }
+      });
+    }
+  });
+}
 // Fonction pour valider la recupération des raquettes
 exports.racquetTaken = async (req, res) => {
   console.log("Je rentre dans le backend pour valider la recupération des raquettes");
@@ -616,14 +647,29 @@ exports.racquetTaken = async (req, res) => {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
     console.log("datsa", datas);
-    const racquetTakenList = datas.selectedOrders; // Utilisez le tableau brut ici
+    const racquetTakenList = datas.selectedOrders; 
     console.log("racquetTakenList", racquetTakenList);
-    console.log("type racquetTakenList", typeof racquetTakenList);
     const racquetTakenDate = new Date();
 
     // On modifie la table orders 
     await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
 
+    // On récupère les infos pour envoie d'email
+    await takeInfosFromOrdersToSendEmails(racquetTakenList);
+
+
+
+     // envoie d'email au client
+     try {
+      await sendEmail(email, 'confirmation de récupération raquette', {
+        customerName: firstName,
+      }, 'email/template/confirmationColectEmail.handlebars');
+
+      console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
+    } catch (error) {
+      console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+      return res.sendStatus(500);
+    }
     
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', racquetTakenList: racquetTakenList });

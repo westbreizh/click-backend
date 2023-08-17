@@ -177,6 +177,22 @@ exports.actionAfterPaiement = async (req, res) => {
         return res.sendStatus(500);
       }      
 
+      const emailStringer = "herbreteauaurelien@tutanota.com"
+      try {
+        await sendEmail(emailStringer, 'nouvelle commande', {
+          hub: hub,
+          idOrder : idOrder, 
+        }, 'email/template/newOrderEmail.handlebars');
+  
+        console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
+      } catch (error) {
+        console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
+        // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
+        return res.sendStatus(500);
+      }
+
+
+
 
       break;
 
