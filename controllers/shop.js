@@ -410,13 +410,12 @@ exports.racquetToTakeLog = (req, res, next) => {
   const statusToRetrieve = "initié";
 
   const sqlQuery = `
-    SELECT id, orderDate, hub, userInfo
+    SELECT id, hub, articleList
     FROM orders
     WHERE statusOrder = '${statusToRetrieve}';
   `;
 
-  // Ici, vous exécuteriez la requête SQL dans votre base de données pour obtenir les résultats
-  // Assurez-vous que les résultats de la requête sont stockés dans la variable queryResults
+
 
   db.query(sqlQuery, (err, queryResults) => {
     if (err) {
@@ -426,23 +425,23 @@ exports.racquetToTakeLog = (req, res, next) => {
       });
     }
   
-    const racquetsData = [];
+    const racquetsDataToTake = [];
   
     for (const result of queryResults) {
       const hubObject = JSON.parse(result.hub);
-      const userInfoObject = JSON.parse(result.userInfo);
+      const articleListObject = JSON.parse(result.userInfo);
   
-      racquetsData.push({
+      racquetsDataToTake.push({
         id: result.id,
         orderDate: result.orderDate,
         hub: hubObject.enterprise_name, // Accès à enterprise_name de l'objet hub
-        userInfo: userInfoObject.racquet_player // Accès à racquet_player de l'objet userInfo
+        racquetPlayer: articleListObject.racquetPlayer // Accès à racquet_player de l'objet userInfo
       });
     }
   
     res.status(200).json({
       message: "List of racquets to take retrieved successfully",
-      racquetsData: racquetsData
+      racquetsDataToTake: racquetsDataToTake
     });
   });
   
