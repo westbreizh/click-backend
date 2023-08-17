@@ -500,9 +500,9 @@ exports.racquetToStringLog = (req, res, next) => {
       }
       
      // console.log("list article", articleList);
-    //console.log("racquetPlayerList", racquetPlayerList);
+      //console.log("racquetPlayerList", racquetPlayerList);
       
-      racquetsDataToTake.push({
+      racquetsDataToString.push({
         id: result.id,
         hub: hubObject.enterprise_name, 
         racquetPlayerList: racquetPlayerList
