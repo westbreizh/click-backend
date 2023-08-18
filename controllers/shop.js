@@ -564,7 +564,7 @@ async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatu
         }
       });
     });
-    const userInfoString = results.userInfo; // Obtenez la chaîne JSON
+    const userInfoString = results[0].userInfo; // Obtenez la chaîne JSON
     const userInfoObject = JSON.parse(userInfoString); // Analysez la chaîne JSON en un objet
     const forename = userInfoObject.forename;
     console.log("forename", forename);
