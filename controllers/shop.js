@@ -526,7 +526,7 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
     } else if (statusOrder === "prête") {
       // Construire la requête SQL pour mettre à jour les données dans la table
       const query = 'UPDATE orders SET statusOrder = ?, orderValidateDate= ? WHERE id = ?';
-      const statusToUpdate = 'livrée';
+      const statusToUpdate = 'commande validée';
       db.query(query, [statusToUpdate, changeStatusDate, orderId], (error, results) => {
         if (error) {
           console.error('Erreur lors de la mise à jour de la commande :', error);
