@@ -546,24 +546,38 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
 }
 // fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
 // payload -> orderId, changeStatusDate
-function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate ) {
-  return new Promise((resolve, reject) => {
-    console.log("date de changement d'étape", changeStatusDate);
-    console.log("lorderId", orderId);
-    const query = 'SELECT * FROM orders  WHERE id = ?';
+async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate) {
+  console.log("date de changement d'étape", changeStatusDate);
+  console.log("lorderId", orderId);
+  const query = 'SELECT * FROM orders  WHERE id = ?';
 
-    db.query(query, [ orderId], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
-        reject(error);
-        return;
-      } else {
-        resolve(results);
-        console.log("récupération des infos pour envoie d'email validé", results);
-      }
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.query(query, [orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
+          reject(error);
+          return;
+        } else {
+          console.log("récupération des infos pour envoie d'email validé", results);
+          resolve(results);
+        }
+      });
     });
-  });
+    const forename = JSON.parse(results[0].userInfo.forename);
+    console.log("forename", forename);
+    const email = JSON.parse(results[0].userInfo.email);
+    console.log("email", email);
+    const phoneNumber = JSON.parse(results[0].userInfo.telephone);
+    console.log("phonenumber", phoneNumber);
+    return results;
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 }
+
+
 // fonction pour modifier le status de la commande et envoyer l'email approprié
 // payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
