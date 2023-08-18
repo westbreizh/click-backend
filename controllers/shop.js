@@ -616,7 +616,7 @@ exports.changeStatusOrder = async (req, res) => {
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
 
     // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la modification de status de la commande est effective ', racquetTakenList: racquetTakenList });
+    res.status(200).json({ message: 'la modification de status de la commande est effective '});
 
   } catch (error) {
     console.error('Erreur lors de la modification de status de la commande', error);
