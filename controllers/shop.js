@@ -326,7 +326,7 @@ exports.listHubWithdrawal = (req, res) => {
           //----------- ensemble des fonctions liées aux commandes ---------------//
 
 
-                //logique pour enregistrement de la commande et preferences joueur//
+                //logique pour enregistrement de la commande /
 
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPriceProducts, userInfo, hub, hubBack) {
@@ -417,31 +417,10 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
 
 
-                    //logique côté cordeur//
+                //----------- renvoit des commandes depuis table orders ---------------//
 
 
-
-
-// fonction qui renvoit une commande précise
-exports.sendOneOrder = (req, res, next) => {
-  const orderId = req.body.orderId
-  console.log("req.body.orderId", orderId);
-    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
-      if (err) {
-        console.error(err);
-      } else {
-        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
-        return res.status(201).json({
-          data: {
-            orderInfo: orderInfo
-          },
-          message: 'Données de commande récupérées avec succès!'
-        });
-      }
-    });
-};
-
-// fonction filtre de orders qui renvoit la liste des commandes en fonction du status
+// fonction filtre qui renvoit la liste des commandes en fonction du status
 // payload -> statusOrder
 exports.ordertSelectedByStatus = (req, res, next) => {
   const datas = req.body;
@@ -487,8 +466,30 @@ exports.ordertSelectedByStatus = (req, res, next) => {
   });
 }
 
+// fonction qui renvoit une commande précise
+// payload -> orderId
+exports.sendOneOrder = (req, res, next) => {
+  const orderId = req.body.orderId
+  console.log("req.body.orderId", orderId);
+    db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
+      if (err) {
+        console.error(err);
+      } else {
+        const orderInfo = result; // Ajouter les informations de la commande à la liste ordersInfo
+        return res.status(201).json({
+          data: {
+            orderInfo: orderInfo
+          },
+          message: 'Données de commande récupérées avec succès!'
+        });
+      }
+    });
+};
 
-// Fonction de modification de status et envoie d'email
+
+            //----------- validation des différents etapes, chgment status et envoie email ---------------//
+
+// Fonction de modification de status 
 function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
   return new Promise((resolve, reject) => {
     console.log("Date de changement de statut :", changeStatusDate);
@@ -543,6 +544,26 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
     }
   });
 }
+// fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
+// payload -> orderId, changeStatusDate
+function takeInfosFromOrdersAndSendEmail(orderId, changeStatusDate) {
+  return new Promise((resolve, reject) => {
+    console.log("date de changement d'étape", changeStatusDate);
+    console.log("lorderId", orderId);
+    const query = 'SELECT * FROM orders  WHERE id = ?';
+
+    db.query(query, [ orderId], (error, results) => {
+      if (error) {
+        console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
+        reject(error);
+        return;
+      } else {
+        resolve(results);
+        console.log("récupération des infos pour envoie d'email validé", results);
+      }
+    });
+  });
+}
 // fonction pour modifier le status de la commande et envoyer l'email approprié
 // payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
@@ -560,12 +581,15 @@ exports.changeStatusOrder = async (req, res) => {
     // On modifie la table orders en changeant le status 
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
 
+    // On récupère les infos et on envoie l'email
+    await takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate);
+
     // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la modification de status de la commande est effective '});
+    res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
   } catch (error) {
-    console.error('Erreur lors de la modification de status de la commande', error);
-    res.status(500).json({ error: 'Erreur lors de la modification de status de la commande' });
+    console.error('Erreur lors de la modification de status de la commande et ou l\'envoie d\'email ', error);
+    res.status(500).json({ error: 'Erreur lors de la modification de status de la commande et ou l\'envoie d\'email' });
   }
 }
 
@@ -573,13 +597,8 @@ exports.changeStatusOrder = async (req, res) => {
 
 
 
- 
 
-
-
-
-
-
+              //----------- renvoit de la fiche joueur  ---------------//
 
 // Fonction pour récupérer l'utilisateur à partir de l'id
 const getUserById = (userId) => {
@@ -671,113 +690,18 @@ exports.sendOnePlayer = async (req, res, next) => {
 
 
 
-
-
-
-// fonction de modification de la table orders après avoir récupéré les raquettes
-function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
-  return new Promise((resolve, reject) => {
-    console.log("date de recup racquet", racquetTakenDate);
-    console.log("liste de racquet recup", racquetTakenList);
-
-    // Construire la requête SQL pour mettre à jour les données dans la table
-    const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id = ?';
-
-    const statusToUpdate = 'prêt à corder'; // Nouveau statut à définir
-
-    // Boucle pour exécuter la mise à jour pour chaque élément
-    for (const orderId of racquetTakenList) {
-      db.query(query, [statusToUpdate, racquetTakenDate, orderId], (error, results) => {
-        if (error) {
-          console.error('Erreur lors de la mise à jour de la commande :', error);
-          reject(error);
-          return;
-        } else {
-          console.log("orderId", orderId);
-          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
-          if (orderId === racquetTakenList[racquetTakenList.length - 1]) {
-            // Si c'est la dernière commande, résoudre la promesse
-            resolve(results);
-          }
-        }
-      });
-    }
-  });
-}
-// fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
-// payload tableau des id de la table orders
-function takeInfosFromOrdersToSendEmails(racquetTakenList, racquetTakenDate) {
-  return new Promise((resolve, reject) => {
-    console.log("date de recup racquet", racquetTakenDate);
-    console.log("liste de racquet recup", racquetTakenList);
-
-    // Construire la requête SQL pour mettre à jour les données dans la table
+        /* envoie d'email au client
+        try {
+          await sendEmail(email, 'confirmation de récupération raquette', {
+            customerName: firstName,
+          }, 'email/template/confirmationColectEmail.handlebars');
     
-    const query = 'SELECT * FROM player  WHERE id = ?';
-
-    const arrayInfosForSendEmail =[]
-
-    // Boucle pour récupérer à les infos pour chaque élément
-    for (const orderId of racquetTakenList) {
-      db.query(query, [ orderId], (error, results) => {
-        if (error) {
-          console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
-          reject(error);
-          return;
-        } else {
-          arrayInfosForSendEmail.push(results.userInfo)
-          
-          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
-          if (orderId === racquetTakenList[racquetTakenList.length - 1]) {
-            // Si c'est la dernière commande, résoudre la promesse
-            console.log(arrayInfosForSendEmail)
-            resolve(results);
-          }
+          console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
+        } catch (error) {
+          console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+          return res.sendStatus(500);
         }
-      });
-    }
-  });
-}
-// Fonction pour valider la recupération des raquettes
-exports.racquetTaken = async (req, res) => {
-  console.log("Je rentre dans le backend pour valider la recupération des raquettes");
-
-  try {
-    // On récupère les données du frontend depuis le corps de la requête
-    const datas = req.body;
-    console.log("datsa", datas);
-    const racquetTakenList = datas.selectedOrders; 
-    console.log("racquetTakenList", racquetTakenList);
-    const racquetTakenDate = new Date();
-
-    // On modifie la table orders 
-    await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
-
-    // On récupère les infos pour envoie d'email
-    await takeInfosFromOrdersToSendEmails(racquetTakenList);
-
-
-
-     // envoie d'email au client
-     try {
-      await sendEmail(email, 'confirmation de récupération raquette', {
-        customerName: firstName,
-      }, 'email/template/confirmationColectEmail.handlebars');
-
-      console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
-    } catch (error) {
-      console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-      return res.sendStatus(500);
-    }
-    
-    // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', racquetTakenList: racquetTakenList });
-
-  } catch (error) {
-    console.error('Erreur lors de la validation des raquettes récupérées', error);
-    res.status(500).json({ error: 'Erreur lors de la validation des raquettes récupérées' });
-  }
-};
+ 
 
 
 
@@ -790,25 +714,9 @@ exports.racquetTaken = async (req, res) => {
 
 
 
-// fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
-  return new Promise((resolve, reject) => {
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
-    console.log("raquete joeuer"+ racquetPlayer)
-    // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
 
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la modification des préférences joueur :', error);
-        reject(error);
-      } else {
-        console.log('Préférences joueur modifiées avec succès');
-        resolve(results);
-      }
-    });
-  });
+
+
+
 }
 
