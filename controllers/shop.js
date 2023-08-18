@@ -544,9 +544,9 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
     }
   });
 }
-// fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
-// payload -> orderId, changeStatusDate
-async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate) {
+// fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
+// payload -> orderId
+async function takeInfosFromOrders(orderId, statusOrder, changeStatusDate) {
   console.log("date de changement d'étape", changeStatusDate);
   console.log("lorderId", orderId);
   const query = 'SELECT * FROM orders  WHERE id = ?';
@@ -572,7 +572,11 @@ async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatu
     console.log("email", email);
     const phoneNumber = userInfoObject.telephone; 
     console.log("phonenumber", phoneNumber);
-    return results;
+    return {
+      forename: forename,
+      email: email,
+      phoneNumber: phoneNumber
+    };
   } catch (error) {
     console.error(error);
     throw error;
@@ -597,9 +601,15 @@ exports.changeStatusOrder = async (req, res) => {
     // On modifie la table orders en changeant le status 
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
 
-    // On récupère les infos et on envoie l'email
-    await takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate);
+    // On récupère les infos 
+    const userInfo = await takeInfosFromOrders(orderId);
+    const forename = userInfo.forename;
+    console.log("forename recupéré", forename);
+    const email = userInfo.email;
+    const phoneNumber = userInfo.phoneNumber;
 
+
+    //comment recuperer forename , numberphone email ici ?
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
