@@ -564,11 +564,13 @@ async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatu
         }
       });
     });
-    const forename = JSON.parse(results[0].userInfo.forename);
+    const userInfoString = results.userInfo; // Obtenez la chaîne JSON
+    const userInfoObject = JSON.parse(userInfoString); // Analysez la chaîne JSON en un objet
+    const forename = userInfoObject.forename;
     console.log("forename", forename);
-    const email = JSON.parse(results[0].userInfo.email);
-    console.log("email", email);
-    const phoneNumber = JSON.parse(results[0].userInfo.telephone);
+    const email = userInfoObject.email; 
+    console.log("forename", forename);
+    const phoneNumber = userInfoObject.telephone; 
     console.log("phonenumber", phoneNumber);
     return results;
   } catch (error) {
