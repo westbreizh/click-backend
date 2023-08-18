@@ -507,7 +507,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
     if (statusOrder === "initié") {
       try {
         // Envoyer l'e-mail de confirmation de récupération raquette
-        await sendEmail(email, 'confirmation de récupération raquette', {
+        await sendEmail(email, 'Confirmation de collecte de votre raquette', {
           customerName: forename, date: dateFrancaise, orderId: orderId
         }, 'email/template/confirmationColectEmail.handlebars');
         console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
