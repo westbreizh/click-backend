@@ -489,8 +489,76 @@ exports.sendOneOrder = (req, res, next) => {
 
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
+// Fonction d'envoi d'email suite à la validation d'étapes
+async function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate, forename, email) {
+  return new Promise(async (resolve, reject) => {
+    console.log("Date de changement de statut :", changeStatusDate);
+    console.log("OrderId :", orderId);
+    console.log("StatusOrder :", statusOrder);
+
+    if (statusOrder === "initié") {
+      try {
+        await sendEmail(email, 'confirmation de récupération raquette', {
+          customerName: forename, date: changeStatusDate, orderId: orderId
+        }, 'email/template/confirmationColectEmail.handlebars');
+
+        console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
+        resolve();
+      } catch (error) {
+        console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+        reject(error);
+      }
+
+    } else if (statusOrder === "prêt à corder") {
+      // Logique pour le statut "prêt à corder"
+    } else if (statusOrder === "prête") {
+      // Logique pour le statut "prête"
+    } else {
+      console.log("Statut non pris en charge :", statusOrder);
+      reject("Statut non pris en charge");
+    }
+  });
+}
+// fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
+// payload -> orderId
+async function takeInfosFromOrders(orderId) {
+  console.log("date de changement d'étape", changeStatusDate);
+  console.log("lorderId", orderId);
+  const query = 'SELECT * FROM orders  WHERE id = ?';
+
+  try {
+    const results = await new Promise((resolve, reject) => {
+      db.query(query, [orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
+          reject(error);
+          return;
+        } else {
+          console.log("récupération des infos pour envoie d'email validé", results);
+          resolve(results);
+        }
+      });
+    });
+    const userInfoString = results[0].userInfo; // Obtenez la chaîne JSON
+    const userInfoObject = JSON.parse(userInfoString); // Analysez la chaîne JSON en un objet
+    const forename = userInfoObject.forename;
+    console.log("forename", forename);
+    const email = userInfoObject.email; 
+    console.log("email", email);
+    const phoneNumber = userInfoObject.telephone; 
+    console.log("phonenumber", phoneNumber);
+    return {
+      forename: forename,
+      email: email,
+      phoneNumber: phoneNumber
+    };
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
+}
 // Fonction de modification de status 
-function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
+function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate,) {
   return new Promise((resolve, reject) => {
     console.log("Date de changement de statut :", changeStatusDate);
     console.log("OrderId :", orderId);
@@ -544,44 +612,6 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
     }
   });
 }
-// fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
-// payload -> orderId
-async function takeInfosFromOrders(orderId, statusOrder, changeStatusDate) {
-  console.log("date de changement d'étape", changeStatusDate);
-  console.log("lorderId", orderId);
-  const query = 'SELECT * FROM orders  WHERE id = ?';
-
-  try {
-    const results = await new Promise((resolve, reject) => {
-      db.query(query, [orderId], (error, results) => {
-        if (error) {
-          console.error('Erreur lors de la récupération des données dans takeInfosFromOrdersToSendEmails  :', error);
-          reject(error);
-          return;
-        } else {
-          console.log("récupération des infos pour envoie d'email validé", results);
-          resolve(results);
-        }
-      });
-    });
-    const userInfoString = results[0].userInfo; // Obtenez la chaîne JSON
-    const userInfoObject = JSON.parse(userInfoString); // Analysez la chaîne JSON en un objet
-    const forename = userInfoObject.forename;
-    console.log("forename", forename);
-    const email = userInfoObject.email; 
-    console.log("email", email);
-    const phoneNumber = userInfoObject.telephone; 
-    console.log("phonenumber", phoneNumber);
-    return {
-      forename: forename,
-      email: email,
-      phoneNumber: phoneNumber
-    };
-  } catch (error) {
-    console.error(error);
-    throw error;
-  }
-}
 
 
 // fonction pour modifier le status de la commande et envoyer l'email approprié
@@ -608,9 +638,8 @@ exports.changeStatusOrder = async (req, res) => {
     const email = userInfo.email;
     const phoneNumber = userInfo.phoneNumber;
 
+    await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
-    //comment recuperer forename , numberphone email ici ?
-    // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
   } catch (error) {
