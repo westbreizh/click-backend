@@ -540,9 +540,60 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
+// fonction qui renvoit la liste des commandes en fonction du status
+// payload -> statusOrder
+exports.ordertSelectedByStatus = (req, res, next) => {
+  const datas = req.body;
+  console.log("datas", datas);
+  const statusOrder= datas.statusOrder;
+  console.log("statusOrder", statusOrder); 
+  const statusToRetrieve = statusOrder;
+  const sqlQuery = `
+    SELECT id, hub, articleList
+    FROM orders
+    WHERE statusOrder = '${statusToRetrieve}';
+  `;
+
+  db.query(sqlQuery, (err, queryResults) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({
+        message: 'Erreur lors de la récupération des données.'
+      });
+    }
+  
+    const orderListFiltered = [];
+    for (const result of queryResults) {
+      const hubObject = JSON.parse(result.hub);
+      const articleList = JSON.parse(result.articleList);
+      const racquetPlayerList = []; 
+      for (const article of articleList) {
+        if (article.racquetPlayer) {
+          racquetPlayerList.push(article.racquetPlayer);
+        }
+      }
+      orderListFiltered.push({
+        id: result.id,
+        hub: hubObject.enterprise_name, 
+        racquetPlayerList: racquetPlayerList
+      });
+    }
+    
+    res.status(200).json({
+      message: "List of racquets to string retrieved successfully",
+      orderListFiltered : orderListFiltered 
+    });
+  });
+}
 
 
-// Fonction de modification de la table orders après avoir récupéré les raquettes
+
+
+
+
+
+
+// Fonction de modification de status et envoie d'email
 function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
   return new Promise((resolve, reject) => {
     console.log("Date de changement de statut :", changeStatusDate);
@@ -601,7 +652,6 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
 // payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
   console.log("Je rentre dans le backend pour changer le status de la commande");
-
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
@@ -629,6 +679,106 @@ exports.changeStatusOrder = async (req, res) => {
 
 
  
+
+
+
+
+
+
+
+// Fonction pour récupérer l'utilisateur à partir de l'id
+const getUserById = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, playerResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (playerResult.length > 0) {
+          console.log("playerResult", playerResult)
+          resolve({ userType: 'player', user: playerResult[0] });
+        } else {
+          db.query(`SELECT * FROM hub WHERE id='${userId}'`, (err, hubResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', user: hubResult[0] });
+              } else {
+                db.query(`SELECT * FROM stringer WHERE id='${userId}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+};     
+// Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
+const getUserAddress = (userId) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        console.log("adressResult", addressResult)
+        resolve(addressResult.length > 0 ? addressResult[0] : null);
+      }
+    });
+  });
+};
+// Fonction de récupération des infos du joueur pour construire la fiche joueur
+exports.sendOnePlayer = async (req, res, next) => {
+  const userId = req.body.userId;
+
+
+  try {
+    // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    const user = await getUserById(userId);
+    console.log("user", user)
+    if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
+      return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
+    }
+
+
+
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    //delete user.user.password_hash;
+
+    // On essaie de retrouver l'adresse du joueur s'il est renseigné
+    const userAddress = await getUserAddress(userId);
+    console.log("usserAdress",userAddress)
+    // Retourner les données et le message
+    return res.status(201).json({
+      userInfo: user.user,
+      userAddress: userAddress,
+      message: 'récupération des données joueurs réussies !',
+    });
+  } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la recuperation des données.' });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 // fonction de modification de la table orders après avoir récupéré les raquettes
 function modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate) {
   return new Promise((resolve, reject) => {
@@ -733,106 +883,6 @@ exports.racquetTaken = async (req, res) => {
     res.status(500).json({ error: 'Erreur lors de la validation des raquettes récupérées' });
   }
 };
-
-
-
-
-
-
-// Fonction pour récupérer l'utilisateur à partir de l'id
-const getUserById = (userId) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, playerResult) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (playerResult.length > 0) {
-          console.log("playerResult", playerResult)
-          resolve({ userType: 'player', user: playerResult[0] });
-        } else {
-          db.query(`SELECT * FROM hub WHERE id='${userId}'`, (err, hubResult) => {
-            if (err) {
-              reject(err);
-            } else {
-              if (hubResult.length > 0) {
-                resolve({ userType: 'hub', user: hubResult[0] });
-              } else {
-                db.query(`SELECT * FROM stringer WHERE id='${userId}'`, (err, stringerResult) => {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', user: stringerResult[0] });
-                    } else {
-                      resolve(null);
-                    }
-                  }
-                });
-              }
-            }
-          });
-        }
-      }
-    });
-  });
-};     
-// Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
-const getUserAddress = (userId) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("adressResult", addressResult)
-        resolve(addressResult.length > 0 ? addressResult[0] : null);
-      }
-    });
-  });
-};
-// Fonction de récupération des infos du joueur pour construire la fiche joueur
-exports.sendOnePlayer = async (req, res, next) => {
-  const userId = req.body.userId;
-
-
-  try {
-    // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
-    const user = await getUserById(userId);
-    console.log("user", user)
-    if (!user) {
-      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
-      return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
-    }
-
-
-
-    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    //delete user.user.password_hash;
-
-    // On essaie de retrouver l'adresse du joueur s'il est renseigné
-    const userAddress = await getUserAddress(userId);
-    console.log("usserAdress",userAddress)
-    // Retourner les données et le message
-    return res.status(201).json({
-      userInfo: user.user,
-      userAddress: userAddress,
-      message: 'récupération des données joueurs réussies !',
-    });
-  } catch (err) {
-    // En cas d'erreur, renvoyer une erreur 500
-    return res.status(500).json({ message: 'Une erreur est survenue lors de la recuperation des données.' });
-  }
-};
-
-
-
-
-
-
-
-
-
-
-
 
 
 
