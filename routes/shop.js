@@ -16,19 +16,15 @@ router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
 router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
 router.post('/paiement-in-shop', shopCtrl.saveOrderAndPreferencePlayer);
 
-router.post('/racquetToTakeLog', authenticateJWT,  shopCtrl.racquetToTakeLog);
+
 router.post('/ordertSelectedByStatus', authenticateJWT,  shopCtrl.ordertSelectedByStatus);
-
 router.post('/change-status-order', authenticateJWT,  shopCtrl.changeStatusOrder);
-
 router.post('/oneOrder', authenticateJWT, shopCtrl.sendOneOrder);
 router.post('/onePlayer', authenticateJWT, shopCtrl.sendOnePlayer);
 
 
 
 
-
-router.post('/racquetTaken', authenticateJWT, shopCtrl.racquetTaken);
 
 
 

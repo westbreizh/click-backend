@@ -419,105 +419,8 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
 
                     //logique côté cordeur//
 
-// fonction qui renvoit la liste des commandes des raquettes à récuperer
-exports.racquetToTakeLog = (req, res, next) => {
-  const statusToRetrieve = "initié";
-  const sqlQuery = `
-    SELECT id, hub, articleList
-    FROM orders
-    WHERE statusOrder = '${statusToRetrieve}';
-  `;
 
-  db.query(sqlQuery, (err, queryResults) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({
-        message: 'Erreur lors de la récupération des données.'
-      });
-    }
-  
-    const racquetsDataToTake = [];
-  
-    for (const result of queryResults) {
-      const hubObject = JSON.parse(result.hub);
-      const articleList = JSON.parse(result.articleList);
-      
-      const racquetPlayerList = []; // Tableau pour stocker les valeurs racquetPlayer
-      
-      for (const article of articleList) {
-        if (article.racquetPlayer) {
-          racquetPlayerList.push(article.racquetPlayer);
-        }
-      }
-      
-     // console.log("list article", articleList);
-    //console.log("racquetPlayerList", racquetPlayerList);
-      
-      racquetsDataToTake.push({
-        id: result.id,
-        hub: hubObject.enterprise_name, 
-        racquetPlayerList: racquetPlayerList
-      });
-    }
-    
-  
-    res.status(200).json({
-      message: "List of racquets to take retrieved successfully",
-      racquetsDataToTake: racquetsDataToTake
-    });
-  });
-  
-}
 
-// fonction qui renvoit la liste des commandes des raquettes à corder
-exports.racquetToStringLog = (req, res, next) => {
-  const statusToRetrieve = "prêt à corder";
-  const sqlQuery = `
-    SELECT id, hub, articleList
-    FROM orders
-    WHERE statusOrder = '${statusToRetrieve}';
-  `;
-
-  db.query(sqlQuery, (err, queryResults) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({
-        message: 'Erreur lors de la récupération des données.'
-      });
-    }
-  
-    const racquetsDataToString = [];
-  
-    for (const result of queryResults) {
-      const hubObject = JSON.parse(result.hub);
-      const articleList = JSON.parse(result.articleList);
-      
-      const racquetPlayerList = []; // Tableau pour stocker les valeurs racquetPlayer
-      
-      for (const article of articleList) {
-        if (article.racquetPlayer) {
-          racquetPlayerList.push(article.racquetPlayer);
-        }
-      }
-      
-     // console.log("list article", articleList);
-      //console.log("racquetPlayerList", racquetPlayerList);
-      
-      racquetsDataToString.push({
-        id: result.id,
-        hub: hubObject.enterprise_name, 
-        racquetPlayerList: racquetPlayerList
-      });
-    }
-    
-  
-    res.status(200).json({
-      message: "List of racquets to string retrieved successfully",
-      racquetsDataToString : racquetsDataToString 
-    });
-  });
-  
-}
 
 // fonction qui renvoit une commande précise
 exports.sendOneOrder = (req, res, next) => {
@@ -538,9 +441,7 @@ exports.sendOneOrder = (req, res, next) => {
     });
 };
 
-
-
-// fonction qui renvoit la liste des commandes en fonction du status
+// fonction filtre de orders qui renvoit la liste des commandes en fonction du status
 // payload -> statusOrder
 exports.ordertSelectedByStatus = (req, res, next) => {
   const datas = req.body;
@@ -585,12 +486,6 @@ exports.ordertSelectedByStatus = (req, res, next) => {
     });
   });
 }
-
-
-
-
-
-
 
 
 // Fonction de modification de status et envoie d'email
