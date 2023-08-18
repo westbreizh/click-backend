@@ -635,6 +635,7 @@ exports.changeStatusOrder = async (req, res) => {
     const forename = userInfo.forename;
     console.log("forename recupéré", forename);
     const email = userInfo.email;
+    console.log("email recupéré", email);
     const phoneNumber = userInfo.phoneNumber;
 
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
