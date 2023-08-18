@@ -690,17 +690,6 @@ exports.sendOnePlayer = async (req, res, next) => {
 
 
 
-        /* envoie d'email au client
-        try {
-          await sendEmail(email, 'confirmation de récupération raquette', {
-            customerName: firstName,
-          }, 'email/template/confirmationColectEmail.handlebars');
-    
-          console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
-        } catch (error) {
-          console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-          return res.sendStatus(500);
-        }
  
 
 
@@ -718,5 +707,5 @@ exports.sendOnePlayer = async (req, res, next) => {
 
 
 
-}
+
 
