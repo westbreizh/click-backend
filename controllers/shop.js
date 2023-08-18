@@ -569,7 +569,7 @@ async function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatu
     const forename = userInfoObject.forename;
     console.log("forename", forename);
     const email = userInfoObject.email; 
-    console.log("forename", forename);
+    console.log("email", email);
     const phoneNumber = userInfoObject.telephone; 
     console.log("phonenumber", phoneNumber);
     return results;
