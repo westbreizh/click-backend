@@ -490,7 +490,7 @@ exports.sendOneOrder = (req, res, next) => {
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
 // Fonction d'envoi d'email suite à la validation d'étapes
-async function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate, forename, email) {
+async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
   return new Promise(async (resolve, reject) => {
     console.log("Date de changement de statut :", changeStatusDate);
     console.log("OrderId :", orderId);
@@ -557,7 +557,7 @@ async function takeInfosFromOrders(orderId) {
   }
 }
 // Fonction de modification de status 
-function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate,) {
+function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate,) {
   return new Promise((resolve, reject) => {
     console.log("Date de changement de statut :", changeStatusDate);
     console.log("OrderId :", orderId);
