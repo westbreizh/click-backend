@@ -521,7 +521,6 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
 // fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
-  console.log("date de changement d'étape", changeStatusDate);
   console.log("lorderId", orderId);
   const query = 'SELECT * FROM orders  WHERE id = ?';
 
