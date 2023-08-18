@@ -70,7 +70,7 @@ CREATE TABLE `orders` (
   `orderDate` DATE,
   `racquetTakenDate` DATE,
   `orderReadyDate` DATE,
-  `orderToPlayerDate` DATE,
+  `orderValidateDate` DATE,
   `statusOrder` VARCHAR(255),
   `totalPrice` DECIMAL(10, 2),
   `userInfo` TEXT,

@@ -542,46 +542,85 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
+// Fonction de modification de la table orders après avoir récupéré les raquettes
+function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
+  return new Promise((resolve, reject) => {
+    console.log("Date de changement de statut :", changeStatusDate);
+    console.log("OrderId :", orderId);
+    console.log("StatusOrder :", statusOrder);
 
-
+    if (statusOrder === "initié") {
+      // Construire la requête SQL pour mettre à jour les données dans la table
+      const query = 'UPDATE orders SET statusOrder = ?, racquetTakenDate = ? WHERE id = ?';
+      const statusToUpdate = 'prêt à corder';
+      db.query(query, [statusToUpdate, changeStatusDate, orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la mise à jour de la commande :', error);
+          reject(error);
+          return;
+        } else {
+          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
+          resolve(results);
+        }
+      });
+    } else if (statusOrder === "prêt à corder") {
+      // Construire la requête SQL pour mettre à jour les données dans la table
+      const query = 'UPDATE orders SET statusOrder = ?, orderReadyDate = ? WHERE id = ?';
+      const statusToUpdate = 'prête';
+      db.query(query, [statusToUpdate, changeStatusDate, orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la mise à jour de la commande :', error);
+          reject(error);
+          return;
+        } else {
+          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
+          resolve(results);
+        }
+      });
+    } else if (statusOrder === "prête") {
+      // Construire la requête SQL pour mettre à jour les données dans la table
+      const query = 'UPDATE orders SET statusOrder = ?, orderValidateDate= ? WHERE id = ?';
+      const statusToUpdate = 'livrée';
+      db.query(query, [statusToUpdate, changeStatusDate, orderId], (error, results) => {
+        if (error) {
+          console.error('Erreur lors de la mise à jour de la commande :', error);
+          reject(error);
+          return;
+        } else {
+          console.log("Statut et date mis à jour avec succès pour la commande", orderId);
+          resolve(results);
+        }
+      });
+    } else {
+      console.log("Statut non pris en charge :", statusOrder);
+      reject("Statut non pris en charge");
+    }
+  });
+}
 // fonction pour modifier le status de la commande et envoyer l'email approprié
+// payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
   console.log("Je rentre dans le backend pour changer le status de la commande");
 
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-    console.log("datsa", datas);
-    const racquetTakenList = datas.selectedOrders; 
-    console.log("racquetTakenList", racquetTakenList);
-    const racquetTakenDate = new Date();
+    console.log("datas", datas);
+    const orderId= datas.orderId; 
+    console.log("orderId", orderId);
+    const statusOrder= datas.statusOrder; 
+    console.log("statusorder", statusOrder);
+    const changeStatusDate = new Date();
 
-    // On modifie la table orders 
-    await modifyOrdersAfterRacquetTaken(racquetTakenList, racquetTakenDate);
+    // On modifie la table orders en changeant le status 
+    await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
 
-    // On récupère les infos pour envoie d'email
-    await takeInfosFromOrdersToSendEmails(racquetTakenList);
-
-
-
-     // envoie d'email au client
-     try {
-      await sendEmail(email, 'confirmation de récupération raquette', {
-        customerName: firstName,
-      }, 'email/template/confirmationColectEmail.handlebars');
-
-      console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
-    } catch (error) {
-      console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
-      return res.sendStatus(500);
-    }
-    
     // Si tout s'est bien passé, renvoyer un message de succès
-    res.status(200).json({ message: 'la liste des raquettes récupérées a été validée ', racquetTakenList: racquetTakenList });
+    res.status(200).json({ message: 'la modification de status de la commande est effective ', racquetTakenList: racquetTakenList });
 
   } catch (error) {
-    console.error('Erreur lors de la validation des raquettes récupérées', error);
-    res.status(500).json({ error: 'Erreur lors de la validation des raquettes récupérées' });
+    console.error('Erreur lors de la modification de status de la commande', error);
+    res.status(500).json({ error: 'Erreur lors de la modification de status de la commande' });
   }
 }
 
