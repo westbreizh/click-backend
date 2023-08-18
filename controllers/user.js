@@ -24,29 +24,6 @@ const sendEmail = require("../email/sendEmail")
 const db = require("../BDD/database-connect")
 
 
-
-// fonction de modification des preferences joueurs dans la table payer
-function savePreferencePlayerToDatabase( hub, hubBack, stringId, stringRope, racquetPlayer, email) {
-  return new Promise((resolve, reject) => {
-    console.log("stringId"+ stringId)
-    console.log("stringRope"+ stringRope)
-    console.log("raquete joeuer"+ racquetPlayer)
-    // Construisez la requête SQL pour modifier les données dans la table player
-    const query = 'UPDATE player SET hub = ?, hubBack = ?, string_id = ?, string_rope = ?, racquet_player = ?  WHERE email = ?';
-
-    // Exécutez la requête SQL en utilisant le module mysql2
-    db.query(query, [hub, hubBack, stringId, stringRope, racquetPlayer, email], (error, results) => {
-      if (error) {
-        console.error('Erreur lors de la modification des préférences joueur :', error);
-        reject(error);
-      } else {
-        console.log('Préférences joueur modifiées avec succès');
-        resolve(results);
-      }
-    });
-  });
-
-
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
 
