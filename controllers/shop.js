@@ -546,7 +546,7 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate) {
 }
 // fonction de recuperation des infos du joueur (email, prenom, raquette ), de la date et du lieu de récupération de la raquette 
 // payload -> orderId, changeStatusDate
-function takeInfosFromOrdersAndSendEmail(orderId, changeStatusDate) {
+function takeInfosFromOrdersAndSendEmail(orderId, statusOrder, changeStatusDate ) {
   return new Promise((resolve, reject) => {
     console.log("date de changement d'étape", changeStatusDate);
     console.log("lorderId", orderId);
