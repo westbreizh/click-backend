@@ -490,16 +490,25 @@ exports.sendOneOrder = (req, res, next) => {
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
 // Fonction d'envoi d'email suite à la validation d'étapes
+// Payload -> orderId, statusOrder, changeStatusDate, forename, email
 async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
   return new Promise(async (resolve, reject) => {
+    // Convertir la date au format français
+    const changeStatusDate2 = new Date(changeStatusDate);
+    const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
+    const dateFrancaise = changeStatusDate2.toLocaleDateString('fr-FR', options);
+
     console.log("Date de changement de statut :", changeStatusDate);
+    console.log("Date de changement de statut :", dateFrancaise);
     console.log("OrderId :", orderId);
     console.log("StatusOrder :", statusOrder);
 
+    // Gérer différents statuts de commande, le status dans la variable correspond à l'ancien statut, à l'étape précédent celle surlaquelle on va après la fin du code ...
     if (statusOrder === "initié") {
       try {
+        // Envoyer l'e-mail de confirmation de récupération raquette
         await sendEmail(email, 'confirmation de récupération raquette', {
-          customerName: forename, date: changeStatusDate, orderId: orderId
+          customerName: forename, date: dateFrancaise, orderId: orderId
         }, 'email/template/confirmationColectEmail.handlebars');
         console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
         resolve();
@@ -507,17 +516,28 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
         reject(error);
       }
-
     } else if (statusOrder === "prêt à corder") {
-      // Logique pour le statut "prêt à corder"
+      try {
+        // Envoyer l'e-mail de confirmation de commande prête 
+        await sendEmail(email, 'Votre commande est disponible', {
+          customerName: forename, orderId: orderId
+        }, 'email/template/orderReadyEmail.handlebars');
+        console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
+        resolve();
+      } catch (error) {
+        console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
+        reject(error);
+      }
     } else if (statusOrder === "prête") {
-      // Logique pour le statut "prête"
+      // Logique pour le statut "prête" (peut-être envoyer une facture)
+      // À implémenter si nécessaire
     } else {
       console.log("Statut non pris en charge :", statusOrder);
       reject("Statut non pris en charge");
     }
   });
 }
+
 // fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
