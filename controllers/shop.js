@@ -504,6 +504,7 @@ exports.sendOneOrder = (req, res, next) => {
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
 // Fonction pour envoyer un SMS
+// Payload -> forename, phoneNumber
 async function sendSms(forename, phoneNumber) {
   try {
   // Supprimer les espaces et les caractères non numériques du numéro
@@ -526,8 +527,6 @@ async function sendSms(forename, phoneNumber) {
     throw error;
   }
 }
-       
-
 // Fonction d'envoi d'email suite à la validation d'étapes
 // Payload -> orderId, statusOrder, changeStatusDate, forename, email
 async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
@@ -721,7 +720,7 @@ exports.changeStatusOrder = async (req, res) => {
 const getUserById = (userId) => {
   return new Promise((resolve, reject) => {
   db.query(`SELECT id, civilite, lastname, forename, email, telephone, string_id, string_rope, hub, hubBack, userRole, racquet_player FROM player WHERE id='${userId}'`, (err, playerResult) => {
-        // Le reste du code
+
       if (err) {
         reject(err);
       } else {
@@ -771,8 +770,6 @@ const getUserAddress = (userId) => {
 // Fonction de récupération des infos du joueur pour construire la fiche joueur
 exports.sendOnePlayer = async (req, res, next) => {
   const userId = req.body.userId;
-
-
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
     const user = await getUserById(userId);
@@ -781,11 +778,6 @@ exports.sendOnePlayer = async (req, res, next) => {
       // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
       return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
     }
-
-
-
-    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    //delete user.user.password_hash;
 
     // On essaie de retrouver l'adresse du joueur s'il est renseigné
     const userAddress = await getUserAddress(userId);
