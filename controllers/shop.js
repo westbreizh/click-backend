@@ -682,7 +682,8 @@ exports.changeStatusOrder = async (req, res) => {
 
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
-    await sendSms( forename  )
+    if (statusOrder === "prêt à corder") { 
+    await sendSms( forename  )}
 
     
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
