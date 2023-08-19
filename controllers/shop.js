@@ -507,13 +507,17 @@ exports.sendOneOrder = (req, res, next) => {
 async function sendSms(forename, phoneNumber) {
   try {
   // Supprimer les espaces et les caractères non numériques du numéro
-    const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+  const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+  console.log("cleanPhoneNumber", cleanedPhoneNumber)
+
   // Ajouter le préfixe international
   const formattedPhoneNumber = `+33${cleanedPhoneNumber.substr(1)}`;
+  console.log("formattedPhoneNumber", formattedPhoneNumber)
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
       from: '+18159499877',
       to: formattedPhoneNumber
+      //to: '+33616859867'
     });
     
     console.log('SMS envoyé. SID: ', message.sid);
