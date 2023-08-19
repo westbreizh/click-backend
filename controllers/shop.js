@@ -609,7 +609,6 @@ async function takeInfosFromOrders(orderId) {
       userId: userId,
       forename: forename,
       email: email,
-      phoneNumber: phoneNumber
     };
   } catch (error) {
     console.error(error);
@@ -678,35 +677,34 @@ exports.changeStatusOrder = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-    console.log("datas", datas);
     const orderId= datas.orderId; 
-    console.log("orderId", orderId);
     const statusOrder= datas.statusOrder; 
-    console.log("statusorder", statusOrder);
     const changeStatusDate = new Date();
+    // On récupère l'id utilisateur depuis orders
+    const userIdFromOrders = await takeInfosFromOrders(orderId);
+    const userId = userIdFromOrders.userId;
+    // On récupère des infos utilisateurs depuis la table player
+    const userInfoFromUser = await getUserById(userId);
+    const phoneNumber = userInfoFromUser.user.telephone;
+    const forename = userInfoFromUser.user.forename;
+    const email = userInfoFromUser.user.email;
+    console.log("datas", datas);
+    console.log("orderId", orderId); 
+    console.log("statusorder", statusOrder);
+    console.log("userId recupéré", userId);
+    console.log("userInfoFromUser", userInfoFromUser)
+    console.log("phoneNumber", phoneNumber)
+    console.log("forename", forename);
+    console.log("email", email)
 
     // On modifie la table orders en changeant le status 
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
-    // On récupère les infos 
-    const userInfo = await takeInfosFromOrders(orderId);
-    const forename = userInfo.forename;
-    console.log("forename recupéré", forename);
-    const email = userInfo.email;
-    console.log("email recupéré", email);
 
-    const userId = userInfo.userId;
-    console.log("userId recupéré", userId);
-
-    const user = await getUserById(userId);
-    console.log("user", user)
-    const phoneNumber = user.user.telephone;
-    console.log("phoneNumber", phoneNumber)
-    await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
+    await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
     if (statusOrder === "prêt à corder") { 
     await sendSms( forename, phoneNumber )}
 
-    
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
   } catch (error) {
@@ -717,15 +715,13 @@ exports.changeStatusOrder = async (req, res) => {
 
 
 
-
-
-
               //----------- renvoit de la fiche joueur  ---------------//
 
 // Fonction pour récupérer l'utilisateur à partir de l'id
 const getUserById = (userId) => {
   return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, playerResult) => {
+  db.query(`SELECT id, civilite, lastname, forename, email, telephone, string_id, string_rope, hub, hubBack, userRole, racquet_player FROM player WHERE id='${userId}'`, (err, playerResult) => {
+        // Le reste du code
       if (err) {
         reject(err);
       } else {
