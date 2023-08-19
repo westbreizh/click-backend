@@ -504,13 +504,16 @@ exports.sendOneOrder = (req, res, next) => {
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
 // Fonction pour envoyer un SMS
-async function sendSms(forename) {
+async function sendSms(forename, phoneNumber) {
   try {
-
+  // Supprimer les espaces et les caractères non numériques du numéro
+    const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
+  // Ajouter le préfixe international
+  const formattedPhoneNumber = `+33${cleanedPhoneNumber.substr(1)}`;
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
       from: '+18159499877',
-      to: '+33616859867'
+      to: formattedPhoneNumber
     });
     
     console.log('SMS envoyé. SID: ', message.sid);
@@ -688,7 +691,7 @@ exports.changeStatusOrder = async (req, res) => {
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
     if (statusOrder === "prêt à corder") { 
-    await sendSms( forename  )}
+    await sendSms( forename, phoneNumber )}
 
     
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
