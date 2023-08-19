@@ -170,6 +170,7 @@ exports.actionAfterPaiement = async (req, res) => {
           amount: (event.data.object.amount / 100).toFixed(2),
           paymentDate: new Date(event.data.object.created * 1000).toLocaleDateString('fr-FR'),
           paymentMethod: paymentMethod.card.brand,
+          idOrder : idOrder,
         }, 'email/template/confirmationPaiementEmail.handlebars');
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
@@ -182,7 +183,7 @@ exports.actionAfterPaiement = async (req, res) => {
         await sendEmail(emailStringer, 'nouvelle commande', {
           hub: hub,
           idOrder : idOrder, 
-        }, 'email/template/newOrderEmail.handlebars');
+        }, 'email/template/newOrderForStringer.handlebars');
   
         console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
       } catch (error) {

@@ -395,6 +395,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     try {
       await sendEmail(email, 'Confirmation de commande', {
         customerName: firstName,
+        idOrder : idOrder, 
       }, 'email/template/confirmationOrderEmail.handlebars');
 
       console.log('E-mail de confirmation  envoyé avec succès à', email);
@@ -409,8 +410,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       await sendEmail(emailStringer, 'nouvelle commande', {
         hub: hub,
         idOrder : idOrder, 
-      }, 'email/template/newOrderEmail.handlebars');
-
+      }, 'email/template/newOrderForStringer.handlebars');
       console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
@@ -700,8 +700,8 @@ exports.changeStatusOrder = async (req, res) => {
 
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
-    if (statusOrder === "prêt à corder") { 
-    await sendSms( forename, phoneNumber )}
+    //if (statusOrder === "prêt à corder") { 
+    //await sendSms( forename, phoneNumber )}
 
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
