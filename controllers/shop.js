@@ -516,7 +516,7 @@ async function sendSms(forename, phoneNumber) {
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
       from: '+18159499877',
-      to: formattedPhoneNumber
+      to: `'${formattedPhoneNumber}'`
       //to: '+33616859867'
     });
     
