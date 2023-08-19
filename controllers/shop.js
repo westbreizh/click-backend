@@ -511,12 +511,12 @@ async function sendSms(forename, phoneNumber) {
   console.log("cleanPhoneNumber", cleanedPhoneNumber)
 
   // Ajouter le préfixe international
-  const formattedPhoneNumber = `+33${cleanedPhoneNumber.substr(1)}`;
+  const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
   console.log("formattedPhoneNumber", formattedPhoneNumber)
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
       from: '+18159499877',
-      to: `'${formattedPhoneNumber}'`
+      to: `'+33${cleanedPhoneNumber.substr(1)}'` // Ajoutez les guillemets autour de ${formattedPhoneNumber}      
       //to: '+33616859867'
     });
     
