@@ -2,6 +2,13 @@
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 
+//module, configuration pour envoyer des sms 
+const accountSid = 'AC03efb6e04895a233c60a8520ce65f545';
+const authToken = '43ceb0b0543ffb6294b835793e333cbd';
+const client = require('twilio')(accountSid, authToken);
+
+
+
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 
@@ -489,6 +496,24 @@ exports.sendOneOrder = (req, res, next) => {
 
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
+// Fonction pour envoyer un SMS
+async function sendSms(forename) {
+  try {
+
+    const message = await client.messages.create({
+      body: `Bonjour ${forename}, votre commande est prête.`,
+      from: '+18159499877',
+      to: '+33616859867'
+    });
+    
+    console.log('SMS envoyé. SID: ', message.sid);
+  } catch (error) {
+    console.error('Erreur lors de l\'envoi du SMS: ', error);
+    throw error;
+  }
+}
+       
+
 // Fonction d'envoi d'email suite à la validation d'étapes
 // Payload -> orderId, statusOrder, changeStatusDate, forename, email
 async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
@@ -537,7 +562,6 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
     }
   });
 }
-
 // fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
@@ -648,7 +672,6 @@ exports.changeStatusOrder = async (req, res) => {
 
     // On modifie la table orders en changeant le status 
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
-
     // On récupère les infos 
     const userInfo = await takeInfosFromOrders(orderId);
     const forename = userInfo.forename;
@@ -659,6 +682,9 @@ exports.changeStatusOrder = async (req, res) => {
 
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
+    await sendSms( forename  )
+
+    
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
   } catch (error) {
