@@ -565,6 +565,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
         reject(error);
       }
     } else if (statusOrder === "prête") {
+      console.log("en attente d'envoie de facture")
       // Logique pour le statut "prête" (peut-être envoyer une facture)
       // À implémenter si nécessaire
     } else {
