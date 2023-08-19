@@ -9,9 +9,7 @@ const sendEmail = require("../email/sendEmail")
 
 //module, configuration pour envoyer des sms 
 const accountSid = process.env.ACCOUNT_SID
-console.log("accountSise",accountSid)
 const authToken = process.env.AUT_TOKEN 
-console.log("autoken",authToken)
 const client = require('twilio')(accountSid, authToken);
 
 // fichier pour se connecter à notre base de donnée
@@ -716,6 +714,7 @@ exports.changeStatusOrder = async (req, res) => {
 
               //----------- renvoit de la fiche joueur  ---------------//
 
+              
 // Fonction pour récupérer l'utilisateur à partir de l'id
 const getUserById = (userId) => {
   return new Promise((resolve, reject) => {
