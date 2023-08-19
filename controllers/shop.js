@@ -561,7 +561,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
         await sendEmail(email, 'Votre commande est disponible', {
           customerName: forename, orderId: orderId
         }, 'email/template/orderReadyEmail.handlebars');
-        console.log('E-mail de confirmation de récupération raquette envoyé avec succès à', email);
+        console.log('E-mail de confirmation de commande prête envoyé avec succès à', email);
         resolve();
       } catch (error) {
         console.log('Erreur lors de l\'envoi de l\'e-mail:', error);
