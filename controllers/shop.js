@@ -1,6 +1,7 @@
 // charge les variables d'environnement du fichier .env dans process.env
-const dotenv = require("dotenv");   
+const dotenv = require("dotenv");
 dotenv.config();
+
 
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
@@ -8,13 +9,15 @@ const sendEmail = require("../email/sendEmail")
 
 //module, configuration pour envoyer des sms 
 const accountSid = process.env.ACCOUNT_SID
+console.log("accountSise",accountSid)
 const authToken = process.env.AUT_TOKEN 
+console.log("autoken",authToken)
 const client = require('twilio')(accountSid, authToken);
-
-
 
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
+
+
 
 
 
