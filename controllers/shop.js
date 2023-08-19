@@ -1,10 +1,14 @@
+// charge les variables d'environnement du fichier .env dans process.env
+const dotenv = require("dotenv");   
+dotenv.config();
+
 //module pour envoyer des emails
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 
 //module, configuration pour envoyer des sms 
-const accountSid = 'AC03efb6e04895a233c60a8520ce65f545';
-const authToken = '43ceb0b0543ffb6294b835793e333cbd';
+const accountSid = process.env.ACCOUNT_SID
+const authToken = process.env.AUT_TOKEN 
 const client = require('twilio')(accountSid, authToken);
 
 
@@ -501,7 +505,7 @@ async function sendSms(forename) {
   try {
 
     const message = await client.messages.create({
-      body: `Bonjour ${forename}, votre commande est prête.`,
+      body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
       from: '+18159499877',
       to: '+33616859867'
     });
@@ -654,8 +658,6 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate,) {
     }
   });
 }
-
-
 // fonction pour modifier le status de la commande et envoyer l'email approprié
 // payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
