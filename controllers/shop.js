@@ -566,8 +566,8 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
       }
     } else if (statusOrder === "prête") {
       console.log("en attente d'envoie de facture")
-      // Logique pour le statut "prête" (peut-être envoyer une facture)
-      // À implémenter si nécessaire
+      resolve();
+
     } else {
       console.log("Statut non pris en charge :", statusOrder);
       reject("Statut non pris en charge");
