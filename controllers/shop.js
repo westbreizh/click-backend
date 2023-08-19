@@ -693,12 +693,14 @@ exports.changeStatusOrder = async (req, res) => {
     console.log("forename recupéré", forename);
     const email = userInfo.email;
     console.log("email recupéré", email);
-    const phoneNumber = userInfo.phoneNumber;
+
     const userId = userInfo.userId;
     console.log("userId recupéré", userId);
+
     const user = await getUserById(userId);
     console.log("user", user)
-
+    const phoneNumber = user.user.telephone;
+    console.log("phoneNumber", phoneNumber)
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
     if (statusOrder === "prêt à corder") { 
