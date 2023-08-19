@@ -576,7 +576,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
     }
   });
 }
-// fonction de recuperation des infos du joueur (email, prenom, numéro de téléphone ), 
+// fonction de recuperation de l'id du joueur à partir d'une commande, 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
   console.log("lorderId", orderId);
@@ -603,7 +603,10 @@ async function takeInfosFromOrders(orderId) {
     console.log("email", email);
     const phoneNumber = userInfoObject.telephone; 
     console.log("phonenumber", phoneNumber);
+    const userId = userInfoObject.id; 
+    console.log("userId", userId);
     return {
+      userId: userId,
       forename: forename,
       email: email,
       phoneNumber: phoneNumber
@@ -691,6 +694,10 @@ exports.changeStatusOrder = async (req, res) => {
     const email = userInfo.email;
     console.log("email recupéré", email);
     const phoneNumber = userInfo.phoneNumber;
+    const userId = userInfo.userId;
+    console.log("userId recupéré", userId);
+    const user = await getUserById(userId);
+    console.log("user", user)
 
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email)
 
