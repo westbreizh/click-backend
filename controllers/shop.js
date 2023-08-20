@@ -408,7 +408,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const emailStringer = "herbreteauaurelien@tutanota.com"
     try {
       await sendEmail(emailStringer, 'nouvelle commande', {
-        hub: hub,
         idOrder : idOrder, 
       }, 'email/template/newOrderForStringer.handlebars');
       console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
