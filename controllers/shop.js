@@ -404,7 +404,8 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       // Vous pouvez choisir comment gérer l'erreur, par exemple, renvoyer une réponse d'erreur appropriée au client.
       return res.sendStatus(500);
     }
-    // envoie d'email au cordeur
+    // envoie d'email au cordeur avec outlokk pour envoyer deux mails à la fois
+    /*
     const emailStringer = "herbreteauaurelien@tutanota.com"
     try {
       await sendEmail(emailStringer, 'nouvelle commande', {
@@ -415,7 +416,7 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
       console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
       return res.sendStatus(500);
     }
-
+    */ 
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
 
