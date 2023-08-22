@@ -10,8 +10,6 @@ router.use(express.json());
 
 
 router.post('/signup', userCtrl.signup);
-router.post('/signupHub', userCtrl.signupHub);
-router.post('/signupStringer', userCtrl.signupStringer);
 router.post('/login', userCtrl.login);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
