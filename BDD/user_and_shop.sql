@@ -6,14 +6,15 @@ CREATE TABLE `player` (
     `lastname`              varchar(100) DEFAULT NULL,
     `forename`              varchar(100) DEFAULT NULL,
     `email`                 varchar(255) NOT NULL,
-    `password_hash`        varchar(255) NOT NULL,
+    `password_hash`         varchar(255) NOT NULL,
     `telephone`             varchar(20) DEFAULT NULL,
     `string_id`             varchar(100) DEFAULT NULL,
     `string_rope`           int DEFAULT NULL,
-    `hub`                   varchar(100) DEFAULT NULL,
-    `hubBack`               varchar(100) DEFAULT NULL,
+    `hub_id`                int DEFAULT NULL,
+    `hubBack_id`            int DEFAULT NULL,
     `userRole`              VARCHAR(50) NOT NULL DEFAULT 'player', 
     `racquet_player`        VARCHAR(255),
+    `ownString_player`      VARCHAR(255),
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 );
