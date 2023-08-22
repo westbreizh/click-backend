@@ -121,7 +121,7 @@ exports.login = async (req, res, next) => {
     // Vérifier le mot de passe
     console.log("avant vlid password")
     const validPassword = await verifyPassword(password, user.user.password_hash);
-
+    console.log("après valid password")
     if (!validPassword) {
       // Si le mot de passe n'est pas valide, renvoyer une erreur 401
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
@@ -129,6 +129,9 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.user.id;
+    console.log("userid", userId)
+    console.log("avant creatoken")
+
     const token = createToken(userId);
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
