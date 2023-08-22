@@ -25,12 +25,14 @@ app.use(express.static('public/accessorie'));
 app.use(express.urlencoded({ extended: true }));
 
 // importe le chemin pour les routes
-const userRoutes = require('./routes/user');
+const userRoutes = require('./routes/player');
 const shopRoutes = require ('./routes/shop')
 const stripeRoutes = require ('./routes/stripes')
+const stringerRoutes = require ('./routes/stringer')
 app.use('/api/user', userRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/stringer', stringerRoutes);
 
 
 app.get('/', (req, res) => {
