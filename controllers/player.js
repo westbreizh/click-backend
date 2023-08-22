@@ -137,13 +137,10 @@ exports.login = async (req, res, next) => {
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.user.password_hash;
 
-    // On essaie de retrouver l'adresse du joueur s'il est renseigné
-    const userAddress = await getUserAddress(userId);
 
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.user,
-      userAddress: userAddress,
       token: token,
       message: 'Connexion au site réussie !',
     });
