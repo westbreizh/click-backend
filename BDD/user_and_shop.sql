@@ -6,7 +6,9 @@ CREATE TABLE `player` (
     `lastname`              varchar(100) DEFAULT NULL,
     `forename`              varchar(100) DEFAULT NULL,
     `email`                 varchar(255) NOT NULL,
-    `password_hash`         varchar(255) NOT NULL,
+    `road`                  varchar(255)  DEFAULT NULL,                  
+    `postal_code`           varchar(10)  DEFAULT NULL,
+    `city `                 varchar(100)  DEFAULT NULL ,
     `telephone`             varchar(20) DEFAULT NULL,
     `string_id`             varchar(100) DEFAULT NULL,
     `string_rope`           int DEFAULT NULL,
@@ -15,11 +17,11 @@ CREATE TABLE `player` (
     `userRole`              VARCHAR(50) NOT NULL DEFAULT 'player', 
     `racquet_player`        VARCHAR(255),
     `ownString_player`      VARCHAR(255),
+    `password_hash`         varchar(255) NOT NULL,
+
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 );
-
-
 
 
 
@@ -97,20 +99,6 @@ CREATE TABLE IF NOT EXISTS invoices (
 );
 
 
-
-
-
-DROP TABLE IF EXISTS `address`;
-
-CREATE TABLE `address` (
-    `id` int NOT NULL AUTO_INCREMENT,
-    `road` varchar(100) DEFAULT NULL,
-    `city` varchar(100) DEFAULT NULL,
-    `postalCode` varchar(100) DEFAULT NULL,
-    `inHabitant` int NOT NULL,
-    PRIMARY KEY (`id`),
-    FOREIGN KEY (`inHabitant`) REFERENCES `player`(`id`) ON DELETE CASCADE
-) ;
 
 
 
