@@ -18,8 +18,7 @@ router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 router.post('/saveResetPassword', userCtrl.saveResetPassword);
 
 router.post('/createOrUploadCoordinate', authenticateJWT, userCtrl.createOrUploadCoordinate);
-router.post('/changeEmail', authenticateJWT, userCtrl.changeEmail);
-router.post('/changePassword', authenticateJWT, userCtrl.changePassword);
+
 
 router.post('/orderLog', authenticateJWT, userCtrl.sendOrderLog);
 router.post('/oneOrder', authenticateJWT, userCtrl.sendOneOrder);
