@@ -65,13 +65,51 @@ exports.signup = (req, res ) => {
     }    
   })
 } 
+// Fonction pour récupérer l'utilisateur à partir de l'adresse e-mail
+const getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
+      if (err) {
+        reject(err);
+      } else {
+        if (playerResult.length > 0) {
+          resolve({ userType: 'player', user: playerResult[0] });
+        } else {
+          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', user: hubResult[0] });
+              } else {
+                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+};
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log("email", email)
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    console.log("avant getuserbyemai")
     const user = await getUserByEmail(email);
 
     if (!user) {
@@ -203,42 +241,7 @@ console.log("preference jouer email trouvé")
   )
 }
 
-// Fonction pour récupérer l'utilisateur à partir de l'adresse e-mail
-const getUserByEmail = (email) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
-      if (err) {
-        reject(err);
-      } else {
-        if (playerResult.length > 0) {
-          resolve({ userType: 'player', user: playerResult[0] });
-        } else {
-          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
-            if (err) {
-              reject(err);
-            } else {
-              if (hubResult.length > 0) {
-                resolve({ userType: 'hub', user: hubResult[0] });
-              } else {
-                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', user: stringerResult[0] });
-                    } else {
-                      resolve(null);
-                    }
-                  }
-                });
-              }
-            }
-          });
-        }
-      }
-    });
-  });
-};
+
 // Fonction pour créer le jeton JWT
 const createToken = (userId) => {
   return jwt.sign(
