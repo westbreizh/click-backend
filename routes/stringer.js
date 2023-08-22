@@ -1,25 +1,15 @@
 const express = require('express');
 const router = express.Router();
+const stringerCtrl = require('../controllers/stringer');
+router.use(express.json());  // Middleware d'analyse JSON pour toutes les routes du routeur
 const authenticateJWT = require('../middleware/authenticateJWT '); 
-const userCtrl = require('../controllers/user');
 
 
-
-// Middleware d'analyse JSON pour toutes les routes du routeur
-router.use(express.json());
-
-router.post('/signupStringer', userCtrl.signupStringer);
-router.post('/ordertSelectedByStatus', authenticateJWT,  shopCtrl.ordertSelectedByStatus);
-router.post('/change-status-order', authenticateJWT,  shopCtrl.changeStatusOrder);
-router.post('/oneOrder', authenticateJWT, shopCtrl.sendOneOrder);
-router.post('/onePlayer', authenticateJWT, shopCtrl.sendOnePlayer);
-
-
-
-
-
-
-
+router.post('/signupStringer', stringerCtrl.signupStringer);
+router.post('/ordertSelectedByStatus', authenticateJWT,  stringerCtrl.ordertSelectedByStatus);
+router.post('/change-status-order', authenticateJWT,  stringerCtrl.changeStatusOrder);
+router.post('/oneOrder', authenticateJWT, stringerCtrl.sendOneOrder);
+router.post('/onePlayer', authenticateJWT, stringerCtrl.sendOnePlayer);
 
 
 

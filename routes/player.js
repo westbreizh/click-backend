@@ -1,11 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const authenticateJWT = require('../middleware/authenticateJWT '); 
-const userCtrl = require('../controllers/stringer');
+const userCtrl = require('../controllers/player');
+router.use(express.json()); // Middleware d'analyse JSON pour toutes les routes du routeur
 
-
-// Middleware d'analyse JSON pour toutes les routes du routeur
-router.use(express.json());
 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
