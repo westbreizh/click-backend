@@ -583,7 +583,7 @@ const getUserInfoAndAddress = (playerId, res) => {
 // Fonction pour récupérer les informations de l'utilisateur
 const getUserInfo = (playerId) => {
   return new Promise((resolve, reject) => {
-    db.query(`SELECT id, civilite, lastname, forename, email, telephone, string_id, string_rope, hub, hubBack, userRole, racquet_player FROM player WHERE id='${playerId}'`, (err, playerResult) => {
+    db.query(`SELECT id, civilite, lastname, forename, email, telephone, string_id, string_rope, hub_id, hubBack_id, userRole, racquet_player FROM player WHERE id='${playerId}'`, (err, playerResult) => {
       if (err) {
         reject(err);
       } else {
