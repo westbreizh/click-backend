@@ -71,6 +71,7 @@ const getUserByEmail = (email) => {
     db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
       if (err) {
         reject(err);
+        console.log("erreure dici ")
       } else {
         if (playerResult.length > 0) {
           resolve({ userType: 'player', user: playerResult[0] });
@@ -118,6 +119,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Vérifier le mot de passe
+    console.log("avant vlid password")
     const validPassword = await verifyPassword(password, user.user.password_hash);
 
     if (!validPassword) {
