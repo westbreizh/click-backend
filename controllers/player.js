@@ -159,7 +159,7 @@ exports.login = async (req, res, next) => {
         SET telephone = '${req.body.telephone}', 
         road = '${req.body.road}',
         city = '${req.body.city}',
-        postalCode = '${req.body.postalCode}'
+        postal_code = '${req.body.postalCode}'
         WHERE id = ${req.body.playerId}`,
       (err) => {
         if (err) {
