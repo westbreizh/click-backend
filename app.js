@@ -25,6 +25,7 @@ app.use(express.static('public/accessorie'));
 app.use(express.urlencoded({ extended: true }));
 
 // importe le chemin pour les routes
+// player contient quelues endpoint généraus du coup c'est mentionnés user
 const userRoutes = require('./routes/player');
 const shopRoutes = require ('./routes/shop')
 const stripeRoutes = require ('./routes/stripes')

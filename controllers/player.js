@@ -374,25 +374,6 @@ const verifyPassword = (password, hashedPassword) => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
