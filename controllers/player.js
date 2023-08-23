@@ -13,7 +13,8 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
-const db = require("../BDD/database-connect")
+const db = require("../BDD/database-connect");
+const { userInfo } = require("os");
 
 
 
@@ -109,17 +110,14 @@ exports.login = async (req, res, next) => {
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
-    console.log("cic")
     const user = await getUserByEmail(email);
-    console.log("la")
+    console.log("user", userInfo)
 
     if (!user) {
       return res.status(404).json({ message: 'L\'email est inconnu !' });
     }
 
     // Vérifier le mot de passe
-    console.log("lad")
-
     const validPassword = await bcrypt.compare(password, user.user.password_hash);
     if (!validPassword) {
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
@@ -128,6 +126,7 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfo.id;
+    console.log("userId", userId)
     const token = createToken(userId);
     console.log("ladede")
 
@@ -207,6 +206,8 @@ console.log("preference jouer email trouvé")
 
 // Fonction pour créer le jeton JWT
 const createToken = (userId) => {
+  console.log("ladedef'f'")
+
   return jwt.sign(
     { userId: userId },
     Token_Secret_Key,
