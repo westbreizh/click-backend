@@ -137,11 +137,16 @@ exports.login = async (req, res, next) => {
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.user.password_hash;
 
+    // Récupérer les informations du hub
+    const hubId = user.user.hub_id;
+    const hubInfo = await getHubViaId(hubId);
+
 
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.user,
       token: token,
+      hubInfo: hubInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
@@ -447,3 +452,19 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
+const getHubViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubInfo.length > 0) {
+          resolve({ hubInfo: hubInfo[0] });
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
