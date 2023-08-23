@@ -5,7 +5,7 @@ const bcryptSalt = process.env.bcryptSalt;
 const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
 // extension pour crytpé, décrypté comparé le mot de passe
-const bcrypt = require('bcryptjs');  
+const bcryptjs = require('bcryptjs');  
 const crypto = require("crypto");
 // module pour générer un jeton, un token 
 const jwt = require('jsonwebtoken');
@@ -13,8 +13,7 @@ const jwt = require('jsonwebtoken');
 const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
-const db = require("../BDD/database-connect");
-const { userInfo } = require("os");
+const db = require("../BDD/database-connect")
 
 
 
@@ -72,18 +71,29 @@ const getUserByEmail = (email) => {
     db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
       if (err) {
         reject(err);
+        console.log("erreure dici ")
       } else {
         if (playerResult.length > 0) {
-          resolve({ userType: 'player', userInfo: playerResult[0] });
+          resolve({ userType: 'player', user: playerResult[0] });
         } else {
-          db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
+          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
             if (err) {
               reject(err);
             } else {
-              if (stringerResult.length > 0) {
-                resolve({ userType: 'stringer', userInfo: stringerResult[0] });
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', user: hubResult[0] });
               } else {
-                resolve(null);
+                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
               }
             }
           });
@@ -92,46 +102,50 @@ const getUserByEmail = (email) => {
     });
   });
 };
-
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+  console.log("email", email)
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    console.log("avant getuserbyemai")
     const user = await getUserByEmail(email);
-    console.log("user", user)
 
     if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
       return res.status(404).json({ message: 'L\'email est inconnu !' });
     }
 
     // Vérifier le mot de passe
-    const validPassword = await bcrypt.compare(password, user.user.password_hash);
+    console.log("avant vlid password")
+    const validPassword = await verifyPassword(password, user.user.password_hash);
+    console.log("après valid password")
     if (!validPassword) {
+      // Si le mot de passe n'est pas valide, renvoyer une erreur 401
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
     }
-    console.log("lall")
 
     // Mot de passe correct, créer un token
-    const userId = user.userInfo.id;
-    console.log("userId", userId)
-    const token = createToken(userId);
-    console.log("ladede")
+    const userId = user.user.id;
+    console.log("userid", userId)
+    console.log("avant creatoken")
 
-    // Récupérer les informations du hub
-    const hubId = user.userInfo.hub_id;
-    const hubInfo = await getHubViaId(hubId);
+    const token = createToken(userId);
+
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    delete user.user.password_hash;
+
 
     // Retourner les données et le message
     return res.status(201).json({
-      userInfo: user.userInfo, // Utiliser "userInfo" au lieu de "user.user"
+      userInfo: user.user,
       token: token,
-      hubInfo: hubInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
     return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
   }
 };
@@ -196,8 +210,6 @@ console.log("preference jouer email trouvé")
 
 // Fonction pour créer le jeton JWT
 const createToken = (userId) => {
-  console.log("ladedef'f'")
-
   return jwt.sign(
     { userId: userId },
     Token_Secret_Key,
@@ -361,7 +373,7 @@ const verifyPassword = (password, hashedPassword) => {
 
 
 
-//--------------- commande historique---------------//
+
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
@@ -427,28 +439,6 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
-
-
-
-// Fonction pour récupérer le dépot 
-// payload --> l'id du hub
-const getHubViaId = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
-      if (err) {
-        reject(err);
-        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
-      } else {
-        if (hubInfo.length > 0) {
-          resolve({ hubInfo: hubInfo[0] });
-          console.log("hubInfo", hubInfo[0]); 
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  });
-};
 
 
 
