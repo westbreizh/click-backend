@@ -152,25 +152,40 @@ exports.login = async (req, res, next) => {
 
  // Fonction de création ou modification des coordonnées
  exports.createOrUploadCoordinate = (req, res) => {
-  console.log("req.body", req.body)
-    // Mise à jour de l'utilisateur existant
-    db.query(
-      `UPDATE player 
-        SET telephone = '${req.body.telephone}', 
-        road = '${req.body.road}',
-        city = '${req.body.city}',
-        postal_code = '${req.body.postalCode}'
-        WHERE id = ${req.body.playerId}`,
-      (err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-        }
+  console.log("req.body", req.body);
+
+  // Mise à jour de l'utilisateur existant
+  db.query(
+    `UPDATE player 
+    SET telephone = '${req.body.telephone}', 
+    road = '${req.body.road}',
+    city = '${req.body.city}',
+    postal_code = '${req.body.postalCode}'
+    WHERE id = ${req.body.playerId}`,
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
       }
-    );
 
+      // Après la mise à jour, sélectionnez à nouveau les données mises à jour du joueur
+      db.query(
+        `SELECT * FROM player WHERE id = ${req.body.playerId}`,
+        (selectErr, result) => {
+          if (selectErr) {
+            console.error(selectErr);
+            return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
+          }
+          
+          // Envoyer les données mises à jour en réponse
+          const updatedPlayerData = result[0];
+          res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
+        }
+      );
+    }
+  );
+};
 
-  }
 
 
 // fonction qui enregistre les prérences du joueur pour le cordage
