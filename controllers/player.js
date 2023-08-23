@@ -101,7 +101,7 @@ exports.login = async (req, res, next) => {
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
     const user = await getUserByEmail(email);
-    console.log("user", userInfo)
+    console.log("user", user)
 
     if (!user) {
       return res.status(404).json({ message: 'L\'email est inconnu !' });
