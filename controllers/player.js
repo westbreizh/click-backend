@@ -88,7 +88,7 @@ const getUserByEmail = (email) => {
                     reject(err);
                   } else {
                     if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                      resolve({ userType: 'stringer', userInfo: stringerResult[0] });
                     } else {
                       resolve(null);
                     }
@@ -110,7 +110,6 @@ exports.login = async (req, res, next) => {
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
-    console.log("avant getuserbyemai")
     const user = await getUserByEmail(email);
 
     if (!user) {
@@ -119,24 +118,24 @@ exports.login = async (req, res, next) => {
     }
 
     // Vérifier le mot de passe
-    console.log("avant vlid password")
     const validPassword = await verifyPassword(password, user.user.password_hash);
-    console.log("après valid password")
     if (!validPassword) {
       // Si le mot de passe n'est pas valide, renvoyer une erreur 401
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
     }
 
     // Mot de passe correct, créer un token
-    const userId = user.user.id;
+    const userInfo = user.userInfo
+    const userId = userInfo.id;
     console.log("userid", userId)
-    console.log("avant creatoken")
-
     const token = createToken(userId);
-
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    delete user.user.password_hash;
+    delete userInfo.password_hash;
 
+    const hubId = userInfo.hub_id
+    console.log("hubId", hubId)
+    const hubInfo = await getHubViaId(hubId)
+    console.log("hubinfo", hubInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
@@ -373,7 +372,7 @@ const verifyPassword = (password, hashedPassword) => {
 
 
 
-
+//--------------- commande historique---------------//
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
@@ -439,6 +438,28 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
+
+
+
+// Fonction pour récupérer le dépot 
+// payload --> l'id du hub
+const getHubViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubInfo.length > 0) {
+          resolve({ hubInfo: hubInfo[0] });
+          console.log("hubInfo", hubInfo[0]); 
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
 
 
 
