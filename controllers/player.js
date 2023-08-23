@@ -109,21 +109,27 @@ exports.login = async (req, res, next) => {
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    console.log("cic")
     const user = await getUserByEmail(email);
+    console.log("la")
 
     if (!user) {
       return res.status(404).json({ message: 'L\'email est inconnu !' });
     }
 
     // Vérifier le mot de passe
+    console.log("lad")
+
     const validPassword = await bcrypt.compare(password, user.user.password_hash);
     if (!validPassword) {
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
     }
+    console.log("lall")
 
     // Mot de passe correct, créer un token
     const userId = user.userInfo.id;
     const token = createToken(userId);
+    console.log("ladede")
 
     // Récupérer les informations du hub
     const hubId = user.userInfo.hub_id;
