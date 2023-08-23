@@ -72,29 +72,18 @@ const getUserByEmail = (email) => {
     db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
       if (err) {
         reject(err);
-        console.log("erreure dici ")
       } else {
         if (playerResult.length > 0) {
-          resolve({ userType: 'player', user: playerResult[0] });
+          resolve({ userType: 'player', userInfo: playerResult[0] });
         } else {
-          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+          db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
             if (err) {
               reject(err);
             } else {
-              if (hubResult.length > 0) {
-                resolve({ userType: 'hub', user: hubResult[0] });
+              if (stringerResult.length > 0) {
+                resolve({ userType: 'stringer', userInfo: stringerResult[0] });
               } else {
-                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', userInfo: stringerResult[0] });
-                    } else {
-                      resolve(null);
-                    }
-                  }
-                });
+                resolve(null);
               }
             }
           });
@@ -103,6 +92,7 @@ const getUserByEmail = (email) => {
     });
   });
 };
+
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
