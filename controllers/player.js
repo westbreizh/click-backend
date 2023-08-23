@@ -5,7 +5,7 @@ const bcryptSalt = process.env.bcryptSalt;
 const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
 // extension pour crytpé, décrypté comparé le mot de passe
-const bcryptjs = require('bcryptjs');  
+const bcrypt = require('bcryptjs');  
 const crypto = require("crypto");
 // module pour générer un jeton, un token 
 const jwt = require('jsonwebtoken');
@@ -106,45 +106,37 @@ const getUserByEmail = (email) => {
 exports.login = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
-  console.log("email", email)
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
     const user = await getUserByEmail(email);
 
     if (!user) {
-      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
       return res.status(404).json({ message: 'L\'email est inconnu !' });
     }
 
     // Vérifier le mot de passe
-    const validPassword = await verifyPassword(password, user.user.password_hash);
+    const validPassword = await bcrypt.compare(password, user.user.password_hash);
     if (!validPassword) {
-      // Si le mot de passe n'est pas valide, renvoyer une erreur 401
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
     }
 
     // Mot de passe correct, créer un token
-    const userInfo = user.userInfo
-    const userId = userInfo.id;
-    console.log("userid", userId)
+    const userId = user.userInfo.id;
     const token = createToken(userId);
-    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    delete userInfo.password_hash;
 
-    const hubId = userInfo.hub_id
-    console.log("hubId", hubId)
-    const hubInfo = await getHubViaId(hubId)
-    console.log("hubinfo", hubInfo)
+    // Récupérer les informations du hub
+    const hubId = user.userInfo.hub_id;
+    const hubInfo = await getHubViaId(hubId);
 
     // Retourner les données et le message
     return res.status(201).json({
-      userInfo: user.user,
+      userInfo: user.userInfo, // Utiliser "userInfo" au lieu de "user.user"
       token: token,
+      hubInfo: hubInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
-    // En cas d'erreur, renvoyer une erreur 500
     return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
   }
 };
