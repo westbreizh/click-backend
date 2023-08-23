@@ -152,77 +152,26 @@ exports.login = async (req, res, next) => {
 
  // Fonction de création ou modification des coordonnées
  exports.createOrUploadCoordinate = (req, res) => {
-  db.query(`SELECT * FROM address WHERE inHabitant ='${req.body.playerId}'`, (err, result) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données." });
-    }
-
-    if (result.length > 0) {
-      console.log("on va modifier");
-      // Mise à jour de l'utilisateur existant
-      db.query(
-        `UPDATE player 
-         SET telephone = '${req.body.telephone}' 
-         WHERE id = ${req.body.playerId}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-          }
-
-          // Mise à jour de l'adresse existante
-          db.query(
-            `UPDATE address
-             SET road = '${req.body.road}',
-             city = '${req.body.city}',
-             postalCode = '${req.body.postalCode}'
-             WHERE inHabitant = ${req.body.playerId}`,
-            (err) => {
-              if (err) {
-                console.error(err);
-                return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-              }
-
-              // Récupération des informations mises à jour
-              getUserInfoAndAddress(req.body.playerId, res);
-            }
-          );
+  console.log("req.body", req.body)
+    // Mise à jour de l'utilisateur existant
+    db.query(
+      `UPDATE player 
+        SET telephone = '${req.body.telephone}', 
+        road = '${req.body.road}',
+        city = '${req.body.city}',
+        postalCode = '${req.body.postalCode}'
+        WHERE id = ${req.body.playerId}`,
+      (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
         }
-      );
-    } else {
-      console.log("on va créer");
-      // Mise à jour du téléphone de l'utilisateur
-      db.query(
-        `UPDATE player 
-         SET telephone = '${req.body.telephone}' 
-         WHERE id = ${req.body.playerId}`,
-        (err) => {
-          if (err) {
-            console.error(err);
-            return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-          }
+      }
+    );
 
-          // Création d'une nouvelle adresse
-          db.query(
-            `INSERT INTO address
-             (road, city, postalCode, inHabitant) 
-             VALUES ('${req.body.road}', '${req.body.city}', '${req.body.postalCode}', '${req.body.playerId}')`,
-            (err) => {
-              if (err) {
-                console.error(err);
-                return res.status(500).json({ message: "Une erreur s'est produite lors de la création des données." });
-              }
 
-              // Récupération des informations mises à jour
-              getUserInfoAndAddress(req.body.playerId, res);
-            }
-          );
-        }
-      );
-    }
-  });
-};
+  }
+
 
 // fonction qui enregistre les prérences du joueur pour le cordage
 exports.registerPreferencePlayer = (req, res ) => {
@@ -496,7 +445,7 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
-//-------------------fonction annexe------------//
+
 
 
 
