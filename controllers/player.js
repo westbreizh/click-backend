@@ -74,21 +74,21 @@ const getUserByEmail = (email) => {
         console.log("erreure dici ")
       } else {
         if (playerResult.length > 0) {
-          resolve({ userType: 'player', user: playerResult[0] });
+          resolve({ userType: 'player', userInfos: playerResult[0] });
         } else {
           db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
             if (err) {
               reject(err);
             } else {
               if (hubResult.length > 0) {
-                resolve({ userType: 'hub', user: hubResult[0] });
+                resolve({ userType: 'hub', userInfos: hubResult[0] });
               } else {
                 db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
                   if (err) {
                     reject(err);
                   } else {
                     if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', user: stringerResult[0] });
+                      resolve({ userType: 'stringer', userInfos: stringerResult[0] });
                     } else {
                       resolve(null);
                     }
@@ -169,7 +169,7 @@ exports.login = async (req, res, next) => {
 
     // Vérifier le mot de passe
     console.log("avant vlid password")
-    const validPassword = await verifyPassword(password, user.user.password_hash);
+    const validPassword = await verifyPassword(password, user.userInfos.password_hash);
     console.log("après valid password")
     if (!validPassword) {
       // Si le mot de passe n'est pas valide, renvoyer une erreur 401
@@ -177,30 +177,29 @@ exports.login = async (req, res, next) => {
     }
 
     // Mot de passe correct, créer un token
-    const userId = user.user.id;
-    console.log("userid", userId)
-    console.log("avant creatoken")
+    const userId = user.userInfos.id;
 
     const token = createToken(userId);
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    delete user.user.password_hash;
+    delete user.userInfos.password_hash;
 
     // Récupérer les informations du hub
-    const hubId = user.user.hub_id;
+    const hubId = user.userInfos.hub_id;
     const hubInfo = await getHubViaId(hubId);
+    
 
     // Récupérer les informations du hubBack
-    const hubBackId = user.user.hubBack_id;
+    const hubBackId = user.userInfos.hubBack_id;
     const hubBackInfo = await getHubBackViaId(hubBackId);
     // Récupérer les informations du hubBack
-    const stringId = user.user.string_id;
+    const stringId = user.userInfos.string_id;
     const stringInfo = await getStringViaId(stringId);
     console.log("stringInfo", stringInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
-      userInfo: user.user,
+      userInfo: user.userInfos,
       token: token,
       hubInfo: hubInfo,
       hubBackInfo: hubBackInfo,
