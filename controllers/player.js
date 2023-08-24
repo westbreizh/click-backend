@@ -196,13 +196,11 @@ exports.login = async (req, res, next) => {
     const stringId = user.userInfos.string_id;
     const stringInfo = await getStringViaId(stringId);
     user.userInfos.stringInfo = stringInfo;
-    console.log("stringInfo", stringInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.userInfos,
       token: token,
-      stringInfo: stringInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
