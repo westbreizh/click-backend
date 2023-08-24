@@ -102,6 +102,38 @@ const getUserByEmail = (email) => {
     });
   });
 };
+const getHubViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubInfo.length > 0) {
+          resolve(hubInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
+const getHubBackViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubBackInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubBackInfo.length > 0) {
+          resolve( hubBackInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
@@ -141,12 +173,17 @@ exports.login = async (req, res, next) => {
     const hubId = user.user.hub_id;
     const hubInfo = await getHubViaId(hubId);
 
+    // Récupérer les informations du hubBack
+    const hubBackId = user.user.hubBack_id;
+    const hubBackInfo = await getHubBackViaId(hubBackId);
+    console.log("hubbackinfo", hubBackInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.user,
       token: token,
       hubInfo: hubInfo,
+      hubBackInfo: hubBackInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
@@ -155,7 +192,7 @@ exports.login = async (req, res, next) => {
   }
 };
 
- // Fonction de création ou modification des coordonnées
+// Fonction de création ou modification des coordonnées
  exports.createOrUploadCoordinate = (req, res) => {
   console.log("req.body", req.body);
 
@@ -452,19 +489,5 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 
-const getHubViaId = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
-      if (err) {
-        reject(err);
-        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
-      } else {
-        if (hubInfo.length > 0) {
-          resolve({ hubInfo: hubInfo[0] });
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  });
-};
+
+
