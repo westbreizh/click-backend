@@ -188,22 +188,21 @@ exports.login = async (req, res, next) => {
     const hubId = user.userInfos.hub_id;
     const hubInfo = await getHubViaId(hubId);
     user.userInfos.hubInfo = hubInfo;
-    
-
     // Récupérer les informations du hubBack
     const hubBackId = user.userInfos.hubBack_id;
     const hubBackInfo = await getHubBackViaId(hubBackId);
+    user.userInfos.hubBackInfo = hubBackInfo;
     // Récupérer les informations du hubBack
     const stringId = user.userInfos.string_id;
     const stringInfo = await getStringViaId(stringId);
+    user.userInfos.stringInfo = stringInfo;
     console.log("stringInfo", stringInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.userInfos,
       token: token,
-      hubInfo: hubInfo,
-      hubBackInfo: hubBackInfo,
+      stringInfo: stringInfo,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
