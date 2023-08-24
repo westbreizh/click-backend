@@ -187,6 +187,7 @@ exports.login = async (req, res, next) => {
     // Récupérer les informations du hub
     const hubId = user.userInfos.hub_id;
     const hubInfo = await getHubViaId(hubId);
+    user.userInfos.hubInfo = hubInfo;
     
 
     // Récupérer les informations du hubBack
