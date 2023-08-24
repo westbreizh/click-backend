@@ -134,6 +134,23 @@ const getHubBackViaId = (id) => {
     });
   });
 };
+const getStringViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM string WHERE id='${id}'`, (err, stringInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (stringInfo.length > 0) {
+          resolve(stringInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
+
 // Fonction de connexion
 exports.login = async (req, res, next) => {
   const email = req.body.email;
@@ -176,7 +193,10 @@ exports.login = async (req, res, next) => {
     // Récupérer les informations du hubBack
     const hubBackId = user.user.hubBack_id;
     const hubBackInfo = await getHubBackViaId(hubBackId);
-    console.log("hubbackinfo", hubBackInfo)
+    // Récupérer les informations du hubBack
+    const stringId = user.user.string_id;
+    const stringInfo = await getStringViaId(stringId);
+    console.log("stringInfo", stringInfo)
 
     // Retourner les données et le message
     return res.status(201).json({
