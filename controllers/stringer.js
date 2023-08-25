@@ -406,13 +406,9 @@ exports.sendOnePlayer = async (req, res, next) => {
       return res.status(404).json({ message: 'L\'utilisateur n\'a pas été trouvé!' });
     }
 
-    // On essaie de retrouver l'adresse du joueur s'il est renseigné
-    const userAddress = await getUserAddress(userId);
-    console.log("usserAdress",userAddress)
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.user,
-      userAddress: userAddress,
       message: 'récupération des données joueurs réussies !',
     });
   } catch (err) {
