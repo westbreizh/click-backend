@@ -136,13 +136,13 @@ const getHubBackViaId = (id) => {
 };
 const getStringViaId = (id) => {
   return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM string WHERE id='${id}'`, (err, stringInfo) => {
+    db.query(`SELECT * FROM string WHERE id='${id}'`, (err, stringFromShopInfo) => {
       if (err) {
         reject(err);
         console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
       } else {
-        if (stringInfo.length > 0) {
-          resolve(stringInfo[0] );
+        if (stringFromShopInfo.length > 0) {
+          resolve(stringFromShopInfo[0] );
         } else {
           resolve(null);
         }
@@ -159,7 +159,6 @@ exports.login = async (req, res, next) => {
 
   try {
     // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
-    console.log("avant getuserbyemai")
     const user = await getUserByEmail(email);
 
     if (!user) {
@@ -168,9 +167,7 @@ exports.login = async (req, res, next) => {
     }
 
     // Vérifier le mot de passe
-    console.log("avant vlid password")
     const validPassword = await verifyPassword(password, user.userInfos.password_hash);
-    console.log("après valid password")
     if (!validPassword) {
       // Si le mot de passe n'est pas valide, renvoyer une erreur 401
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
@@ -192,8 +189,8 @@ exports.login = async (req, res, next) => {
     const hubBackId = user.userInfos.hubBack_id;
     const hubBackInfo = await getHubBackViaId(hubBackId);
     user.userInfos.hubBackInfo = hubBackInfo;
-    // Récupérer les informations du hubBack
-    const stringId = user.userInfos.string_id;
+    // Récupérer les informations du preference cordage
+    const stringId = user.userInfos.stringFromShop_id;
     const stringInfo = await getStringViaId(stringId);
     user.userInfos.stringInfo = stringInfo;
 

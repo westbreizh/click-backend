@@ -1,27 +1,28 @@
 DROP TABLE IF EXISTS `player`;
 
 CREATE TABLE `player` (
-    `id`                    int NOT NULL AUTO_INCREMENT,
-    `civilite`              varchar(100) DEFAULT NULL,
-    `lastname`              varchar(100) DEFAULT NULL,
-    `forename`              varchar(100) DEFAULT NULL,
-    `email`                 varchar(255) NOT NULL,
-    `road`                  varchar(255)  DEFAULT NULL,                  
-    `postal_code`           varchar(10)  DEFAULT NULL,
-    `city `                 varchar(100)  DEFAULT NULL ,
-    `telephone`             varchar(20) DEFAULT NULL,
-    `string_id`             varchar(100) DEFAULT NULL,
-    `string_rope`           int DEFAULT NULL,
-    `hub_id`                int DEFAULT NULL,
-    `hubBack_id`            int DEFAULT NULL,
-    `userRole`              VARCHAR(50) NOT NULL DEFAULT 'player', 
-    `racquet_player`        VARCHAR(255),
-    `ownString_player`      VARCHAR(255),
-    `password_hash`         varchar(255) NOT NULL,
+    `id`                 int NOT NULL AUTO_INCREMENT,
+    `civilite`           varchar(100) DEFAULT NULL,
+    `lastname`           varchar(100) DEFAULT NULL,
+    `forename`           varchar(100) DEFAULT NULL,
+    `email`              varchar(255) NOT NULL,
+    `road`               varchar(255) DEFAULT NULL,
+    `postal_code`        varchar(10) DEFAULT NULL,
+    `city`               varchar(100) DEFAULT NULL,
+    `telephone`          varchar(20) DEFAULT NULL,
+    `stringFromShop_id`  int DEFAULT NULL,
+    `string_rope`        int DEFAULT NULL,
+    `hub_id`             int DEFAULT NULL,
+    `hubBack_id`         int DEFAULT NULL,
+    `userRole`           VARCHAR(50) NOT NULL DEFAULT 'player',
+    `racquet_player`     VARCHAR(255),
+    `stringFromPlayer`   VARCHAR(255) DEFAULT NULL,
+    `password_hash`      varchar(255) NOT NULL,
 
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 );
+
 
 
 
