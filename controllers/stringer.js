@@ -212,9 +212,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
 // fonction de recuperation de l'id du joueur à partir d'une commande, 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
-  console.log("orderId", orderId);
   const query = 'SELECT * FROM orders  WHERE id = ?';
-
   try {
     const results = await new Promise((resolve, reject) => {
       db.query(query, [orderId], (error, results) => {
@@ -223,7 +221,7 @@ async function takeInfosFromOrders(orderId) {
           reject(error);
           return;
         } else {
-          console.log("récupération des infos pour envoie d'email validé", results);
+          console.log("récupération des infos pour envoie d'email validé");
           resolve(results);
         }
       });
@@ -348,7 +346,7 @@ exports.changeStatusOrder = async (req, res) => {
 // Fonction pour récupérer l'utilisateur à partir de l'id
 const getUserById = (userId) => {
   return new Promise((resolve, reject) => {
-  db.query(`SELECT id, civilite, lastname, forename, email, telephone, string_id, string_rope, hub, hubBack, userRole, racquet_player FROM player WHERE id='${userId}'`, (err, playerResult) => {
+  db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, playerResult) => {
 
       if (err) {
         reject(err);
