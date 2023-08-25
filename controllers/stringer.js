@@ -169,7 +169,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
     const options = { day: '2-digit', month: '2-digit', year: '2-digit' };
     const dateFrancaise = changeStatusDate2.toLocaleDateString('fr-FR', options);
 
-    console.log("Date de changement de statut :", changeStatusDate);
+
     console.log("Date de changement de statut :", dateFrancaise);
     console.log("OrderId :", orderId);
     console.log("StatusOrder :", statusOrder);
@@ -212,7 +212,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
 // fonction de recuperation de l'id du joueur à partir d'une commande, 
 // payload -> orderId
 async function takeInfosFromOrders(orderId) {
-  console.log("lorderId", orderId);
+  console.log("orderId", orderId);
   const query = 'SELECT * FROM orders  WHERE id = ?';
 
   try {
@@ -321,18 +321,12 @@ exports.changeStatusOrder = async (req, res) => {
     const phoneNumber = userInfoFromUser.user.telephone;
     const forename = userInfoFromUser.user.forename;
     const email = userInfoFromUser.user.email;
-    console.log("datas", datas);
-    console.log("orderId", orderId); 
-    console.log("statusorder", statusOrder);
-    console.log("userId recupéré", userId);
-    console.log("userInfoFromUser", userInfoFromUser)
-    console.log("phoneNumber", phoneNumber)
-    console.log("forename", forename);
-    console.log("email", email)
+
+    console.log("avant le changement de status");
 
     // On modifie la table orders en changeant le status 
     await modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate );
-
+    console.log("avant le changement d'email");
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
     //if (statusOrder === "prêt à corder") { 
