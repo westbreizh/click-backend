@@ -253,7 +253,7 @@ exports.savePreferencePlayer = (req, res ) => {
 
   console.log(req.body)
   // on recherche l'utilisateur via l'email
-  db.query(`SELECT * FROM player WHERE id='${req.body.id}'`, 
+  db.query(`SELECT * FROM player WHERE id='${req.body.userId}'`, 
     (err, results) => {
 
       // on bien retrouvé notre player
