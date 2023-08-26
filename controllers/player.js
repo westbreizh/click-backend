@@ -244,17 +244,21 @@ exports.login = async (req, res, next) => {
 
 
 
+
+
+
+
 // fonction qui enregistre les prérences du joueur pour le cordage
-exports.registerPreferencePlayer = (req, res ) => {
+exports.savePreferencePlayer = (req, res ) => {
 
   console.log(req.body)
   // on recherche l'utilisateur via l'email
-  db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
+  db.query(`SELECT * FROM player WHERE id='${req.body.id}'`, 
     (err, results) => {
 
       // on bien retrouvé notre player
       if (results.length > 0) {                           
-console.log("preference jouer email trouvé")
+      console.log("preference jouer email trouvé")
       // bug player non trouvé ou pas connecté
       }else{  
         console.log("preference jouer email pas trouvé")
@@ -262,6 +266,11 @@ console.log("preference jouer email trouvé")
     }
   )
 }
+
+
+
+
+
 
 
 // Fonction pour créer le jeton JWT
