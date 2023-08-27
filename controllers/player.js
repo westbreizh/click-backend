@@ -259,7 +259,7 @@ exports.savePreferencePlayer = (req, res ) => {
     hub_id = '${req.body.hubChoiceId}',
     hubBack_id = '${req.body.hubBackChoiceId}',
     racquet_player = '${req.body.racquetPlayer}',
-    stringFromPlayer = '${req.body.stringFromPlayer}',
+    stringFromPlayer = '${req.body.stringFromPlayer}'
     WHERE id = ${req.body.userId}`,
     (err) => {
       if (err) {
