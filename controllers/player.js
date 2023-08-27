@@ -150,6 +150,43 @@ const getStringViaId = (id) => {
     });
   });
 };
+// fonction qui enregistre les prérences du joueur pour le cordage dans la base de données
+const savePreferencePlayerInBdd = (userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer) => {
+  const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
+  const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
+  const updateQuery = `
+    UPDATE player 
+    SET stringFromShop_id = ?,
+    string_rope = ?,
+    hub_id = ?,
+    hubBack_id = ?,
+    racquet_player = ?,
+    stringFromPlayer = ?
+    WHERE id = ?
+  `;
+
+  const updateValues = [
+    stringFromShopIdValue,
+    stringRopeChoice,
+    hubChoiceId,
+    hubBackChoiceId,
+    racquetPlayer,
+    stringFromPlayerValue,
+    userId
+  ];
+
+  return new Promise((resolve, reject) => {
+    db.query(updateQuery, updateValues, (updateErr) => {
+      if (updateErr) {
+        console.error(updateErr);
+        reject({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+      } else {
+        resolve({ message: "Mise à jour réussie." });
+      }
+    });
+  });
+};
+
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
@@ -203,7 +240,6 @@ exports.login = async (req, res, next) => {
     return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
   }
 };
-
 // Fonction de création ou modification des coordonnées
  exports.createOrUploadCoordinate = (req, res) => {
   console.log("req.body", req.body);
@@ -247,55 +283,45 @@ exports.login = async (req, res, next) => {
 
 
 
-// fonction qui enregistre les prérences du joueur pour le cordage
-exports.savePreferencePlayer = (req, res) => {
-  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
+// fonction qui enregistre les prérences du joueur pour le cordage et retourne les données mises à jor ...
+exports.savePreferencePlayer = async (req, res, next) => {
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, email } = req.body;
 
-  const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
-  const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
+  try {
+    // On essaie de modofoer la table player
+    const modif = await savePreferencePlayerInBdd(userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer);
 
-  const updateQuery = `
-    UPDATE player 
-    SET stringFromShop_id = ?,
-    string_rope = ?,
-    hub_id = ?,
-    hubBack_id = ?,
-    racquet_player = ?,
-    stringFromPlayer = ?
-    WHERE id = ?
-  `;
-
-  const updateValues = [
-    stringFromShopIdValue,
-    stringRopeChoice,
-    hubChoiceId,
-    hubBackChoiceId,
-    racquetPlayer,
-    stringFromPlayerValue,
-    userId
-  ];
-
-  db.query(updateQuery, updateValues, (updateErr) => {
-    if (updateErr) {
-      console.error(updateErr);
-      return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+    if (error) {
+      // Si couille, renvoyer une erreur 404
+      return res.status(404).json({ message: 'problème !' });
     }
-    db.query(
-      `SELECT * FROM player WHERE id = ${req.body.userId}`,
-      (selectErr, result) => {
-        if (selectErr) {
-          console.error(selectErr);
-          return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
-        }
-        
-        // Envoyer les données mises à jour en réponse
-        const updatedPlayerData = result[0];
-        res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
-      }
-    );
+    const user = await getUserByEmail(email);
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    delete user.userInfos.password_hash;
+    // Récupérer les informations du hub
+    const hubId = user.userInfos.hub_id;
+    const hubInfo = await getHubViaId(hubId);
+    user.userInfos.hubInfo = hubInfo;
+    // Récupérer les informations du hubBack
+    const hubBackId = user.userInfos.hubBack_id;
+    const hubBackInfo = await getHubBackViaId(hubBackId);
+    user.userInfos.hubBackInfo = hubBackInfo;
+    // Récupérer les informations du preference cordage
+    const stringFromShopId = user.userInfos.stringFromShop_id;
+    const stringFromShopInfo = await getStringViaId(stringFromShopId);
+    user.userInfos.stringInfo = stringFromShopInfo;
 
-  });
+    // Retourner les données et le message
+    return res.status(201).json({
+      updatedPlayerData: user.userInfos,
+      message: 'modification réussie!',
+    });
+  } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
+  }
 };
+
 
 
 
