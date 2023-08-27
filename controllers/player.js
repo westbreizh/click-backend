@@ -311,8 +311,8 @@ exports.loadDataPlayerAfterModif = async (req, res, next) => {
 
     // Retourner les données et le message
     return res.status(201).json({
-      userInfo: user.userInfos,
-      message: 'Connexion au site réussie !',
+      updatedPlayerData: user.userInfos,
+      message: 'on a bien récupérées les informations du player modifiées !',
     });
   } catch (err) {
     // En cas d'erreur, renvoyer une erreur 500
