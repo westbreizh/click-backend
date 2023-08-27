@@ -286,7 +286,7 @@ exports.savePreferencePlayer = (req, res) => {
 
         const updatedPlayerData = selectResult[0];
 
-        delete user.userInfos.password_hash;
+        delete updatedPlayerData.password_hash;
 
         const hubId = updatedPlayerData.hub_id;
         getHubViaId(hubId, (hubErr, hubInfo) => {
