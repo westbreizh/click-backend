@@ -254,7 +254,7 @@ exports.savePreferencePlayer = (req, res ) => {
   // Mise à jour de l'utilisateur existant
   db.query(
     `UPDATE player 
-    SET stringFromShop_id = '${req.body.stringFromShopID}', 
+    SET stringFromShop_id = '${req.body.stringFromShopId}', 
     string_rope = '${req.body.stringRopeChoice}',
     hub_id = '${req.body.hubChoiceId}',
     hubBack_id = '${req.body.hubBackChoiceId}',
