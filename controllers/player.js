@@ -242,6 +242,8 @@ exports.login = async (req, res, next) => {
 
 
 // fonction qui enregistre les prérences du joueur pour le cordage
+// fonction qui enregistre les préférences du joueur pour le cordage
+// fonction qui enregistre les préférences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
 
@@ -269,60 +271,16 @@ exports.savePreferencePlayer = (req, res) => {
     userId
   ];
 
-  db.query(updateQuery, updateValues, (updateErr) => {
-    if (updateErr) {
-      console.error(updateErr);
-      return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+  db.query(updateQuery, updateValues, (error) => {
+    if (error) {
+      console.error(error);
+      res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+    } else {
+      res.status(200).json({ message: "Mise à jour réussie." });
     }
-
-    db.query(
-      `SELECT * FROM player WHERE id = ?`,
-      [userId],
-      (selectErr, selectResult) => {
-        if (selectErr) {
-          console.error(selectErr);
-          return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
-        }
-
-        const updatedPlayerData = selectResult[0];
-
-        delete updatedPlayerData.password_hash;
-
-        const hubId = updatedPlayerData.hub_id;
-        getHubViaId(hubId, (hubErr, hubInfo) => {
-          if (hubErr) {
-            console.error(hubErr);
-            return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du hub." });
-          }
-
-          updatedPlayerData.hubInfo = hubInfo;
-
-          const hubBackId = updatedPlayerData.hubBack_id;
-          getHubBackViaId(hubBackId, (hubBackErr, hubBackInfo) => {
-            if (hubBackErr) {
-              console.error(hubBackErr);
-              return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du hubBack." });
-            }
-
-            updatedPlayerData.hubBackInfo = hubBackInfo;
-
-            const stringFromShopId = updatedPlayerData.stringFromShop_id;
-            getStringViaId(stringFromShopId, (stringErr, stringFromShopInfo) => {
-              if (stringErr) {
-                console.error(stringErr);
-                return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du stringFromShop." });
-              }
-
-              updatedPlayerData.stringInfo = stringFromShopInfo;
-
-              res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
-            });
-          });
-        });
-      }
-    );
   });
 };
+
 
 
 
