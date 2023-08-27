@@ -280,8 +280,20 @@ exports.savePreferencePlayer = (req, res) => {
       console.error(updateErr);
       return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
     }
+    db.query(
+      `SELECT * FROM player WHERE id = ${req.body.userId}`,
+      (selectErr, result) => {
+        if (selectErr) {
+          console.error(selectErr);
+          return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
+        }
+        
+        // Envoyer les données mises à jour en réponse
+        const updatedPlayerData = result[0];
+        res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
+      }
+    );
 
-    res.status(200).json({ message: "Mise à jour réussie." });
   });
 };
 
