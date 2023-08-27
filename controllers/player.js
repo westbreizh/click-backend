@@ -150,44 +150,6 @@ const getStringViaId = (id) => {
     });
   });
 };
-// fonction qui enregistre les prérences du joueur pour le cordage dans la base de données
-const savePreferencePlayerInBdd = (userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer) => {
-  console.log("je rentre ici ")
-  const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
-  const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
-  const updateQuery = `
-    UPDATE player 
-    SET stringFromShop_id = ?,
-    string_rope = ?,
-    hub_id = ?,
-    hubBack_id = ?,
-    racquet_player = ?,
-    stringFromPlayer = ?
-    WHERE id = ?
-  `;
-
-  const updateValues = [
-    stringFromShopIdValue,
-    stringRopeChoice,
-    hubChoiceId,
-    hubBackChoiceId,
-    racquetPlayer,
-    stringFromPlayerValue,
-    userId
-  ];
-
-  return new Promise((resolve, reject) => {
-    db.query(updateQuery, updateValues, (updateErr) => {
-      if (updateErr) {
-        console.error(updateErr);
-        reject({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-      } else {
-        resolve({ message: "Mise à jour réussie." });
-      }
-    });
-  });
-};
-
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
@@ -241,6 +203,7 @@ exports.login = async (req, res, next) => {
     return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
   }
 };
+
 // Fonction de création ou modification des coordonnées
  exports.createOrUploadCoordinate = (req, res) => {
   console.log("req.body", req.body);
@@ -278,55 +241,88 @@ exports.login = async (req, res, next) => {
 };
 
 
+// fonction qui enregistre les prérences du joueur pour le cordage
+exports.savePreferencePlayer = (req, res) => {
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
 
+  const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
+  const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
 
+  const updateQuery = `
+    UPDATE player 
+    SET stringFromShop_id = ?,
+    string_rope = ?,
+    hub_id = ?,
+    hubBack_id = ?,
+    racquet_player = ?,
+    stringFromPlayer = ?
+    WHERE id = ?
+  `;
 
+  const updateValues = [
+    stringFromShopIdValue,
+    stringRopeChoice,
+    hubChoiceId,
+    hubBackChoiceId,
+    racquetPlayer,
+    stringFromPlayerValue,
+    userId
+  ];
 
-
-
-// fonction qui enregistre les prérences du joueur pour le cordage et retourne les données mises à jor ...
-exports.savePreferencePlayer = async (req, res, next) => {
-  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, email } = req.body;
-  console.log("je rentre ici et la  ")
-
-  try {
-    // On essaie de modofoer la table player
-    const modif = await savePreferencePlayerInBdd(userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer);
-    console.log("je rentre icif g ")
-
-    if (error) {
-      // Si couille, renvoyer une erreur 404
-      return res.status(404).json({ message: 'problème !' });
+  db.query(updateQuery, updateValues, (updateErr) => {
+    if (updateErr) {
+      console.error(updateErr);
+      return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
     }
-    const user = await getUserByEmail(email);
-    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-    delete user.userInfos.password_hash;
-    // Récupérer les informations du hub
-    const hubId = user.userInfos.hub_id;
-    const hubInfo = await getHubViaId(hubId);
-    user.userInfos.hubInfo = hubInfo;
-    // Récupérer les informations du hubBack
-    const hubBackId = user.userInfos.hubBack_id;
-    const hubBackInfo = await getHubBackViaId(hubBackId);
-    user.userInfos.hubBackInfo = hubBackInfo;
-    // Récupérer les informations du preference cordage
-    const stringFromShopId = user.userInfos.stringFromShop_id;
-    const stringFromShopInfo = await getStringViaId(stringFromShopId);
-    user.userInfos.stringInfo = stringFromShopInfo;
 
-    // Retourner les données et le message
-    return res.status(201).json({
-      updatedPlayerData: user.userInfos,
-      message: 'modification réussie!',
-    });
-  } catch (err) {
-    // En cas d'erreur, renvoyer une erreur 500
-    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
-  }
+    db.query(
+      `SELECT * FROM player WHERE id = ?`,
+      [userId],
+      (selectErr, selectResult) => {
+        if (selectErr) {
+          console.error(selectErr);
+          return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
+        }
+
+        const updatedPlayerData = selectResult[0];
+
+        delete user.userInfos.password_hash;
+
+        const hubId = updatedPlayerData.hub_id;
+        getHubViaId(hubId, (hubErr, hubInfo) => {
+          if (hubErr) {
+            console.error(hubErr);
+            return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du hub." });
+          }
+
+          updatedPlayerData.hubInfo = hubInfo;
+
+          const hubBackId = updatedPlayerData.hubBack_id;
+          getHubBackViaId(hubBackId, (hubBackErr, hubBackInfo) => {
+            if (hubBackErr) {
+              console.error(hubBackErr);
+              return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du hubBack." });
+            }
+
+            updatedPlayerData.hubBackInfo = hubBackInfo;
+
+            const stringFromShopId = updatedPlayerData.stringFromShop_id;
+            getStringViaId(stringFromShopId, (stringErr, stringFromShopInfo) => {
+              if (stringErr) {
+                console.error(stringErr);
+                return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des informations du stringFromShop." });
+              }
+
+              updatedPlayerData.stringInfo = stringFromShopInfo;
+
+              res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
+            });
+          });
+        });
+      }
+    );
+  });
 };
-
-
-
 
 
 
