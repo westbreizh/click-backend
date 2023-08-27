@@ -249,41 +249,56 @@ exports.login = async (req, res, next) => {
 
 
 // fonction qui enregistre les prérences du joueur pour le cordage
-exports.savePreferencePlayer = (req, res ) => {
-  console.log("req.body", req.body);
-  // Mise à jour de l'utilisateur existant
-  db.query(
-    `UPDATE player 
-    SET stringFromShop_id = '${req.body.stringFromShopId}', 
-    string_rope = '${req.body.stringRopeChoice}',
-    hub_id = '${req.body.hubChoiceId}',
-    hubBack_id = '${req.body.hubBackChoiceId}',
-    racquet_player = '${req.body.racquetPlayer}',
-    stringFromPlayer = '${req.body.stringFromPlayer}'
-    WHERE id = ${req.body.userId}`,
-    (err) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-      }
+exports.savePreferencePlayer = (req, res) => {
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
 
-      // Après la mise à jour, sélectionnez à nouveau les données mises à jour du joueur
-      db.query(
-        `SELECT * FROM player WHERE id = ${req.body.userId}`,
-        (selectErr, result) => {
-          if (selectErr) {
-            console.error(selectErr);
-            return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
-          }
-          
-          // Envoyer les données mises à jour en réponse
-          const updatedPlayerData = result[0];
-          res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
-        }
-      );
+  const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
+  const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
+
+  const updateQuery = `
+    UPDATE player 
+    SET stringFromShop_id = ?,
+    string_rope = ?,
+    hub_id = ?,
+    hubBack_id = ?,
+    racquet_player = ?,
+    stringFromPlayer = ?
+    WHERE id = ?
+  `;
+
+  const updateValues = [
+    stringFromShopIdValue,
+    stringRopeChoice,
+    hubChoiceId,
+    hubBackChoiceId,
+    racquetPlayer,
+    stringFromPlayerValue,
+    userId
+  ];
+
+  db.query(updateQuery, updateValues, (err) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
     }
-  );
-}
+
+    // Sélectionnez les données mises à jour du joueur
+    db.query(
+      `SELECT * FROM player WHERE id = ?`,
+      [userId],
+      (selectErr, result) => {
+        if (selectErr) {
+          console.error(selectErr);
+          return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
+        }
+
+        // Envoyer les données mises à jour en réponse
+        const updatedPlayerData = result[0];
+        res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
+      }
+    );
+  });
+};
 
 
 
