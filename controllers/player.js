@@ -275,10 +275,10 @@ exports.savePreferencePlayer = async (req, res) => {
   ];
 
   try {
-    await db.query(updateQuery, updateValues);
+     db.query(updateQuery, updateValues);
 
     // Sélectionnez les données mises à jour du joueur
-    const [selectResult] = await db.query(
+    const [selectResult] =  db.query(
       `SELECT * FROM player WHERE id = ?`,
       [userId]
     );
