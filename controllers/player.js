@@ -152,6 +152,7 @@ const getStringViaId = (id) => {
 };
 // fonction qui enregistre les prérences du joueur pour le cordage dans la base de données
 const savePreferencePlayerInBdd = (userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer) => {
+  console.log("je rentre ici ")
   const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
   const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
   const updateQuery = `
@@ -286,10 +287,12 @@ exports.login = async (req, res, next) => {
 // fonction qui enregistre les prérences du joueur pour le cordage et retourne les données mises à jor ...
 exports.savePreferencePlayer = async (req, res, next) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, email } = req.body;
+  console.log("je rentre ici et la  ")
 
   try {
     // On essaie de modofoer la table player
     const modif = await savePreferencePlayerInBdd(userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer);
+    console.log("je rentre icif g ")
 
     if (error) {
       // Si couille, renvoyer une erreur 404
