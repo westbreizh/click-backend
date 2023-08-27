@@ -250,21 +250,39 @@ exports.login = async (req, res, next) => {
 
 // fonction qui enregistre les prérences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res ) => {
+  console.log("req.body", req.body);
+  // Mise à jour de l'utilisateur existant
+  db.query(
+    `UPDATE player 
+    SET stringFromShop_id = '${req.body.stringFromShopID}', 
+    string_rope = '${req.body.stringRopeChoice}',
+    hub_id = '${req.body.hubChoiceId}',
+    hubBack_id = '${req.body.hubBackChoiceId}',
+    racquet_player = '${req.body.racquetPlayer}',
+    stringFromPlayer = '${req.body.stringFromPlayer}',
+    WHERE id = ${req.body.userId}`,
+    (err) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+      }
 
-  console.log(req.body)
-  // on recherche l'utilisateur via l'email
-  db.query(`SELECT * FROM player WHERE id='${req.body.userId}'`, 
-    (err, results) => {
-
-      // on bien retrouvé notre player
-      if (results.length > 0) {                           
-      console.log("preference jouer email trouvé")
-      // bug player non trouvé ou pas connecté
-      }else{  
-        console.log("preference jouer email pas trouvé")
-      } 
+      // Après la mise à jour, sélectionnez à nouveau les données mises à jour du joueur
+      db.query(
+        `SELECT * FROM player WHERE id = ${req.body.userId}`,
+        (selectErr, result) => {
+          if (selectErr) {
+            console.error(selectErr);
+            return res.status(500).json({ message: "Une erreur s'est produite lors de la récupération des données mises à jour." });
+          }
+          
+          // Envoyer les données mises à jour en réponse
+          const updatedPlayerData = result[0];
+          res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
+        }
+      );
     }
-  )
+  );
 }
 
 
