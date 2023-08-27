@@ -246,7 +246,7 @@ exports.login = async (req, res, next) => {
 
 
 
-// fonction qui enregistre les prérences du joueur pour le cordage
+
 // fonction qui enregistre les prérences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
@@ -275,46 +275,16 @@ exports.savePreferencePlayer = (req, res) => {
     userId
   ];
 
-  db.query(updateQuery, updateValues)
-    .then(() => {
-      // Sélectionnez les données mises à jour du joueur
-      return db.query(`SELECT * FROM player WHERE id = ?`, [userId]);
-    })
-    .then(([selectResult]) => {
-      // Envoyer les données mises à jour en réponse
-      const updatedPlayerData = selectResult[0];
-      
-      // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
-      delete user.userInfos.password_hash;
+  db.query(updateQuery, updateValues, (updateErr) => {
+    if (updateErr) {
+      console.error(updateErr);
+      return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
+    }
 
-      // Récupérer les informations du hub
-      const hubId = updatedPlayerData.hub_id;
-      return getHubViaId(hubId);
-    })
-    .then(hubInfo => {
-      updatedPlayerData.hubInfo = hubInfo;
-
-      // Récupérer les informations du hubBack
-      const hubBackId = updatedPlayerData.hubBack_id;
-      return getHubBackViaId(hubBackId);
-    })
-    .then(hubBackInfo => {
-      updatedPlayerData.hubBackInfo = hubBackInfo;
-
-      // Récupérer les informations du preference cordage
-      const stringFromShopId = updatedPlayerData.stringFromShop_id;
-      return getStringViaId(stringFromShopId);
-    })
-    .then(stringFromShopInfo => {
-      updatedPlayerData.stringInfo = stringFromShopInfo;
-
-      res.status(200).json({ message: "Mise à jour réussie.", updatedPlayerData });
-    })
-    .catch(error => {
-      console.error(error);
-      res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour des données." });
-    });
+    res.status(200).json({ message: "Mise à jour réussie." });
+  });
 };
+
 
 
 
