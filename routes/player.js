@@ -8,7 +8,9 @@ router.use(express.json()); // Middleware d'analyse JSON pour toutes les routes 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
 router.post('/createOrUploadCoordinate', authenticateJWT, userCtrl.createOrUploadCoordinate);
-router.post('/savePreferencePlayer', authenticateJWT, userCtrl.savePreferencePlayer);//
+router.post('/savePreferencePlayer', authenticateJWT, userCtrl.savePreferencePlayer);
+router.post('/loadDataPlayerAfterModif', authenticateJWT, userCtrl.loadDataPlayerAfterModif);
+
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 router.post('/saveResetPassword', userCtrl.saveResetPassword);

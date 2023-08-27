@@ -241,8 +241,7 @@ exports.login = async (req, res, next) => {
 };
 
 
-// fonction qui enregistre les prérences du joueur pour le cordage
-// fonction qui enregistre les préférences du joueur pour le cordage
+
 // fonction qui enregistre les préférences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
@@ -281,6 +280,45 @@ exports.savePreferencePlayer = (req, res) => {
   });
 };
 
+// Fonction qui recupère les données joueurs ave un email fournies 
+exports.loadDataPlayerAfterModif = async (req, res, next) => {
+  const email = req.body.email;
+  console.log("email", email)
+
+  try {
+    // On essaie de récupérer l'utilisateur dans les tables player, hub et stringer
+    const user = await getUserByEmail(email);
+
+    if (!user) {
+      // Si l'utilisateur n'est pas trouvé, renvoyer une erreur 404
+      return res.status(404).json({ message: 'L\'email est inconnu !' });
+    }
+
+    // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
+    delete user.userInfos.password_hash;
+    // Récupérer les informations du hub
+    const hubId = user.userInfos.hub_id;
+    const hubInfo = await getHubViaId(hubId);
+    user.userInfos.hubInfo = hubInfo;
+    // Récupérer les informations du hubBack
+    const hubBackId = user.userInfos.hubBack_id;
+    const hubBackInfo = await getHubBackViaId(hubBackId);
+    user.userInfos.hubBackInfo = hubBackInfo;
+    // Récupérer les informations du preference cordage
+    const stringFromShopId = user.userInfos.stringFromShop_id;
+    const stringFromShopInfo = await getStringViaId(stringFromShopId);
+    user.userInfos.stringInfo = stringFromShopInfo;
+
+    // Retourner les données et le message
+    return res.status(201).json({
+      userInfo: user.userInfos,
+      message: 'Connexion au site réussie !',
+    });
+  } catch (err) {
+    // En cas d'erreur, renvoyer une erreur 500
+    return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
+  }
+};
 
 
 
