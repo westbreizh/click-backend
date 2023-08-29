@@ -328,8 +328,7 @@ const createToken = (userId) => {
   return jwt.sign(
     { userId: userId },
     Token_Secret_Key,
-    //{ expiresIn: '4h' }
-        { expiresIn: 90 }
+    { expiresIn: '4h' }
   );
 };
 
