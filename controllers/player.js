@@ -329,7 +329,7 @@ const createToken = (userId) => {
     { userId: userId },
     Token_Secret_Key,
     //{ expiresIn: '4h' }
-        { expiresIn: 15 }
+        { expiresIn: 90 }
   );
 };
 
