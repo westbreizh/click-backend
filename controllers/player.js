@@ -419,7 +419,7 @@ exports.saveResetPassword = (req, res) => {
     if (err) {
       return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
     }
-    console.log("avant verification du resttoken")
+
 
     // Vérifier si l'utilisateur a le même resetToken que celui stocké dans la base de données
     const storedResetToken = result[0].resetToken;
@@ -435,8 +435,9 @@ exports.saveResetPassword = (req, res) => {
       // Hacher le nouveau mot de passe
       bcryptjs.hash(newPassword, Number(bcryptSalt))
         .then((hashedPassword) => {
+          console.log("hashedPassword", hashedPassword)
           // Mettre à jour le mot de passe dans la base de données
-          db.query(`UPDATE player SET password='${hashedPassword}', resetToken=NULL WHERE id='${userId}'`, (updateErr) => {
+          db.query(`UPDATE player SET password_hash='${hashedPassword}', resetToken=NULL WHERE id='${userId}'`, (updateErr) => {
             if (updateErr) {
               return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du mot de passe." });
             }
