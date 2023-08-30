@@ -406,17 +406,20 @@ exports.sendEmailToResetPassword = (req, res) => {
 };
 //enregistrement du nouveau mot de passe réinitialisé, payload fourni : le mot de passe, id et le token
 exports.saveResetPassword = (req, res) => {
-  console.log("req.body"+req.body)
+
   const userId = req.body.userId;
-  console.log("userId"+req.body.userId)
   const resetToken = req.body.resetToken;
   const newPassword = req.body.newPassword;
+  console.log("userId"+req.body.userId)
+  console.log("resetToken"+req.body.resetToken)
+  console.log("newpassword"+req.body.newPassword)
 
   // Vérifier si l'utilisateur existe dans la base de données
   db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
     }
+    console.log("avant verification du resttoken")
 
     // Vérifier si l'utilisateur a le même resetToken que celui stocké dans la base de données
     const storedResetToken = result[0].resetToken;
@@ -428,7 +431,7 @@ exports.saveResetPassword = (req, res) => {
       if (!isMatch) {
         return res.status(400).json({ message: "Le token de réinitialisation est invalide." });
       }
-
+      console.log("avant le hachage du new password")
       // Hacher le nouveau mot de passe
       bcryptjs.hash(newPassword, Number(bcryptSalt))
         .then((hashedPassword) => {
