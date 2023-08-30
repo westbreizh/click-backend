@@ -242,7 +242,6 @@ exports.login = async (req, res, next) => {
 };
 
 
-
 // fonction qui enregistre les préférences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
@@ -320,7 +319,6 @@ exports.loadDataPlayerAfterModif = async (req, res, next) => {
     return res.status(500).json({ message: 'Une erreur est survenue lors de la connexion.' });
   }
 };
-
 
 
 // Fonction pour créer le jeton JWT
@@ -451,48 +449,11 @@ exports.saveResetPassword = (req, res) => {
     });
   });
 };
-//changement de mot de passe  
-//payload l'email, l'ancien et le nouveau mot de passe
-exports.changePassword = (req, res, next) => {
-
-  db.query(`SELECT * FROM player WHERE email='${req.body.email}'`,
-    (err, result) => {
-
-      //verification de l'ancien mot de passe
-      bcryptjs.compare(req.body.password, result[0].password) //  
-      .then(checkOldPassword => {
-
-         // verification de l'ancien mot de passe ok
-        if (checkOldPassword) {        
-          bcryptjs.hash(req.body.new_password, 10)   
-            .then(cryptedPassword => {
-              db.query(` UPDATE player   SET password = '${cryptedPassword}'  WHERE email='${req.body.email}' `,
-              (err, results) => {
-                return res.status(201).json({ message: 'le mot de passe a bien été modifié !'})
-              })
-            })
-
-         // verification de l'ancien mot de passe faux
-        }else {          
-          res.status(401).json({    
-            message: 'Le mot de passe que vous souhaitez réinitialiser est incorrect !'
-          })
-        }
-
-      })
-
-    if (err) {
-      return res.status(500).json({message :"une erreur avec le serveur s'est produite!"});
-    }  
-  })
-}
-// Fonction pour vérifier le mot de passe
-const verifyPassword = (password, hashedPassword) => {
-  return bcryptjs.compare(password, hashedPassword);
-};
 
 
 
+
+//--------------- commandes ---------------//
 
 // fonction qui renvoit la liste des commandes effectué son historique
 exports.sendOrderLog = (req, res, next) => {
@@ -558,7 +519,7 @@ exports.sendOneOrder = (req, res, next) => {
 };
 
 
-
+//--------------- à suivre  ---------------//
 
 // Fonction qui vérifie si le token a été validé
 exports.isTokenYeatOk = (req, res, next) => {

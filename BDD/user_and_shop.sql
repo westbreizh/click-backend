@@ -18,7 +18,7 @@ CREATE TABLE `player` (
     `racquet_player`     VARCHAR(255),
     `stringFromPlayer`   VARCHAR(255) DEFAULT NULL,
     `password_hash`      varchar(255) NOT NULL,
-
+    `resetToken`         VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
     UNIQUE KEY `email` (`email`)
 );
