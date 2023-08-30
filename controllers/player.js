@@ -151,6 +151,10 @@ const getStringViaId = (id) => {
     });
   });
 };
+// Fonction pour vérifier le mot de passe
+const verifyPassword = (password, hashedPassword) => {
+  return bcryptjs.compare(password, hashedPassword);
+};
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
