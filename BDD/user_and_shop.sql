@@ -202,7 +202,7 @@ VALUES
 ('cordage', 'Babolat', 'RPM Blast', 'Monofilament', 'bobine 200m', 18, 'Prise d\'effet', 8, 4, 8, 3, 7, '1.25 mm', 'noir', '    http://localhost:3001/bobine-cordage-tennis-babolat-rpm-blast-200m.webp', '    http://localhost:3001/logo-babolat.webp',
 'Le RPM Blast est un choix idéal pour les joueurs recherchant un cordage rigide offrant contrôle et prise d\'effet. Sa forme pentagonale permet d\'augmenter la rotation de la balle, tandis que sa composition monofilament assure durabilité et stabilité de tension.'),
 
-('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'bobine 200m', 325, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', '    http://localhost:3001/technifibre-biphase-bobine.webp', '    http://localhost:3001/logo-technifibre.webp',
+('cordage', 'tecnifibre', 'X-One Biphase', 'Multifilament', 'bobine 200m', 325, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', '    http://localhost:3001/tecnifibre-biphase-bobine.webp', '    http://localhost:3001/logo-tecnifibre.webp',
 'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance. '),
 
 
@@ -233,16 +233,16 @@ description_text            VARCHAR(255)
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
 
-('cordage', 'Tecnifibre', 'TGV', 'Multifilaments', 'garniture 12m', 32, 'Confort', 8, 5, 4, 9, 5, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/technifibre-tgv.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
+('cordage', 'Tecnifibre', 'TGV', 'Multifilaments', 'garniture 12m', 32, 'Confort', 8, 5, 4, 9, 5, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/tecnifibre-tgv.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
  'Le cordage Tecnifibre TGV est un multifilament axé sur le confort et le contrôle, idéal pour les joueurs souffrant de tennis elbow, bien qu\'il ne soit pas très puissant. Il se distingue par sa stabilité de tension.'),
 
-('cordage', 'Tecnifibre', 'Black Code', 'Monofilament', 'garniture 12m', 28, 'Prise d\'effet', 8, 5, 8, 4, 7, '1.32 mm', 'noire', 'https://click-backend.herokuapp.com/technifibre-black-code.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
+('cordage', 'Tecnifibre', 'Black Code', 'Monofilament', 'garniture 12m', 28, 'Prise d\'effet', 8, 5, 8, 4, 7, '1.32 mm', 'noire', 'https://click-backend.herokuapp.com/tecnifibre-black-code.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
  'Le cordage Tecnifibre Black Code est un cordage en co-polyester pentagonal qui intègre la technologie Thermacore de Tecnifibre. Cette innovation apporte un confort exceptionnel pour un cordage monofilament, offrant à la fois souplesse, confort, et vitesse de balle. Sa forme pentagonale optimise également la prise d\'effet.'),
 
-('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'garniture 12m', 37, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', ' https://click-backend.herokuapp.com/technifibre-biphase-12m.webp', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+('cordage', 'tecnifibre', 'X-One Biphase', 'Multifilament', 'garniture 12m', 37, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', ' https://click-backend.herokuapp.com/tecnifibre-biphase-12m.webp', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
 'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance.'),
 
-('cordage', 'Tecnifibre', 'Duramix', 'Multifilaments', 'garniture 12m', 28, 'Contrôle', 8, 6, 6, 7, 4, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/technifibre-duramix.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
+('cordage', 'Tecnifibre', 'Duramix', 'Multifilaments', 'garniture 12m', 28, 'Contrôle', 8, 6, 6, 7, 4, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/tecnifibre-duramix.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
  'Le Duramix est conçu pour offrir le meilleur compromis entre confort et contrôle. Malgré sa puissance modérée, il excelle par sa polyvalence.');
 
 

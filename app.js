@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public/logo'));
 app.use(express.static('public/ball'));
 app.use(express.static('public/accessorie'));
-app.use(express.static('public/string/technifibre'));
+app.use(express.static('public/string/tecnifibre'));
 app.use(express.static('public/string/babolat'));
 app.use(express.static('public/string/yonex'));
 app.use(express.static('public/string/dunlop'));
