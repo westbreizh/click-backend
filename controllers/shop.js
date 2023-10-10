@@ -16,7 +16,7 @@ const db = require("../BDD/database-connect")
       //----------- ensemble des fonctions liées aux produits ---------------//
 
 
-// retourne l'ensemble  des cordage de manière aléatoire
+// retourne l'ensemble  des produits de manière aléatoire
 exports.productListRandom = (req, res ) => {
 
   console.log( "le payload fournit à productListRandom est" );   console.log( req.body ) ;

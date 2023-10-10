@@ -180,32 +180,9 @@ VALUES
 
 
 
-DROP TABLE IF EXISTS `string`;
-
-CREATE TABLE string (
-id INT PRIMARY KEY AUTO_INCREMENT,
-categorie                   VARCHAR(25), 
-mark                        VARCHAR(25),
-model                       VARCHAR(50),
-composition                 VARCHAR(25),
-packaging                   VARCHAR(25),
-price                       DECIMAL(10,2),
-first_characteristic        VARCHAR(50),
-control_rating              INT,
-power_rating                INT,
-spin                        INT,
-comfort                     INT,
-durability_rating           INT,
-gauge                       VARCHAR(10),
-color                       VARCHAR(20),
-image_url                   VARCHAR(255),
-logoMark_url                VARCHAR(255),
-description_text            VARCHAR(255)
-);
 
 
-INSERT INTO string (categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
-VALUES 
+
 
 ('cordage', 'Yonex', 'Poly Tour Pro', 'Monofilament', 'garniture 12m', 10, 'Contrôle', 8, 6, 8, 5, 7, '1.25 mm', 'jaune', '    http://localhost:3001/yonex-poly-tour-pro-12m.webp', '    http://localhost:3001/yonex-logo.webp',
 'Essayez le Yonex Poly Tour Pro, l\'un des meilleurs cordages en co-polyester sur le marché. Il se démarque par sa polyvalence et offre d\'exelentes prise d\'effets et un très bon contrôle. Achetez une garniture et nous vous rembourserons lorsque vous achèterez la bobine.'),
@@ -228,13 +205,38 @@ VALUES
 ('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'bobine 200m', 325, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', '    http://localhost:3001/technifibre-biphase-bobine.webp', '    http://localhost:3001/logo-technifibre.webp',
 'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance. '),
 
-('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'garniture 12m', 22, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', '    http://localhost:3001/technifibre-biphase-12m.webp', '    http://localhost:3001/logo-technifibre.webp',
-'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance. ');
 
 
+DROP TABLE IF EXISTS `string`;
 
+CREATE TABLE string (
+id INT PRIMARY KEY AUTO_INCREMENT,
+categorie                   VARCHAR(25), 
+mark                        VARCHAR(25),
+model                       VARCHAR(50),
+composition                 VARCHAR(25),
+packaging                   VARCHAR(25),
+price                       DECIMAL(10,2),
+first_characteristic        VARCHAR(50),
+control_rating              INT,
+power_rating                INT,
+spin                        INT,
+comfort                     INT,
+durability_rating           INT,
+gauge                       VARCHAR(255),
+color                       VARCHAR(20),
+image_url                   VARCHAR(255),
+logoMark_url                VARCHAR(255),
+description_text            VARCHAR(255)
+);
 
+INSERT INTO string (categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
+VALUES 
+('cordage', 'Technifibre', 'X-One Biphase', 'Multifilament', 'garniture 12m', 37, 'Confort', 7, 8, 6, 9, 5, '1.24 mm', 'noir', ' https://click-backend.herokuapp.com/technifibre-biphase-12m.webp', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une combinaison exceptionnelle de durée de vie, de confort, de contrôle, d\'effets et de puissance.'),
 
+('cordage', 'Tecnifibre', 'Duramix', 'Multifilaments', 'garniture 12m', 28, 'Contrôle', 8, 6, 6, 7, 4, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/technifibre-duramix.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
+ 'Le Duramix est conçu pour offrir le meilleur compromis entre confort et contrôle. Malgré sa puissance modérée, il excelle par sa polyvalence.');
 
 
 
