@@ -18,12 +18,15 @@ app.use(express.urlencoded({ extended: true }));
 
 // gestion des images, fichier statiques sans codes logiques
 app.use(express.static('public/logo'));
-app.use(express.static('public/string'));
 app.use(express.static('public/ball'));
 app.use(express.static('public/accessorie'));
 app.use(express.static('public/string/technifibre'));
+app.use(express.static('public/string/babolat'));
+app.use(express.static('public/string/yonex'));
+app.use(express.static('public/string/dunlop'));
 
 app.use(express.urlencoded({ extended: true }));
+
 
 // importe le chemin pour les routes
 // player contient quelues endpoint généraus du coup c'est mentionnés user
