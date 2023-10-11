@@ -230,6 +230,9 @@ logoMark_url                VARCHAR(255),
 description_text            VARCHAR(500)
 );
 
+
+//tecnifibre
+
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
 
@@ -258,6 +261,33 @@ VALUES
 ('cordage', 'Tecnifibre', 'Duramix', 'Multifilament', 'garniture et pose', 28, 'Contrôle', 8, 6, 6, 7, 4, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/tecnifibre-duramix.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
  'Le Duramix est conçu pour offrir le meilleur compromis entre confort et contrôle. Malgré sa puissance modérée, il excelle par sa polyvalence.');
 
+
+
+//Babolat
+
+INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
+VALUES 
+
+
+('cordage', 'Babolat', 'RPM Blast', 'Monofilament', 'garniture et pose', 31, 'Prise d\'effet', 8, 4, 8, 4, 7, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/babolat-rpm-blast.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp', 
+'Ce cordage est un monofilament en co-polyester haute densité avec une section octogonale et un revêtement "Cross-Linked Silicone" qui offre un retour rapide à la position normale pour un effet lift exceptionnel. Il est souvent associé au jeu de Rafael Nadal en raison de sa prise d\'effet incroyable.'),
+
+('cordage', 'Babolat', 'Xcel Comfort', 'Multifilament', 'garniture et pose', 34, 'Confort', 7, 7, 6, 9, 4, '1.30 mm', 'blanc', ' https://click-backend.herokuapp.com/babolat-xcel.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp', 
+'Le cordage Babolat Xcel satifera les joueurs de multifilament à la recherche de confort, peu regardant sur la durée de vie du cordage.'),
+
+('cordage', 'Babolat', 'VS Touch', 'Boyau', 'garniture et pose', 57, 'Confort', 8, 8, 6, 10, 6, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/babolat-boyau-naturel-vs-touch.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp', 
+'Le VS Touch 1,30 mm est un cordage de tennis en boyau naturel de vache, fabriqué en France à Ploërmel, en Bretagne. Depuis sa création en 1925, le VS est reconnu comme la référence en matière de cordages en boyau naturel. '),
+
+
+('cordage', 'Babolat', 'RPM Power', 'Monofilament', 'garniture et pose', 31, 'Puissance', 6, 9, 5, 8, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/babolat-RPM-power.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp', 
+'Le cordage Babolat RPM Power offre un équilibre entre puissance et contrôle, avec une excellente prise d\'effet malgré sa forme ronde. Il n\'est pas recommandé pour les casseurs fréquents. '),
+
+('cordage', 'Babolat', 'RPM Soft', 'Multifilament', 'garniture et pose', 31, 'Confort', 6, 9, 7, 7, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/babolat-RPM-power.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp', 
+'Le cordage RPM Soft de Babolat est un monofilament rond conçu pour offrir un équilibre optimal entre confort et contrôle. Il répond aux besoins des joueurs qui recherchent un niveau élevé de confort tout en maintenant un bon contrôle.'),
+
+
+('cordage', 'Babolat', ' Hurricane ', 'Multifilament', 'garniture et pose', 29, 'Contrôle', 8, 6, 6, 7, 4, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/babolat-hurricane.jpg', 'https://click-backend.herokuapp.com/logo-babolat.webp',
+ 'Le Pro hurricane Tour est un monofilament en co-polyester qui vous apportera un maximum de contrôle sur des frappes à pleine puissance. ');
 
 
 
