@@ -233,7 +233,7 @@ description_text            VARCHAR(500)
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
 
-('cordage', 'Tecnifibre', 'Multi Feel', 'Multifilament', 'garniture et pose', 26, 'Confort', 6, 9, 5, 8, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/tecnifibre-multi-feel.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+('cordage', 'Tecnifibre', 'Multi Feel', 'Multifilament', 'garniture et pose', 26, 'Confort', 6, 9, 5, 8, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/tecnifibre-multi-feel.webp', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
 'Le cordage Tecnifibre Multifeel est un multifilament reconnu pour sa puissance et son confort. Il combine un noyau de polyamide entouré de fibres de PU 400%, offrant ainsi une grande vitesse de balle tout en préservant le bras. De plus, il est durable grâce à sa couche de SPL, limitant l\'abrasion. Idéal pour les joueurs recherchant puissance, confort et longévité.'),
 
 
