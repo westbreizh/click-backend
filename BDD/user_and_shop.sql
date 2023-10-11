@@ -233,16 +233,18 @@ description_text            VARCHAR(255)
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
 VALUES 
 
+('cordage', 'Tecnifibre', 'Multi Feel', 'Multifilament', 'garniture et pose', 26, 'Confort', 6, 9, 5, 8, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/tecnifibre-multi-feel.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+'Le cordage Tecnifibre Multifeel est un multifilament reconnu pour sa puissance et son confort. Il combine un noyau de polyamide entouré de fibres de PU 400%, offrant ainsi une grande vitesse de balle tout en préservant le bras. De plus, il est durable grâce à sa couche de SPL, limitant l\'abrasion. Idéal pour les joueurs recherchant puissance, confort et longévité.'),
+
+
+('cordage', 'Tecnifibre', 'Ice code', 'Monofilament', 'garniture et pose', 28, 'Puissance', 6, 9, 5, 8, 4, '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/tecnifibre-ice-code.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+'Le cordage Ice Code est souple, offrant un contact prolongé avec la balle et une puissance facile. Sa sensation de frappe unique, le distingue. Il offre une prise d\'effet moyenne, un contrôle légèrement en retrait, mais excelle en confort, même en cas de décentrage. Il est durable et maintient bien la tension. '),
+
 ('cordage', 'Tecnifibre', 'Red code', 'Monofilament', 'garniture et pose', 23, 'Contrôle', 8, 7, 5, 7, 4, '1.25 mm', 'rouge', ' https://click-backend.herokuapp.com/tecnifibre-red-code.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
 'Le cordage Tecnifibre Red Code est un co-polyester réputé pour offrir un excellent contrôle et précision lors des frappes. Bien qu\'il soit rigide, il procure un bon confort et permet une prise d\'effet efficace.'),
 
-
-
 ('cordage', 'Tecnifibre', 'Razor code', 'Monofilament', 'garniture et pose', 28, 'Contrôle', 8, 7, 5, 5, 7, '1.25 mm', 'gris', ' https://click-backend.herokuapp.com/tecnifibre-razor.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
 'Le cordage Tecnifibre Razor Code offre un contrôle élevé et de la puissance pour les frappes puissantes. Il favorise la prise d\'effet, malgré sa rigidité, offrant un confort surprenant. Il convient aux joueurs précis, a une longue durée de vie, maintient bien la tension, et est idéal pour ceux qui cherchent équilibre entre contrôle, puissance et tenue de tension. C\'est le plus rigide de la gamme Tecnifibre, offrant un excellent contrôle.'),
-
-
-
 
 ('cordage', 'Tecnifibre', 'TGV', 'Multifilament', 'garniture et pose', 32, 'Confort', 8, 5, 4, 9, 5, '1.25 mm', 'blanc', 'https://click-backend.herokuapp.com/tecnifibre-tgv.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp',
  'Le cordage Tecnifibre TGV est un multifilament axé sur le confort et le contrôle, idéal pour les joueurs souffrant de tennis elbow, bien qu\'il ne soit pas très puissant. Il se distingue par sa stabilité de tension.'),
