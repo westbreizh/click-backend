@@ -227,7 +227,7 @@ gauge                       VARCHAR(255),
 color                       VARCHAR(20),
 image_url                   VARCHAR(255),
 logoMark_url                VARCHAR(255),
-description_text            VARCHAR(255)
+description_text            VARCHAR(500)
 );
 
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, control_rating, power_rating, spin, comfort, durability_rating, gauge, color, image_url, logoMark_url, description_text)
