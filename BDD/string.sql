@@ -280,7 +280,16 @@ INSERT INTO `string`(categorie, mark, model, composition, packaging, price, firs
 VALUES
 
 ('cordage', 'Head', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+('cordage', 'Head', 'Velocity', 'Multifilament', 'garniture et pose', 28, 'Puissance', 'Confort','','','', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-velocity-noir.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Le cordage Head Velocity offre un équilibre optimal entre contrôle, puissance et durabilité. Cette combinaison garantit des performances de haute qualité, adaptées aux joueurs recherchant un cordage confortable et réactif, idéal pour les frappeurs'),
+
+('cordage', 'Head', 'Lynx Tour', 'Multifilament', 'garniture et pose', 29, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+('cordage', 'Head', 'Graviy', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-velocity-noir.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
 
 
 
