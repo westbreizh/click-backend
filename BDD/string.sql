@@ -310,17 +310,15 @@ VALUES
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
 VALUES
 
-('cordage', 'Yonex', 'PolyTour', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+('cordage', 'Yonex', 'PolyTour Pro', 'Monofilament', 'garniture et pose', 28, 'Puissance', 'Confort','','Tolérance','', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-pro-jaune.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+'Le cordage Yonex Poly Tour Pro est un monofilament de forme ronde qui offre une sensation feutrée lors de la frappe. Il se distingue par un excellent équilibre entre contrôle et puissance, dépassant la moyenne dans ce domaine.'),
 
-('cordage', 'Yonex', 'Strike/Rev', 'Multifilament', 'garniture et pose', 30, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+('cordage', 'Yonex', 'PolyTour Strike', 'Monofilament', 'garniture et pose', 30, 'Contrôle', 'Durabilité','','Tolérance','Confort', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-strike.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+'Cette corde est la plus rigide parmi les monofilaments de la gamme Yonex, ce qui en fait également la plus axée sur le contrôle. Elle est très appréciée par les joueurs qui frappent fort. Bien qu\'elle soit similaire au Poly Tour Fire, elle offre une meilleure capacité à générer de l\'effet. De plus, elle offre des sensations très nettes qui favorisent la vitesse de jeu.'),
 
-('cordage', 'Yonex', 'BG 65', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
 
-('cordage', 'Yonex', 'BG 80', 'Multifilament', 'garniture et pose', 29, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+
 
 
 
