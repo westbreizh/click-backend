@@ -285,18 +285,40 @@ VALUES
 ('cordage', 'Head', 'Velocity', 'Multifilament', 'garniture et pose', 28, 'Puissance', 'Confort','','','', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-velocity-noir.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
 ' Le cordage Head Velocity offre un équilibre optimal entre contrôle, puissance et durabilité. Cette combinaison garantit des performances de haute qualité, adaptées aux joueurs recherchant un cordage confortable et réactif, idéal pour les frappeurs'),
 
-('cordage', 'Head', 'Lynx Tour', 'Multifilament', 'garniture et pose', 29, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+('cordage', 'Head', 'Lynx Tour', 'Monofilament', 'garniture et pose', 29, 'Contrôle', 'Prise d\'effet', '','Puissance','', '1.25 mm', 'bronze', ' https://click-backend.herokuapp.com/head-lynx-tour-champagne.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Sa structure hexagonale lui confère un équilibre entre contrôle et prise d\'effet, tout en offrant un niveau de confort supérieur à la moyenne. C\'est le choix idéal pour les joueurs qui frappent fort dans la balle, cherchent à maîtriser leur puissance et souhaitent optimiser leurs effets.'),
+
+('cordage', 'Head', 'Graviy', 'Monofilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Puissance','', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-gravity.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Ce cordage combine une corde triangulaire sur les montants pour une excellente adhérence et une corde ronde sur les travers pour un retour rapide des cordes. Cela se traduit par un contrôle accru et une meilleure rotation de la balle.');
+
+
+
+//Dunlop
+
+INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
+VALUES
+
+('cordage', 'Dunlop', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/dunlop-logo.webp', 
 ' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
 
-('cordage', 'Head', 'Graviy', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-velocity-noir.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+
+
+//Yonex
+
+INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
+VALUES
+
+('cordage', 'Yonex', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
 ' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
 
 
+//Luxillon
 
+INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
+VALUES
 
-
-
-
+('cordage', 'Luxillon', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
 
 
 
