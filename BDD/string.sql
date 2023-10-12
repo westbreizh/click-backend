@@ -316,7 +316,11 @@ VALUES
 ('cordage', 'Yonex', 'PolyTour Strike', 'Monofilament', 'garniture et pose', 30, 'Contrôle', 'Durabilité','','Tolérance','Confort', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-strike.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
 'Cette corde est la plus rigide parmi les monofilaments de la gamme Yonex, ce qui en fait également la plus axée sur le contrôle. Elle est très appréciée par les joueurs qui frappent fort. Bien qu\'elle soit similaire au Poly Tour Fire, elle offre une meilleure capacité à générer de l\'effet. De plus, elle offre des sensations très nettes qui favorisent la vitesse de jeu.'),
 
+('cordage', 'Yonex', 'PolyTour Spin', 'Monofilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Puissance','', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-spin.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+'Ce cordage représente le parfait équilibre entre la capacité d\'adhérence à la balle et le contrôle parmi les cordages Yonex. Il se distingue par sa rigidité, ce qui implique qu\'il génère moins de puissance.'),
 
+('cordage', 'Yonex', 'PolyTour Rev', 'Monofilament', 'garniture et pose', 28, 'Puissance', 'Contrôle','Polyvalence','Tolérance','', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-rev.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+'Ce cordage convient aux joueurs qui ont une frappe de balle de haute qualité et recherchent plus de précision et de rotation qu\'un monofilament classique. Il est idéal pour les joueurs puissants de fond de court qui aiment jouer en rythme et apprécient la précision offerte par ce cordage.');
 
 
 
