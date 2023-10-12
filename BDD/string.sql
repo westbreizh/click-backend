@@ -298,9 +298,11 @@ VALUES
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
 VALUES
 
-('cordage', 'Dunlop', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/dunlop-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+('cordage', 'Dunlop', 'NTMax plus', 'Monofilament', 'garniture et pose', 30,  'Contrôle','Tenue de tension','','Puissance','', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/dunlop-ntmax.jpg', 'https://click-backend.herokuapp.com/dunlop-logo.webp', 
+'Ce cordage monofilament se distingue par sa souplesse, en particulier adaptée aux joueurs plus jeunes qui découvrent les monofilaments. Il offre un équilibre amélioré entre contrôle et puissance, grâce à sa grande élasticité. '),
 
+('cordage', 'Dunlop', 'Explosive', 'Monofilament', 'garniture et pose', 30, 'Puissance', 'Confort','Tolérance','Longévité','Prise d\'effet', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/dunlop-explosive.jpg', 'https://click-backend.herokuapp.com/dunlop-logo.webp', 
+' Le Dunlop Explosive est un cordage axé sur la puissance avec un contrôle suffisant. Il convient aux joueurs qui préfèrent les frappes à plat et ne recherchent pas une forte prise d\'effet.'),
 
 
 //Yonex
@@ -308,8 +310,18 @@ VALUES
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
 VALUES
 
-('cordage', 'Yonex', 'Rip Control', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+('cordage', 'Yonex', 'PolyTour', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
 ' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+('cordage', 'Yonex', 'Strike/Rev', 'Multifilament', 'garniture et pose', 30, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+('cordage', 'Yonex', 'BG 65', 'Multifilament', 'garniture et pose', 28, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
+('cordage', 'Yonex', 'BG 80', 'Multifilament', 'garniture et pose', 29, 'Prise d\'effet', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'noire', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+
 
 
 //Luxillon
