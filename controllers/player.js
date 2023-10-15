@@ -248,7 +248,7 @@ exports.login = async (req, res, next) => {
 
 // fonction qui enregistre les préférences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
-  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer } = req.body;
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, stringFromPlayerOrigin, numberKnotChoice } = req.body;
 
   const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
   const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
@@ -260,7 +260,9 @@ exports.savePreferencePlayer = (req, res) => {
     hub_id = ?,
     hubBack_id = ?,
     racquet_player = ?,
-    stringFromPlayer = ?
+    stringFromPlayer = ?,
+    stringFromPlayerOrigin = ?,
+    numberKnot = ?
     WHERE id = ?
   `;
 
@@ -271,6 +273,8 @@ exports.savePreferencePlayer = (req, res) => {
     hubBackChoiceId,
     racquetPlayer,
     stringFromPlayerValue,
+    stringFromPlayerOrigin,
+    numberKnotChoice,
     userId
   ];
 
@@ -283,6 +287,7 @@ exports.savePreferencePlayer = (req, res) => {
     }
   });
 };
+
 
 // Fonction qui recupère les données joueurs ave un email fournies 
 exports.loadDataPlayerAfterModif = async (req, res, next) => {
