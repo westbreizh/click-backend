@@ -324,16 +324,9 @@ exports.listHubWithdrawal = (req, res) => {
 
 
 
+                //logique pour enregistrement de la commande //
 
 
-
-
-
-
-
-
-
-// fonction de sauvegarde de la commande dans la base de données pour  un paiement en boutique, paiement en ligne voire fichier stripe
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
@@ -350,10 +343,6 @@ function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, u
     });
   });
 }
-
-
-
-
 // Fonction d'enregistrement de la commande  avec paiement en boutique 
 exports.saveOrderPaiementInShop = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
@@ -361,11 +350,13 @@ exports.saveOrderPaiementInShop = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-    console.log("datas", datas)
+   //console.log("datas", datas)
+   //console.log("articleList", articleList)
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
-    console.log("articleList", articleList)
+
     const orderDate = new Date();
+    const userInfo = JSON.stringify(datas.userInfo);
     const firstName = userInfo.firstName;
     const email = datas.userInfo.email;
     const hub = JSON.stringify(datas.hubChoice);
@@ -374,14 +365,18 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
     const token = datas.token;
-    let statusOrder = "initié";
-    if (hub.enterprise_name == "KST Boutique"){
-    statusOrder="prêt à corder"
+    let statusOrder = "initié"; // Initialisez la variable ici
+
+    if (hub.enterprise_name == "KST Boutique") {
+      statusOrder = "prêt à corder"; // Modifiez la valeur ici si la condition est vraie
     }
+
     console.log("statusOrder " + statusOrder);
     console.log("hub " + hub);
     console.log("hub.enterprise_name " + hub.enterprise_name);
-  
+    
+
+
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack);
     // Récupérer l'ID généré à partir de `insertId`
