@@ -528,7 +528,7 @@ exports.sendOneOrder = (req, res, next) => {
 };
 
 
-//--------------- à suivre  ---------------//
+//--------------- à suivre     ---------------//
 
 // Fonction qui vérifie si le token a été validé
 exports.isTokenYeatOk = (req, res, next) => {
