@@ -148,7 +148,7 @@ async function sendSms(forename, phoneNumber) {
   const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
   console.log("formattedPhoneNumber", formattedPhoneNumber)
     const message = await client.messages.create({
-      body: `Bonjour ${forename}, votre commande est prête à être retiré ....`,
+      body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique`,
       from: '+18159499877',
       to: formattedPhoneNumber // Ajoutez les guillemets autour de ${formattedPhoneNumber}      
       //to: '+33616859867'
@@ -301,7 +301,9 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate,) {
     }
   });
 }
-// fonction pour modifier le status de la commande et envoyer l'email approprié
+// fonction pour modifier le status de la commande 
+// envoyer l'email approprié
+// et le sms si numéro de telephone
 // payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
   console.log("Je rentre dans le backend pour changer le status de la commande");
@@ -327,8 +329,8 @@ exports.changeStatusOrder = async (req, res) => {
     console.log("avant le changement d'email");
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
-    //if (statusOrder === "prêt à corder") { 
-    //await sendSms( forename, phoneNumber )}
+    if (statusOrder === "prêt à corder") { 
+    await sendSms( forename, phoneNumber )}
 
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
