@@ -366,8 +366,6 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     console.log("articleList", articleList)
     const orderDate = new Date();
-    const userInfo = JSON.stringify(datas.userInfo);
-    console.log("userInfo", userInfo)
     const firstName = userInfo.firstName;
     const email = datas.userInfo.email;
     const hub = JSON.stringify(datas.hubChoice);
@@ -376,13 +374,13 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
     const token = datas.token;
-    const statusOrder = "initié";
+    let statusOrder = "initié";
     if (hub.enterprise_name == "KST Boutique"){
     statusOrder="prêt à corder"
     }
     console.log("statusOrder " + statusOrder);
     console.log("hub " + hub);
-
+    console.log("hub.enterprise_name " + hub.enterprise_name);
   
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack);
