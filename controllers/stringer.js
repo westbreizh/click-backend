@@ -144,30 +144,31 @@ exports.sendOneOrder = (req, res, next) => {
 
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
-// Fonction pour envoyer un SMS
-// Payload -> forename, phoneNumber
+
+            // Fonction pour envoyer un SMS
 async function sendSms(forename, phoneNumber) {
   try {
-  // Supprimer les espaces et les caractères non numériques du numéro
-  const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
-  console.log("cleanPhoneNumber", cleanedPhoneNumber)
+    // Supprimer les espaces et les caractères non numériques du numéro
+    const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
 
-  // Ajouter le préfixe international
-  const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
-  console.log("formattedPhoneNumber", formattedPhoneNumber)
+    // Ajouter le préfixe international
+    const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
+
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique`,
       from: '+18159499877',
-      to: formattedPhoneNumber // Ajoutez les guillemets autour de ${formattedPhoneNumber}      
-      //to: '+33616859867'
+      to: formattedPhoneNumber
     });
-    
+
     console.log('SMS envoyé. SID: ', message.sid);
   } catch (error) {
     console.error('Erreur lors de l\'envoi du SMS: ', error);
     throw error;
   }
 }
+
+
+
 // Fonction d'envoi d'email suite à la validation d'étapes
 // Payload -> orderId, statusOrder, changeStatusDate, forename, email
 async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
