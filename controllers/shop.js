@@ -367,13 +367,13 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const token = datas.token;
     let statusOrder = "initié"; // Initialisez la variable ici
 
-    if (hub.enterprise_name == "KST Boutique") {
+    if (datas.hubChoice.enterprise_name == "KST Boutique") {
       statusOrder = "prêt à corder"; // Modifiez la valeur ici si la condition est vraie
     }
 
     console.log("statusOrder " + statusOrder);
     console.log("hub " + hub);
-    console.log("hub.enterprise_name " + hub.enterprise_name);
+    console.log("datas.hubChoice.enterprise_name " + datas.hubChoice.enterprise_name);
     
 
 
