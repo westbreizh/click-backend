@@ -1,6 +1,14 @@
 // charge les variables d'environnement du fichier .env dans process.env
 const dotenv = require("dotenv");   
 dotenv.config();
+
+// Chargez les informations de Twilio depuis votre fichier .env
+const accountSid = process.env.ACCOUNT_SID;
+const authToken = process.env.AUT_TOKEN;
+
+const twilio = require('twilio');
+const client = new twilio(accountSid, authToken);
+
 const bcryptSalt = process.env.bcryptSalt;
 const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const clientURL = process.env.CLIENT_URL;
