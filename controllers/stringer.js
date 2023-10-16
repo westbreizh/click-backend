@@ -145,7 +145,7 @@ exports.sendOneOrder = (req, res, next) => {
             //----------- validation des différents etapes, chgment status et envoie email ---------------//
 
 
-            // Fonction pour envoyer un SMS
+// Fonction pour envoyer un SMS
 async function sendSms(forename, phoneNumber) {
   try {
     // Supprimer les espaces et les caractères non numériques du numéro
@@ -155,7 +155,7 @@ async function sendSms(forename, phoneNumber) {
     const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
 
     const message = await client.messages.create({
-      body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique`,
+      body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique ! Hervé Karren`,
       from: '+18159499877',
       to: formattedPhoneNumber
     });
@@ -338,8 +338,9 @@ exports.changeStatusOrder = async (req, res) => {
     console.log("avant le changement d'email");
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
-    if (statusOrder === "prêt à corder") { 
-    await sendSms( forename, phoneNumber )}
+    if (statusOrder === "prêt à corder" && phoneNumber !== null && phoneNumber !== undefined) {
+      await sendSms(forename, phoneNumber);
+    }
 
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
 
