@@ -392,12 +392,12 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     }
     // envoie d'email au cordeur avec outlokk pour envoyer deux mails à la fois
     
-    const emailCoursier = "herbreteauaurelien@tutanota.com"
+    const emailRunner = "herbreteauaurelien@tutanota.com"
     try {
-      await sendEmail(emailCoursier, 'nouvelle commande', {
+      await sendEmail(emailRunner, 'nouvelle commande', {
         idOrder : idOrder, 
       }, 'email/template/newOrderForStringer.handlebars');
-      console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
+      console.log('E-mail de nouvelle commande envoyé avec succès à', emailRunner);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
       return res.sendStatus(500);
