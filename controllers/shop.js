@@ -324,9 +324,16 @@ exports.listHubWithdrawal = (req, res) => {
 
 
 
-                //logique pour enregistrement de la commande //
 
-// fonction de sauvegarde de la commande dans la base de données
+
+
+
+
+
+
+
+
+// fonction de sauvegarde de la commande dans la base de données pour  un paiement en boutique, paiement en ligne voire fichier stripe
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
@@ -343,8 +350,12 @@ function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, u
     });
   });
 }
+
+
+
+
 // Fonction d'enregistrement de la commande  avec paiement en boutique 
-exports.saveOrderAndPreferencePlayer = async (req, res) => {
+exports.saveOrderPaiementInShop = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
 
   try {
@@ -355,7 +366,6 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
     console.log("articleList", articleList)
     const orderDate = new Date();
-    const statusOrder = "initié";
     const userInfo = JSON.stringify(datas.userInfo);
     console.log("userInfo", userInfo)
     const firstName = userInfo.firstName;
@@ -365,13 +375,15 @@ exports.saveOrderAndPreferencePlayer = async (req, res) => {
     const totalPriceString = datas.totalPrice;
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
-    console.log("unitAmount " + unitAmount);
     const token = datas.token;
-    console.log("token : " + token);
+    const statusOrder = "initié";
+    if (hub.enterprise_name == "KST Boutique"){
+    statusOrder="prêt à corder"
+    }
+    console.log("statusOrder " + statusOrder);
+    console.log("hub " + hub);
 
   
-
-
     // On enregistre les données dans la table `orders`
     const savedOrder = await saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack);
     // Récupérer l'ID généré à partir de `insertId`
