@@ -396,18 +396,18 @@ exports.saveOrderPaiementInShop = async (req, res) => {
       return res.sendStatus(500);
     }
     // envoie d'email au cordeur avec outlokk pour envoyer deux mails à la fois
-    /*
-    const emailStringer = "herbreteauaurelien@tutanota.com"
+    
+    const emailTransporteur = "herbreteauaurelien@tutanota.com"
     try {
-      await sendEmail(emailStringer, 'nouvelle commande', {
+      await sendEmail(emailTransporteur, 'nouvelle commande', {
         idOrder : idOrder, 
       }, 'email/template/newOrderForStringer.handlebars');
-      console.log('E-mail de nouvelle commande envoyé avec succès à', emailStringer);
+      console.log('E-mail de nouvelle commande envoyé avec succès à', emailTransporteur);
     } catch (error) {
       console.log('Erreur lors de l\'envoi de l\'e-mail de nouvelle commande:', error);
       return res.sendStatus(500);
     }
-    */ 
+    
     // Si tout s'est bien passé, renvoyer un message de succès
     res.status(200).json({ message: 'Commande enregistrée avec succès', orderId: idOrder });
 
