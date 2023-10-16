@@ -248,7 +248,7 @@ exports.login = async (req, res, next) => {
 
 // fonction qui enregistre les préférences du joueur pour le cordage
 exports.savePreferencePlayer = (req, res) => {
-  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, stringFromPlayerOrigin, numberKnotChoice } = req.body;
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, stringFromPlayerOrigin, numberKnotChoiceChoice } = req.body;
 
   const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
   const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
@@ -262,7 +262,7 @@ exports.savePreferencePlayer = (req, res) => {
     racquet_player = ?,
     stringFromPlayer = ?,
     stringFromPlayerOrigin = ?,
-    numberKnot = ?
+    numberKnotChoice = ?
     WHERE id = ?
   `;
 
@@ -274,7 +274,7 @@ exports.savePreferencePlayer = (req, res) => {
     racquetPlayer,
     stringFromPlayerValue,
     stringFromPlayerOrigin,
-    numberKnotChoice,
+    numberKnotChoiceChoice,
     userId
   ];
 

@@ -18,7 +18,7 @@ CREATE TABLE `player` (
     `racquet_player`              VARCHAR(255),
     `stringFromPlayer`            VARCHAR(255) DEFAULT NULL,
     `stringFromPlayerOrigin`      VARCHAR(50),
-    `numberKnot`                  VARCHAR(50),
+    `numberKnotChoice`                  VARCHAR(50),
     `password_hash`               varchar(255) NOT NULL,
     `resetToken`                  VARCHAR(255) DEFAULT NULL,
     PRIMARY KEY (`id`),
