@@ -128,6 +128,12 @@ VALUES
 ('cordage', 'Luxilon', 'Alu Power', 'MonoFilament', 'garniture et pose', 30, 'Puissance', 'Confort','Tenue de tension','','', '1.30 mm', 'gris', ' https://click-backend.herokuapp.com/luxilon-alu-power.jpg', 'https://click-backend.herokuapp.com/logo-luxilon.webp', 
 ' Le cordage Luxilon Alu Power est un cordage en co-polyester qui associe à merveille la puissance, le contrôle, les sensations, la prise des effets et la tenue de tension.'),
 
+('cordage', 'Luxilon', 'Original', 'MonoFilament', 'garniture et pose', 30, 'Puissance', 'Confort','Durabilité','','', '1.30 mm', 'gris', ' https://click-backend.herokuapp.com/luxilon-original.jpg', 'https://click-backend.herokuapp.com/logo-luxilon.webp', 
+' Le Luxilon Original est idéal pour les joueurs puissants qui préfèrent imprimer un rythme soutenu depuis l\'arrière du court. En effet, les frappeurs apprécieront ses performances exceptionnelles et sa durabilité à long terme.'),
+
+('cordage', 'Luxilon', '4G', 'MonoFilament', 'garniture et pose', 30, 'Puissance', 'Confort','Tenue de tension','','', '1.30 mm', 'gris', ' https://click-backend.herokuapp.com/luxilon-4g.jpg', 'https://click-backend.herokuapp.com/logo-luxilon.webp', 
+'Le cordage Luxilon 4G, comme de nombreux autres cordages de la gamme Luxilon, se distingue par ses performances exceptionnelles en termes de sensation de la balle.
+Il se positionne comme l\'un des choix les plus axés sur le contrôle, et surtout, il se démarque par sa capacité exceptionnelle à maintenir la tension.');
 
 
 
