@@ -122,9 +122,11 @@ VALUES
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
 VALUES
 
-('cordage', 'Luxillon', 'alu power', 'MonoFilament', 'garniture et pose', 28, 'Puissance', 'Contrôle','','Confort','Tenue de tension', '1.25 mm', 'gris', ' https://click-backend.herokuapp.com/head-rip-control-black.jpg', 'https://click-backend.herokuapp.com/head-logo.webp', 
-' Sa surface texturée offre une excellente adhérence, favorisant ainsi la prise d\'effet et le contrôle de la balle. Il parvient à atteindre un équilibre optimal entre puissance, contrôle, résistance et effets.'),
+('cordage', 'Luxilon', 'element', 'MonoFilament', 'garniture et pose', 30, 'Puissance', 'Confort','Tenue de tension','','', '1.30 mm', 'gris', ' https://click-backend.herokuapp.com/luxilon-element.jpg', 'https://click-backend.herokuapp.com/logo-luxilon.webp', 
+' L\'avantage premier de cette corde est la puissance qu\'il délivre très facilement. En effet, la balle part rapidement du tamis. Le contrôle est donc en retrait sur cette référence.'),
 
+('cordage', 'Luxilon', 'Alu Power', 'MonoFilament', 'garniture et pose', 30, 'Puissance', 'Confort','Tenue de tension','','', '1.30 mm', 'gris', ' https://click-backend.herokuapp.com/luxilon-alu-power.jpg', 'https://click-backend.herokuapp.com/logo-luxilon.webp', 
+' Le cordage Luxilon Alu Power est un cordage en co-polyester qui associe à merveille la puissance, le contrôle, les sensations, la prise des effets et la tenue de tension.'),
 
 
 

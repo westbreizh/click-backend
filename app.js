@@ -25,6 +25,7 @@ app.use(express.static('public/string/babolat'));
 app.use(express.static('public/string/yonex'));
 app.use(express.static('public/string/dunlop'));
 app.use(express.static('public/string/head'));
+app.use(express.static('public/string/luxilon'));
 app.use(express.urlencoded({ extended: true }));
 
 
