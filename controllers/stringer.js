@@ -146,13 +146,21 @@ exports.sendOneOrder = (req, res, next) => {
 
 
 // Fonction pour envoyer un SMS
+
 async function sendSms(forename, phoneNumber) {
   try {
     // Supprimer les espaces et les caractères non numériques du numéro
     const cleanedPhoneNumber = phoneNumber.replace(/\D/g, '');
 
-    // Ajouter le préfixe international
-    const formattedPhoneNumber = `'+33${cleanedPhoneNumber.substr(1)}'`;
+    // Vérifier le format du numéro de téléphone (06 ou 07) et ajouter le préfixe international
+    let formattedPhoneNumber;
+    if (cleanedPhoneNumber.startsWith("06")) {
+      formattedPhoneNumber = `+336${cleanedPhoneNumber.substr(2)}`;
+    } else if (cleanedPhoneNumber.startsWith("07")) {
+      formattedPhoneNumber = `+337${cleanedPhoneNumber.substr(2)}`;
+    } else {
+      throw new Error("Format de numéro de téléphone non pris en charge");
+    }
 
     const message = await client.messages.create({
       body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique ! Hervé Karren`,
@@ -160,9 +168,9 @@ async function sendSms(forename, phoneNumber) {
       to: formattedPhoneNumber
     });
 
-    console.log('SMS envoyé. SID: ', message.sid);
+    console.log('SMS envoyé. SID :', message.sid);
   } catch (error) {
-    console.error('Erreur lors de l\'envoi du SMS: ', error);
+    console.error('Erreur lors de l\'envoi du SMS :', error);
     throw error;
   }
 }
