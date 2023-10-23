@@ -343,6 +343,7 @@ function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, u
     });
   });
 }
+
 // Fonction d'enregistrement de la commande  avec paiement en boutique 
 exports.saveOrderPaiementInShop = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");

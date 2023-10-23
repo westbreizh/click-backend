@@ -484,6 +484,7 @@ exports.sendOrderLog = (req, res, next) => {
 
       const ordersInfo = [];
       let count = 0;
+      let noOrdersFound = true; // Variable pour vérifier si des données ont été trouvées
 
       ordersId.forEach((orderId) => {
         db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
@@ -492,22 +493,37 @@ exports.sendOrderLog = (req, res, next) => {
           if (err) {
             console.error(err);
           } else {
-            ordersInfo.push(result[0]);
-          }
+            if (result.length > 0) {
+              // Des données ont été trouvées
+              noOrdersFound = false;
+              ordersInfo.push(result[0]);
+            }
 
-          if (count === ordersId.length) {
-            return res.status(201).json({
-              data: {
-                ordersInfo: ordersInfo
-              },
-              message: 'Données de commande récupérées avec succès!'
-            });
+            if (count === ordersId.length) {
+              if (noOrdersFound) {
+                // Aucune commande trouvée, renvoie un message approprié
+                return res.status(201).json({
+                  message: "Vous n'avez pas encore effectué de commande."
+                });
+              } else {
+                return res.status(201).json({
+                  data: {
+                    ordersInfo: ordersInfo
+                  },
+                  message: 'Données de commande récupérées avec succès!'
+                });
+              }
+            }
           }
         });
       });
     }
   );
 };
+
+
+
+
 // fonction qui renvoit une commande précise
 exports.sendOneOrder = (req, res, next) => {
   const orderId = req.body.orderId
