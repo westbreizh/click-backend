@@ -523,7 +523,6 @@ exports.sendOrderLog = (req, res, next) => {
 
 
 
-
 // fonction qui renvoit une commande précise
 exports.sendOneOrder = (req, res, next) => {
   const orderId = req.body.orderId
