@@ -465,55 +465,61 @@ exports.saveResetPassword = (req, res) => {
 //--------------- commandes ---------------//
 
 // fonction qui renvoit la liste des commandes effectué son historique
-
-const getOrderInfo = (orderId) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(result.length > 0 ? result[0] : null);
-      }
-    });
-  });
-};
-
-exports.sendOrderLog = async (req, res, next) => {
+exports.sendOrderLog = (req, res, next) => {
   console.log("req.body", req.body);
 
   const email = req.body.email;
 
-  try {
-    const result = await db.query(
-      `SELECT id FROM orders WHERE JSON_UNQUOTE(JSON_EXTRACT(userInfo, '$.email')) = ?`,
-      [email]
-    );
+  db.query(
+    `SELECT id FROM orders WHERE JSON_UNQUOTE(JSON_EXTRACT(userInfo, '$.email')) = ?`,
+    [email],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
+      }
 
-    const ordersId = result.map((row) => row.id);
-    console.log("ordersId", ordersId);
+      const ordersId = result.map((row) => row.id);
+      console.log("ordersId", ordersId);
 
-    const orderInfoPromises = ordersId.map((orderId) => getOrderInfo(orderId));
+      const ordersInfo = [];
+      let count = 0;
+      let noOrdersFound = true; // Variable pour vérifier si des données ont été trouvées
 
-    const ordersInfo = await Promise.all(orderInfoPromises);
+      ordersId.forEach((orderId) => {
+        db.query(`SELECT orderDate, statusOrder, id, totalPrice FROM orders WHERE id='${orderId}'`, (err, result) => {
+          count++;
 
-    if (ordersInfo.every(order => order === null)) {
-      return res.status(201).json({
-        message: "Vous n'avez pas encore effectué de commande."
-      });
-    } else {
-      return res.status(201).json({
-        data: {
-          ordersInfo: ordersInfo
-        },
-        message: 'Données de commande récupérées avec succès!'
+          if (err) {
+            console.error(err);
+          } else {
+            if (result.length > 0) {
+              // Des données ont été trouvées
+              noOrdersFound = false;
+              ordersInfo.push(result[0]);
+            }
+
+            if (count === ordersId.length) {
+              if (noOrdersFound) {
+                // Aucune commande trouvée, renvoie un message approprié
+                return res.status(201).json({
+                  message: "Vous n'avez pas encore effectué de commande."
+                });
+              } else {
+                return res.status(201).json({
+                  data: {
+                    ordersInfo: ordersInfo
+                  },
+                  message: 'Données de commande récupérées avec succès!'
+                });
+              }
+            }
+          }
+        });
       });
     }
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ message: "Une erreur s'est produite sur le serveur." });
-  }
+  );
 };
-
 
 
 
