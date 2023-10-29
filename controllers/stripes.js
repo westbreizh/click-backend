@@ -8,8 +8,6 @@ const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 
-
-
  
 // fonction de sauvegarde de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate, statusOrder, totalPrice, userInfo, hub, hubBack) {

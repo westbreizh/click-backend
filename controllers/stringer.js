@@ -177,8 +177,7 @@ async function sendSms(forename, phoneNumber) {
 
 
 
-// Fonction d'envoi d'email suite à la validation d'étapes
-// Payload -> orderId, statusOrder, changeStatusDate, forename, email
+// Fonction d'envoi d'email suite à la validation d'étapes, Payload -> orderId, statusOrder, changeStatusDate, forename, email
 async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email) {
   return new Promise(async (resolve, reject) => {
     // Convertir la date au format français
@@ -226,8 +225,7 @@ async function sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate
     }
   });
 }
-// fonction de recuperation de l'id du joueur à partir d'une commande, 
-// payload -> orderId
+// fonction de recuperation de l'id du joueur à partir d'une commande,  payload -> orderId
 async function takeInfosFromOrders(orderId) {
   const query = 'SELECT * FROM orders  WHERE id = ?';
   try {
@@ -318,10 +316,8 @@ function modifyOrdersToChangeStatus(orderId, statusOrder, changeStatusDate,) {
     }
   });
 }
-// fonction pour modifier le status de la commande 
-// envoyer l'email approprié
-// et le sms si numéro de telephone
-// payload -> orderID, statusOrder
+
+// fonction pour modifier le status de la commande, envoyer l'email approprié, le sms si numéro de telephone payload -> orderID, statusOrder
 exports.changeStatusOrder = async (req, res) => {
   console.log("Je rentre dans le backend pour changer le status de la commande");
   try {
@@ -401,19 +397,6 @@ const getUserById = (userId) => {
     });
   });
 };     
-// Fonction pour récupérer l'adresse de l'utilisateur s'il est renseigné
-const getUserAddress = (userId) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM address WHERE inHabitant='${userId}'`, (err, addressResult) => {
-      if (err) {
-        reject(err);
-      } else {
-        console.log("adressResult", addressResult)
-        resolve(addressResult.length > 0 ? addressResult[0] : null);
-      }
-    });
-  });
-};
 // Fonction de récupération des infos du joueur pour construire la fiche joueur
 exports.sendOnePlayer = async (req, res, next) => {
   const userId = req.body.userId;
