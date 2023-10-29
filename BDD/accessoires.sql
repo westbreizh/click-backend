@@ -27,19 +27,6 @@ INSERT INTO accessories (categorie, mark, model, price, type_product, logoMark_u
 
 
 
-DROP TABLE IF EXISTS `tariffs`;
-
-CREATE TABLE tariffs (
-id INT PRIMARY KEY AUTO_INCREMENT,
-categorie_service   VARCHAR(50), 
-price               DECIMAL(10,2),
-description_text    VARCHAR(255)
-);
-
-INSERT INTO tariffs (categorie_service, price, description_text)
-VALUES
-('pose cordage', '1O', 'tarif pour un forfait de pose du un cordage'),
-('dépot retrait', '1', 'tarif pour le service de collecte et retrait de la raquette');
 
 
 

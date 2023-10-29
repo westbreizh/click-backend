@@ -16,14 +16,14 @@ const db = require("../BDD/database-connect")
       //----------- ensemble des fonctions liées aux produits ---------------//
 
 
-// retourne l'ensemble  des produits de manière aléatoire
+// retourne l'ensemble  des produits de manière aléatoire pour une catégorie une table donnée
 exports.productListRandom = (req, res ) => {
 
-  console.log( "le payload fournit à productListRandom est" );   console.log( req.body ) ;
+  console.log( "le payload fournit à productListRandom est", req.body );  
   // on récupère la categorie du produit (cordage, balles ...)
   const productCategorie = req.body.productCategorie;
 
-  // on recherche la liste des marques dans la BDD
+  // on recherche la liste complète des produit dans la bonne table (productCategorie)
   db.query(`SELECT * FROM ${productCategorie} ORDER BY RAND()`, 
     (error, results) =>{
       if (error){          
@@ -41,13 +41,12 @@ exports.productListRandom = (req, res ) => {
        }
     } 
   )
-
 }
 
 // retourne la liste des cordages en filtant sur la base des données
 // via les paramètres fournit
 exports.stringListFiltered = (req, res) => {
-  console.log( "le payload fournit à productListFiltered  est" );   console.log( req.body ) ;
+  console.log( "le payload fournit à stringListFiltered  est", req.body );  
 
   // on récupère la categorie du produit (cordage, balles ...)
   const productCategorie = req.body.productCategorie;
@@ -117,7 +116,7 @@ exports.stringListFiltered = (req, res) => {
 // retourne la liste des balles en filtant sur la base des données
 // via les paramètres fournit
 exports.ballListFiltered = (req, res) => {
-  console.log( "le payload fournit à ballListFiltered  est" );   console.log( req.body ) ;
+  console.log( "le payload fournit à ballListFiltered  est" , req.body);  
 
   // on récupère la categorie du produit (cordage, balles ...)
   const productCategorie = req.body.productCategorie;
@@ -185,10 +184,10 @@ exports.ballListFiltered = (req, res) => {
   }
 };
 
-// retourne la liste des balles en filtant sur la base des données
+// retourne la liste des accessoires en filtant sur la base des données
 // via les paramètres fournit
 exports.accessoriesListFiltered = (req, res) => {
-  console.log( "le payload fournit à accessoriesListFiltered  est" );   console.log( req.body ) ;
+  console.log( "le payload fournit à accessoriesListFiltered  est", req.body );  
 
   // on récupère la categorie du produit (cordage, balles ...)
   const productCategorie = req.body.productCategorie;
@@ -256,10 +255,10 @@ exports.accessoriesListFiltered = (req, res) => {
   }
 };
 
-// on récupère le produit sélectionné via le id et le nom du tableau
+// on récupère le produit sélectionné via le id et le nom du tableau du produit catégorie fournit en payload
 exports.productSelected = (req, res ) => {
 
-  console.log( "le payload fournit à productSelected est" );   console.log( req.body ) ;
+  console.log( "le payload fournit à productSelected est" , req.body);    
   // on récupère la categorie et l'd du produit 
   const productCategorie = req.body.productCategorie;
   const productId = req.body.productId
@@ -324,9 +323,9 @@ exports.listHubWithdrawal = (req, res) => {
 
 
 
-                //logique pour enregistrement de la commande //
+                //logique pour enregistrement de la commande depuis la boutique sans stripe //
 
-
+//function d'enregistrement de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack) {
   return new Promise((resolve, reject) => {
     // Construisez la requête SQL pour insérer les données dans la table
@@ -344,7 +343,7 @@ function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, u
   });
 }
 
-// Fonction d'enregistrement de la commande  avec paiement en boutique 
+// Fonction d'enregistrement de la commande et d'envoie d'email 
 exports.saveOrderPaiementInShop = async (req, res) => {
   console.log("Je rentre dans le backend pour enregistrement de la commande");
 
@@ -368,7 +367,7 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const token = datas.token;
     let statusOrder = "initié"; // Initialisez la variable ici
 
-    if (datas.hubChoice.enterprise_name == "KST Boutique") {
+    if (datas.hubChoice.enterprise_name == "click-and-raquette") {
       statusOrder = "prêt à corder"; // Modifiez la valeur ici si la condition est vraie
     }
 
