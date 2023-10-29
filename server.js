@@ -1,23 +1,12 @@
-// creation du serveur qui accuille notre backend constuit via le framewrok express
-// configuration du port de notre ordinateur qui va ecouter les futurs requêtes clients
-// et mise sur ecoute du serveur
+// Importation des modules nécessaires
+const express = require('express');
+const app = express();
 
-const http = require('http'); // Import du package http (https requiert un certificat SSL à obtenir avec un nom de domaine)
+// Importation de votre application Express depuis le fichier 'app.js'
 const app = require('./app');
 
-
-// gestion des différentes origines de communications back frontend 
-const cors = require('cors');
-app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-
-//La fonction normalizePort renvoie un port valide (numéro ou chaîne)
-//Cela configure le port de connection en fonction de l'environnement
+// La fonction normalizePort renvoie un port valide (numéro ou chaîne)
+// Elle configure le port de connexion en fonction de l'environnement
 const normalizePort = val => {
   const port = parseInt(val, 10);
 
@@ -30,17 +19,13 @@ const normalizePort = val => {
   return false;
 };
 
+// Récupération du port à partir de l'environnement ou utilisation de 5001 par défaut
+const port = normalizePort(process.env.PORT || '5001');
 
-
-
-
-
-app.get('/cool', (req, res) => res.send(cool()))
-
-
-const port = normalizePort(process.env.PORT || '5001');
+// Configuration du port de l'application Express
 app.set('port', port);
 
+// Gestion des erreurs liées au serveur
 const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error;
@@ -61,38 +46,18 @@ const errorHandler = error => {
   }
 };
 
-//fonction "createserver" permettant de créer un serveur 
-//(prend "app" en argument, notre application crée via le module le framework  express)
-
+// Création d'un serveur HTTP
 const server = http.createServer(app);
 
+// Gestion des erreurs du serveur
 server.on('error', errorHandler);
-server.on('listening', () => {        // L'écouteur d'évènements enregistre le port nommé                            
-  const address = server.address();   //sur lequel le serveur s'exécute dans la console
+
+// Écoute de connexions entrantes sur le port spécifié
+server.on('listening', () => {
+  const address = server.address();
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind, '  🍾🍾');
 });
 
+// Démarrage du serveur en écoutant sur le port spécifié
 server.listen(port);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
