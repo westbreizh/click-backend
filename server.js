@@ -1,8 +1,8 @@
-// creation du serveur qui accuille notre backend constuit via le framewrok express
 
-const http = require('http'); // Import du package http (https requiert un certificat SSL à obtenir avec un nom de domaine)
 const app = require('./app');
 
+//fonction "createserver" permettant de créer un serveur, prend "app" en argument, notre application crée via le module le framework  express
+const server = http.createServer(app);
 
 
 //La fonction normalizePort renvoie un port valide (numéro ou chaîne)
@@ -18,12 +18,11 @@ const normalizePort = val => {
   }
   return false;
 };
-
-
-
-const port = normalizePort(process.env.PORT || '5001');
+const port = normalizePort(process.env.PORT || '5001');
 app.set('port', port);
 
+
+// Gestion des erreurs du serveur
 const errorHandler = error => {
   if (error.syscall !== 'listen') {
     throw error;
@@ -43,19 +42,19 @@ const errorHandler = error => {
       throw error;
   }
 };
-
-//fonction "createserver" permettant de créer un serveur 
-//prend "app" en argument, notre application crée via le module le framework  express
-
-const server = http.createServer(app);
-
 server.on('error', errorHandler);
-server.on('listening', () => {        // L'écouteur d'évènements enregistre le port nommé                            
-  const address = server.address();   //sur lequel le serveur s'exécute dans la console
+
+
+// Événement déclenché lorsque le serveur commence à écouter
+server.on('listening', () => {    
+  // Récupération des informations sur l'adresse et le port sur lesquels le serveur écoute                              
+  const address = server.address();  
+    // Formatage du texte pour indiquer où le serveur est en écoute 
   const bind = typeof address === 'string' ? 'pipe ' + address : 'port ' + port;
   console.log('Listening on ' + bind, '  🍾🍾');
 });
 
+// Démarrage du serveur en écoutant sur le port spécifié
 server.listen(port);
 
 
