@@ -40,7 +40,7 @@ VALUES
 ('cordage', 'Tecnifibre', 'Razor code', 'Monofilament', 'garniture et pose', 28, 'Confort', 'Polyvalence', 'Contrôle/puuissnce', 'Prise d\'effet', '', '1.25 mm', 'gris', ' https://click-backend.herokuapp.com/tecnifibre-razor.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
 'Le cordage Tecnifibre Razor Code offre un contrôle élevé et de la puissance pour les frappes puissantes. Il favorise la prise d\'effet, malgré sa rigidité, offrant un confort surprenant. Il convient aux joueurs précis, a une longue durée de vie, maintient bien la tension, et est idéal pour ceux qui cherchent équilibre entre contrôle, puissance et tenue de tension. C\'est le plus rigide de la gamme Tecnifibre, offrant un excellent contrôle.'),
 ('cordage', 'Tecnifibre', 'Multi Feel', 'Multifilament', 'garniture et pose', 26, 'Confort','Puissance', 'Prix', 'Contrôle', '', '1.25 mm', 'blanc', ' https://click-backend.herokuapp.com/tecnifibre-multi-feel.webp', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
-'Le cordage Tecnifibre Multifeel test est un multifilament reconnu pour sa puissance et son confort.  Idéal pour les joueurs recherchant puissance, confort et longévité.');
+'Le cordage Tecnifibre Multifeel test test est un multifilament reconnu pour sa puissance et son confort.  Idéal pour les joueurs recherchant puissance, confort et longévité.');
 
 
 //Babolat
