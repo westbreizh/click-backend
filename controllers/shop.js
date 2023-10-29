@@ -323,7 +323,7 @@ exports.listHubWithdrawal = (req, res) => {
 
 
 
-                //logique pour enregistrement de la commande depuis la boutique sans stripe //
+                //logique pour enregistrement de la commande depuis la boutique, sans stripe //
 
 //function d'enregistrement de la commande dans la base de données
 function saveOrderToDatabase(articleList, orderDate,  statusOrder, totalPrice, userInfo, hub, hubBack) {

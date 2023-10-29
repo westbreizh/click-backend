@@ -19,6 +19,112 @@ const db = require("../BDD/database-connect")
 
 //---------------------compte joueur, préférences, info joueurs-----------------------//
 
+
+//---------------sous-fonctions utilisées ailleurs---------------//
+const getUserByEmail = (email) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
+      if (err) {
+        reject(err);
+        console.log("erreure dici ")
+      } else {
+        if (playerResult.length > 0) {
+          resolve({ userType: 'player', userInfos: playerResult[0] });
+        } else {
+          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
+            if (err) {
+              reject(err);
+            } else {
+              if (hubResult.length > 0) {
+                resolve({ userType: 'hub', userInfos: hubResult[0] });
+              } else {
+                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    if (stringerResult.length > 0) {
+                      resolve({ userType: 'stringer', userInfos: stringerResult[0] });
+                    } else {
+                      resolve(null);
+                    }
+                  }
+                });
+              }
+            }
+          });
+        }
+      }
+    });
+  });
+};
+
+const getHubViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubInfo.length > 0) {
+          resolve(hubInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
+
+const getHubBackViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubBackInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (hubBackInfo.length > 0) {
+          resolve( hubBackInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
+
+const getStringViaId = (id) => {
+  return new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM string WHERE id='${id}'`, (err, stringFromShopInfo) => {
+      if (err) {
+        reject(err);
+        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
+      } else {
+        if (stringFromShopInfo.length > 0) {
+          resolve(stringFromShopInfo[0] );
+        } else {
+          resolve(null);
+        }
+      }
+    });
+  });
+};
+
+const verifyPassword = (password, hashedPassword) => {
+  return bcryptjs.compare(password, hashedPassword);
+};
+
+const createToken = (userId) => {
+  return jwt.sign(
+    { userId: userId },
+    Token_Secret_Key,
+    { expiresIn: '4h' }
+     //   { expiresIn: 30 }
+  );
+};
+
+
+
+
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
 
@@ -66,95 +172,6 @@ exports.signup = (req, res ) => {
     }    
   })
 } 
-// Fonction pour récupérer l'utilisateur à partir de l'adresse e-mail
-const getUserByEmail = (email) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM player WHERE email='${email}'`, (err, playerResult) => {
-      if (err) {
-        reject(err);
-        console.log("erreure dici ")
-      } else {
-        if (playerResult.length > 0) {
-          resolve({ userType: 'player', userInfos: playerResult[0] });
-        } else {
-          db.query(`SELECT * FROM hub WHERE email='${email}'`, (err, hubResult) => {
-            if (err) {
-              reject(err);
-            } else {
-              if (hubResult.length > 0) {
-                resolve({ userType: 'hub', userInfos: hubResult[0] });
-              } else {
-                db.query(`SELECT * FROM stringer WHERE email='${email}'`, (err, stringerResult) => {
-                  if (err) {
-                    reject(err);
-                  } else {
-                    if (stringerResult.length > 0) {
-                      resolve({ userType: 'stringer', userInfos: stringerResult[0] });
-                    } else {
-                      resolve(null);
-                    }
-                  }
-                });
-              }
-            }
-          });
-        }
-      }
-    });
-  });
-};
-const getHubViaId = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubInfo) => {
-      if (err) {
-        reject(err);
-        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
-      } else {
-        if (hubInfo.length > 0) {
-          resolve(hubInfo[0] );
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  });
-};
-const getHubBackViaId = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM hub WHERE id='${id}'`, (err, hubBackInfo) => {
-      if (err) {
-        reject(err);
-        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
-      } else {
-        if (hubBackInfo.length > 0) {
-          resolve( hubBackInfo[0] );
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  });
-};
-const getStringViaId = (id) => {
-  return new Promise((resolve, reject) => {
-    db.query(`SELECT * FROM string WHERE id='${id}'`, (err, stringFromShopInfo) => {
-      if (err) {
-        reject(err);
-        console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
-      } else {
-        if (stringFromShopInfo.length > 0) {
-          resolve(stringFromShopInfo[0] );
-        } else {
-          resolve(null);
-        }
-      }
-    });
-  });
-};
-// Fonction pour vérifier le mot de passe
-const verifyPassword = (password, hashedPassword) => {
-  return bcryptjs.compare(password, hashedPassword);
-};
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
@@ -245,8 +262,7 @@ exports.login = async (req, res, next) => {
   );
 };
 
-
-// fonction qui enregistre les préférences du joueur pour le cordage
+// fonction qui enregistre les préférences du joueur 
 exports.savePreferencePlayer = (req, res) => {
   const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, stringFromPlayerOrigin, numberKnotChoice } = req.body;
 
@@ -288,8 +304,7 @@ exports.savePreferencePlayer = (req, res) => {
   });
 };
 
-
-// Fonction qui recupère les données joueurs ave un email fournies 
+// Fonction qui recupère les données joueurs ave un email fournies comme payload
 exports.loadDataPlayerAfterModif = async (req, res, next) => {
   const email = req.body.email;
   console.log("email", email)
@@ -329,17 +344,6 @@ exports.loadDataPlayerAfterModif = async (req, res, next) => {
   }
 };
 
-
-// Fonction pour créer le jeton JWT
-const createToken = (userId) => {
-  return jwt.sign(
-    { userId: userId },
-    Token_Secret_Key,
-    { expiresIn: '4h' }
-     //   { expiresIn: 30 }
-  );
-};
-
 // obtenir un user via l'id 
 exports.getOneUser = (req, res, next) => {
   let userId = req.params.id
@@ -355,6 +359,8 @@ exports.getOneUser = (req, res, next) => {
           result);
       });
 };
+
+
 
 //--------------- mot de passe---------------//
 //envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
@@ -520,8 +526,6 @@ exports.sendOrderLog = (req, res, next) => {
     }
   );
 };
-
-
 
 // fonction qui renvoit une commande précise
 exports.sendOneOrder = (req, res, next) => {
