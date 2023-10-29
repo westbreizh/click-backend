@@ -5,7 +5,6 @@ router.use(express.json());  // Middleware d'analyse JSON pour toutes les routes
 const authenticateJWT = require('../middleware/authenticateJWT '); 
 
 
-router.post('/signupStringer', stringerCtrl.signupStringer);
 router.post('/ordertSelectedByStatus', authenticateJWT,  stringerCtrl.ordertSelectedByStatus);
 router.post('/change-status-order', authenticateJWT,  stringerCtrl.changeStatusOrder);
 router.post('/oneOrder', authenticateJWT, stringerCtrl.sendOneOrder);

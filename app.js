@@ -1,22 +1,15 @@
+// Importation des modules nécessaires
 const express = require('express');
 const app = express();
-const stripe = require('stripe')('sk_test_51NGdYqI8HrVwrRfPKAmQ17TgZh2yWZtGjNNqhHyMXhebWNh03YR5zgGhibzt5oHJM1eRD5UrwRAvhZPNhs48fC9L00UjaCIuJq');
 
-
-// gestion des différentes origines de communications back frontend
+// Middleware pour gérer les autorisations CORS
 const cors = require('cors');
 app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
 
-// Middleware pour l'analyse des données encodées dans l'URL, comme pour des formulaires
+// Middleware pour analyser les données encodées dans l'URL (par exemple, les formulaires)
 app.use(express.urlencoded({ extended: true }));
 
-// gestion des images, fichier statiques sans codes logiques
+// Middleware pour servir des fichiers statiques (images, etc.)
 app.use(express.static('public/logo'));
 app.use(express.static('public/ball'));
 app.use(express.static('public/accessorie'));
@@ -26,26 +19,22 @@ app.use(express.static('public/string/yonex'));
 app.use(express.static('public/string/dunlop'));
 app.use(express.static('public/string/head'));
 app.use(express.static('public/string/luxilon'));
-app.use(express.urlencoded({ extended: true }));
 
-
-// importe le chemin pour les routes
-// player contient quelues endpoint généraus du coup c'est mentionnés user
+// Importation des routes
 const userRoutes = require('./routes/player');
-const shopRoutes = require ('./routes/shop')
-const stripeRoutes = require ('./routes/stripes')
-const stringerRoutes = require ('./routes/stringer')
+const shopRoutes = require('./routes/shop');
+const stripeRoutes = require('./routes/stripes');
+const stringerRoutes = require('./routes/stringer');
+
+// Configuration des routes
 app.use('/api/user', userRoutes);
 app.use('/api/shop', shopRoutes);
 app.use('/api/stripe', stripeRoutes);
 app.use('/api/stringer', stringerRoutes);
 
 
-app.get('/', (req, res) => {
-  res.send('Hello, world!');
-});
 
-
+// Export de l'application Express pour une utilisation ailleurs
 module.exports = app;
 
 

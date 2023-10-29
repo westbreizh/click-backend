@@ -12,7 +12,7 @@ router.post('/accessoriesListFiltered', shopCtrl.accessoriesListFiltered);
 router.post('/productSelected', shopCtrl.productSelected);
 router.post('/listHubCollect', shopCtrl.listHubCollect);
 router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
-router.post('/paiement-in-shop', shopCtrl.saveOrderPaiementInShop);
+router.post('/paiement-in-shop', authenticateJWT, shopCtrl.saveOrderPaiementInShop);
 
 
 

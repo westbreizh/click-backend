@@ -25,51 +25,7 @@ const db = require("../BDD/database-connect")
 
 
 
-// fonction de creation d'un compte cordeur
-exports.signupStringer = (req, res ) => {
-  // verifie que l'email est disponible
-  db.query(`SELECT * FROM stringer WHERE email='${req.body.email}'`, 
-  (err, results) => {
 
-    // email deja utilisé
-    if (results.length > 0) {                           
-        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
-
-    // email disponible
-    }else{  
-
-      bcryptjs.hash(req.body.password, Number(bcryptSalt))
-      .then(cryptedPassword => {
-        
-        //implemente la base de donnée
-        db.query(`INSERT INTO stringer (enterprise_name, referent_forename, referent_lastname, email, password_hash, road, postal_code, city, telephone   ) VALUES
-          ( '${req.body.enterprise_name}','${req.body.referent_forename}', '${req.body.referent_lastname}', 
-          '${req.body.email}', '${cryptedPassword}', '${req.body.road}', '${req.body.postal_code}', '${req.body.city}', '${req.body.telephone}' )`,
-          (err, result) => {        
-            //recupère l'id pour création du token
-            db.query(`SELECT * FROM stringer WHERE email='${req.body.email}'`, 
-              (err, result) => {
-                const userId = result[0].id;
-                const token = jwt.sign(        
-                  { userId: userId },
-                  Token_Secret_Key, 
-                  { expiresIn: '1000h' }
-                );
-                delete (result[0].password);
-                //on retourne des datas et le message
-                return res.status(201).json(data = {
-                  userInfo: result[0],
-                  token: token,
-                  message: 'Votre compte cordeur a bien été crée !'
-                });
-
-            })
-          }
-        )
-      })
-    }    
-  })
-} 
 
 
                 //----------- renvoit des commandes depuis table orders ---------------//

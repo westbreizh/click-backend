@@ -6,8 +6,7 @@ const http = require('http'); // Import du package http (https requiert un certi
 const app = require('./app');
 
 
-// gestion des différentes origines de communications back frontend
-// 
+// gestion des différentes origines de communications back frontend 
 const cors = require('cors');
 app.use(cors());
 app.use((req, res, next) => {
@@ -37,8 +36,6 @@ const normalizePort = val => {
 
 
 app.get('/cool', (req, res) => res.send(cool()))
-
-
 
 
 const port = normalizePort(process.env.PORT || '5001');
