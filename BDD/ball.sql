@@ -19,10 +19,10 @@ VALUES
 
 
 ('balle', 'Tecnifibre', 'X-one', 8.5, 'tube de 4 balles', 'standard', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 'https://click-backend.herokuapp.com/balle-xone.jpg' ,
-'La X-One est la balle haut de gamme de Tecnifibre. La X-One est une balle vive, ultra performante et qui possède une excellente longévité.');
+'La X-One est la balle haut de gamme de Tecnifibre. La X-One est une balle vive, ultra performante et qui possède une excellente longévité.'),
 
 
-('balle', 'Tecnifibre', 'X-one', 7.5, 'tube de 4 balles', 'standard', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 'https://click-backend.herokuapp.com/tube-de-4-balles-tecnifibre-club.jpg' ,
+('balle', 'Tecnifibre', 'Club', 7.5, 'tube de 4 balles', 'standard', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 'https://click-backend.herokuapp.com/tube-de-4-balles-tecnifibre-club.jpg' ,
 'Un peu moins résistante et qualitative que la Xone, cette balle garde néanmoins de très bonne qualités');
 
 
