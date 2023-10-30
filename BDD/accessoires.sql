@@ -15,14 +15,8 @@ description_text    VARCHAR(255)
 
 INSERT INTO accessories (categorie, mark, model, price, type_product, logoMark_url, image_url, description_text) VALUES
 
-('accessoire', 'Wilson', 'Pro overgrip', 7, 'surgrip','http://localhost:3001/Wilson-logo.webp', '    http://localhost:3001/surgrips-wilson-pro-overgrip-blanc-x-3.jpg',
+('accessoire', 'Wilson', 'Pro overgrip', 7, 'surgrip','http://localhost:3001/Wilson-logo.webp', 'http://localhost:3001/wilson-pro-overgrip-blanc-x-3.jpg',
 'Le Pro overgrip est conçu pour offrir un excellent confort et une absorption optimale de la transpiration.');
-
-
-
-
-
-
 
 
 
