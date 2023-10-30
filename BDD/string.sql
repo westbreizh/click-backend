@@ -21,6 +21,19 @@ description_text            VARCHAR(500)
 );
  
 
+// sur le site web 
+
+INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
+VALUES
+
+('cordage', 'Tecnifibre', 'X-One Biphase', 'Multifilament', 'garniture et pose', 25, 'Puissance', 'Confort', 'Tenue de tension', 'Prix','', '1.30 mm', 'noir', ' https://click-backend.herokuapp.com/tecnifibre-x-one-biphase.jpg', 'https://click-backend.herokuapp.com/logo-tecnifibre.webp', 
+'Le cordage multifilament Xone Biphase est considéré comme le meilleur multifilament du marché par de nombreux joueurs de tennis. Il offre une excellente combinaison des différentes charactéristiques d\'un cordage'),
+
+('cordage', 'Yonex', 'PolyTour Spin', 'Monofilament', 'garniture et pose', 15, 'Prise d\'effet', 'Contrôle','','Puissance','', '1.25 mm', 'jaune', ' https://click-backend.herokuapp.com/yonex-poly-tour-spin.jpg', 'https://click-backend.herokuapp.com/yonex-logo.webp', 
+'Ce cordage représente le parfait équilibre entre la capacité d\'adhérence à la balle et le contrôle parmi les cordages Yonex. Il se distingue par sa rigidité, ce qui implique qu\'il génère moins de puissance.');
+
+
+
 //tecnifibre
 
 INSERT INTO `string`(categorie, mark, model, composition, packaging, price, first_characteristic, second_characteristic, third_characteristic, first_default, second_default, gauge, color, image_url, logoMark_url, description_text)
