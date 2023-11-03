@@ -13,7 +13,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Utilisez cookieParser pour gérer les cookies
 app.use(cookieParser()); 
-
+console.log("req.cookies :", req.cookies);
+console.log("Identifiant de session dans app :", req.cookies.sessionId);
 
 // Middleware pour servir des fichiers statiques (images, etc.)
 app.use(express.static('public/logo'));
