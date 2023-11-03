@@ -9,7 +9,7 @@ app.use(cookieParser());
 const sessionMiddleware = (req, res, next) => {
   let sessionId = req.cookies.sessionId; // Déclarer la variable sessionId
   console.log("Identifiant de session avant :", req.cookies.sessionId);
-  console.log("req.cookies :", req.cookies);
+  console.log("req.cookies   :", req.cookies);
   console.log("req :", req);
   if (!req.cookies.sessionId) {
     sessionId = uuidv4(); // Générez un nouvel identifiant de session unique
