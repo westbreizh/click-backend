@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const authenticateJWT = require('../middleware/authenticateJWT'); 
-const sessionMiddleware = require('../middleware/sessionMiddleware'); // Importez votre middleware de session
+const sessionMiddleware = require('../middleware/sessionMiddleware'); 
 const userCtrl = require('../controllers/player');
 
 // Middleware d'analyse JSON pour toutes les routes du routeur
