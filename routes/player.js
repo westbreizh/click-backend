@@ -26,8 +26,5 @@ router.post('/oneOrder', authenticateJWT, userCtrl.sendOneOrder);
 module.exports = router;
 
 
-
-
-
 //const passwordSchema = require("../middleware/passwordValidate");
 //const rateLimit = require("../middleware/rate-limit");
