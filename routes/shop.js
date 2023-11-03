@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const shopCtrl = require('../controllers/shop');
 const authenticateJWT = require('../middleware/authenticateJWT '); 
+const sessionMiddleware = require('../middleware/sessionMiddleware'); 
+
 router.use(express.json()); // Middleware d'analyse JSON pour toutes les routes du routeur
 
 
@@ -12,7 +14,7 @@ router.post('/accessoriesListFiltered', shopCtrl.accessoriesListFiltered);
 router.post('/productSelected', shopCtrl.productSelected);
 router.post('/listHubCollect', shopCtrl.listHubCollect);
 router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
-router.post('/paiement-in-shop', authenticateJWT, shopCtrl.saveOrderPaiementInShop);
+router.post('/paiement-in-shop', authenticateJWT, sessionMiddleware, shopCtrl.saveOrderPaiementInShop);
 
 
 
