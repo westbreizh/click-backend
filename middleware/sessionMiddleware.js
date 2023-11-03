@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser'); 
 const { v4: uuidv4 } = require('uuid');
 const app = require('../app');
-app.use(cookieParser());
+
 
 // Middleware de génération d'identifiant de session
 const sessionMiddleware = (req, res, next) => {
