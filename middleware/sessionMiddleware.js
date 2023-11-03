@@ -14,6 +14,7 @@ const sessionMiddleware = (req, res, next) => {
     res.cookie('sessionId', sessionId, {
       httpOnly: true,
       secure: true, // Utilisez HTTPS pour sécuriser la communication
+      sameSite: 'none',
     });
   }
   
