@@ -6,7 +6,13 @@ const cookieParser = require('cookie-parser');
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
-app.use(cors());
+const corsOptions = {
+  origin: ['https://click-and-raquette.com', 'http://localhost:3000', 'https://api.stripe.com'], // Spécifiez l'origine autorisée
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Méthodes HTTP autorisées
+  credentials: true, // Permet d'envoyer des cookies et des en-têtes d'authentification
+};
+
+app.use(cors(corsOptions));
 
 // Middleware pour analyser les données encodées dans l'URL (par exemple, les formulaires)
 app.use(express.urlencoded({ extended: true }));
