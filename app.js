@@ -1,7 +1,7 @@
 // Importation des modules nécessaires
 const express = require('express');
 const app = express();
-
+const cookieParser = require('cookie-parser'); 
 
 
 // Middleware pour gérer les autorisations CORS
@@ -11,7 +11,8 @@ app.use(cors());
 // Middleware pour analyser les données encodées dans l'URL (par exemple, les formulaires)
 app.use(express.urlencoded({ extended: true }));
 
-
+// Utilisez cookieParser pour gérer les cookies
+app.use(cookieParser()); 
 
 // Middleware pour servir des fichiers statiques (images, etc.)
 app.use(express.static('public/logo'));

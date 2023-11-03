@@ -1,15 +1,13 @@
 const cookieParser = require('cookie-parser'); 
 const { v4: uuidv4 } = require('uuid');
-
-
-// Utilisez cookieParser pour gérer les cookies
-app.use(cookieParser()); 
+const app = require('../app');
+app.use(cookieParser());
 
 // Middleware de génération d'identifiant de session
 const sessionMiddleware = (req, res, next) => {
   let sessionId = req.cookies.sessionId; // Déclarer la variable sessionId
   console.log("Identifiant de session avant :", req.cookies.sessionId);
-  console.log("req.cookies   :", req.cookies);
+  console.log("req.cookies :", req.cookies);
   console.log("req :", req);
   if (!req.cookies.sessionId) {
     sessionId = uuidv4(); // Générez un nouvel identifiant de session unique
