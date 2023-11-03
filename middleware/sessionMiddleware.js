@@ -2,17 +2,18 @@ const { v4: uuidv4 } = require('uuid');
 
 // Middleware de génération d'identifiant de session
 const sessionMiddleware = (req, res, next) => {
-
+  let newSessionId
   if (!req.cookies.sessionId) {
-    sessionId = uuidv4(); // Générez un nouvel identifiant de session unique
-    res.cookie('sessionId', sessionId, {
+    newSessionId = uuidv4(); // Générez un nouvel identifiant de session unique
+    res.cookie('sessionId', newSessionId, {
       httpOnly: true,
       secure: true, // Utilisez HTTPS pour sécuriser la communication
     });
   }
   
   // Vous pouvez maintenant accéder à sessionId même en dehors du bloc if
-  console.log("Nouvel identifiant de session généré :", req.cookies.sessionId);
+  console.log(" identifiant de session:", req.cookies.sessionId);
+  console.log("Nouvel identifiant de session généré :", newSessionId);
   next();
 };
 
