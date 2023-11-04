@@ -14,6 +14,7 @@ const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
+const cookieParser = require('cookie-parser');
 
 
 
@@ -117,14 +118,14 @@ const createToken = (userId, res) => {
   const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
-    { expiresIn: '4h' }
+    { expiresIn: '4d' }
   );
-
+  console.log('token avant ', token)
   // Définir le cookie
-  res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 3 * 24 * 60 * 60 * 1000 }); // maxAge est en millisecondes};
+  res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 3 * 24 * 60 * 60 * 1000 }); 
+  console.log('token apres', token)
+};
 
-
-  }
 
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
