@@ -113,13 +113,15 @@ const verifyPassword = (password, hashedPassword) => {
   return bcryptjs.compare(password, hashedPassword);
 };
 
-const createToken = (userId) => {
-  return jwt.sign(
+const createToken = (userId, res) => {
+  const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
     { expiresIn: '4h' }
-     //   { expiresIn: 30 }
   );
+
+  // Définir le cookie
+  res.cookie('token', token, { httpOnly: true, secure: true, maxAge: 4 * 60 * 60 * 1000 }); 
 };
 
 

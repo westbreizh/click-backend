@@ -1,37 +1,38 @@
-// charge les variables d'environnement du fichier .env dans process.env
+// Importation des modules nécessaires
 const dotenv = require("dotenv");   
-dotenv.config();
-const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const jwt = require('jsonwebtoken');
 
+// Chargement des variables d'environnement du fichier .env dans process.env
+dotenv.config();
 
-const cookie = require('cookie');
+// Récupération de la clé secrète du token à partir des variables d'environnement
+const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 
-// Middleware d'authentification et d'autorisation basé sur les JWT avec récupération du token depuis le cookie
+// Middleware d'authentification et d'autorisation basé sur les JWT
 const authenticateJWT = (req, res, next) => {
-  // Analyser les cookies de la requête
-  const cookies = cookie.parse(req.headers.cookie || '');
+  // On extrait le token du header "Authorization" en prenant la partie située après l'espace
+  const token = req.headers.authorization?.split(' ')[1]; 
 
-  // Récupérer le token du cookie 'mon_token'
-  const token = cookies.mon_token;
-
+  // Si le token n'est pas présent dans la requête, on renvoie une erreur
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
   }
 
   try {
-    const decodedToken = jwt.verify(token, Token_Secret_Key);
+    // On décode le token en utilisant la clé secrète, c'est cette fonction qui vérifie la validité du token reçu
+    const decodedToken = jwt.verify(token, Token_Secret_Key ); 
 
-    // Vous pouvez ajouter des vérifications supplémentaires ici selon vos besoins
-    // Par exemple, vérifier si l'utilisateur existe dans la base de données, ses autorisations, etc.
-
-    // Passer les informations du token décodé à la demande pour une utilisation ultérieure
+    // On passe les informations du token décodé à la requête pour une utilisation ultérieure
     req.user = decodedToken;
-    console.log("l'authentification via le token réussie")
-    next(); // Si l'authentification et l'autorisation sont réussies, on passe à l'étape suivante
+    console.log("l'authentification via le token réussi")
+
+    // Si l'authentification et l'autorisation sont réussies, on passe à l'étape suivante
+    next(); 
   } catch (error) {
+    // Si la vérification du token échoue, on renvoie une erreur
     return res.status(401).json({ error: 'Token invalide' });
   }
 };
 
+// Exportation du middleware pour pouvoir l'utiliser dans d'autres fichiers
 module.exports = authenticateJWT;
