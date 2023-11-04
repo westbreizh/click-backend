@@ -1,4 +1,3 @@
-const cookieParser = require('cookie-parser'); 
 const { v4: uuidv4 } = require('uuid');
 const app = require('../app');
 

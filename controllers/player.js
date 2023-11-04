@@ -15,7 +15,7 @@ const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
 const cookieParser = require('cookie-parser');
-
+const app = require('../app');
 
 
 //---------------------compte joueur, préférences, info joueurs-----------------------//
