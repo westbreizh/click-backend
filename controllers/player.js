@@ -115,7 +115,6 @@ const verifyPassword = (password, hashedPassword) => {
 };
 
 const createToken = (userId, res) => {
-  console.log('res', res)
   const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
@@ -123,7 +122,7 @@ const createToken = (userId, res) => {
   );
   console.log('token avant ', token)
   // Définir le cookie
-  res.cookie('token', token); 
+  res.cookie('token', "test"); 
   console.log('token apres', token)
 };
 
