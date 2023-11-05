@@ -118,7 +118,7 @@ const createToken = (userId, res) => {
   const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
-    { expiresIn: '4d' }
+    { expiresIn: '3d' }
   );
   console.log('token avant ', token)
   // Définir le cookie

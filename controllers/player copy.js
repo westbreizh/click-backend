@@ -114,17 +114,7 @@ const verifyPassword = (password, hashedPassword) => {
   return bcryptjs.compare(password, hashedPassword);
 };
 
-const createToken = (userId, res) => {
-  const token = jwt.sign(
-    { userId: userId },
-    Token_Secret_Key,
-    { expiresIn: '4d' }
-  );
-  console.log('token avant ', token)
-  // Définir le cookie
-  res.cookie('token', "test"); 
-  console.log('token apres', token)
-};
+
 
 
 // fonction de creation d'un compte joueur   
@@ -203,9 +193,9 @@ exports.login = async (req, res, next) => {
     const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
-    { expiresIn: '4d' }
+    { expiresIn: '3d' }
     );
-    console.log('token avant ', token)
+
     // Définir le cookie
     res.cookie('token', token, {
       httpOnly: true,
@@ -213,7 +203,7 @@ exports.login = async (req, res, next) => {
       sameSite: 'none',
       maxAge: 3 * 24 * 60 * 60 * 1000
     }); 
-    console.log('token apres', token)
+
 
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
