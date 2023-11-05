@@ -8,7 +8,7 @@ const userCtrl = require('../controllers/player');
 router.use(express.json());
 
 // Appliquez sessionMiddleware à toutes les routes
-//router.use(sessionMiddleware);
+router.use(sessionMiddleware);
 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
