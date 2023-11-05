@@ -1,5 +1,4 @@
 const { v4: uuidv4 } = require('uuid');
-const app = require('../app');
 
 
 // Middleware de génération d'identifiant de session
