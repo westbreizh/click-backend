@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 
 // Middleware d'authentification et d'autorisation basé sur les JWT
 const authenticateJWT = (req, res, next) => {
-  const token = req.cookies.token; // On extrait le token du cookie  console.log("token dans le middleware", token)
+  const token = req.cookies.token; // On extrait le token du cookie  
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
   }

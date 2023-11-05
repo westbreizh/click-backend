@@ -14,8 +14,8 @@ const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
-const cookieParser = require('cookie-parser');
-const app = require('../app');
+
+
 
 
 //---------------------compte joueur, préférences, info joueurs-----------------------//
@@ -122,14 +122,10 @@ const createToken = (userId, res) => {
   );
   console.log('token avant ', token)
   // Définir le cookie
-  res.cookie('token', token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
-    maxAge: 3 * 24 * 60 * 60 * 1000
-  }); 
+  res.cookie('token', "test"); 
   console.log('token apres', token)
 };
+
 
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
@@ -203,7 +199,22 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfos.id;
-    const token = createToken(userId, res);
+
+    const token = jwt.sign(
+    { userId: userId },
+    Token_Secret_Key,
+    { expiresIn: '4d' }
+    );
+    console.log('token avant ', token)
+    // Définir le cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'none',
+      maxAge: 3 * 24 * 60 * 60 * 1000
+    }); 
+    console.log('token apres', token)
+
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.userInfos.password_hash;
