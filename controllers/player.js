@@ -199,7 +199,17 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfos.id;
-    const token = createToken(userId);
+
+    const token = jwt.sign(
+    { userId: userId },
+    Token_Secret_Key,
+    { expiresIn: '4d' }
+    );
+    console.log('token avant ', token)
+    // Définir le cookie
+    res.cookie('token', "test"); 
+    console.log('token apres', token)
+
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.userInfos.password_hash;
