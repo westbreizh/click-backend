@@ -9,8 +9,11 @@ const jwt = require('jsonwebtoken');
 const authenticateJWTandXSRF = (req, res, next) => {
   const token = req.cookies.token; // On extrait le token du cookie  
   const xsrfToken = req.cookies.xsrfToken; // On extrait le xsrfToken du cookie
-  const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête
+  const xsrfTokenHeader = req.headers['X-XSRF-TOKEN']; // On extrait le xsrfToken de l'en-tête
 
+console.log("token : " + token)
+console.log("xsrfToken : " + xsrfToken)
+console.log("xsrfTokenHeader : " + xsrfTokenHeader)
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
   }

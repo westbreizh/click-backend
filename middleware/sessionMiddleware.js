@@ -4,7 +4,6 @@ const { v4: uuidv4 } = require('uuid');
 // Middleware de génération d'identifiant de session
 const sessionMiddleware = (req, res, next) => {
   let sessionId = req.cookies.sessionId; // Déclarer la variable sessionId
-  console.log("Identifiant de session avant :", req.cookies.sessionId);
 
   if (!req.cookies.sessionId) {
     sessionId = uuidv4(); // Générez un nouvel identifiant de session unique
@@ -16,7 +15,6 @@ const sessionMiddleware = (req, res, next) => {
   }
   
   // Accédez à la variable sessionId même en dehors du bloc if
-  console.log("Identifiant de session existant ou généré :", sessionId);
   next();
 };
 
