@@ -114,31 +114,29 @@ const verifyPassword = (password, hashedPassword) => {
 };
 
 const createTokens = (userId, res) => {
+  /* On créer le token CSRF */
+  const xsrfToken = crypto.randomBytes(64).toString('hex');
+
+  // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
   const token = jwt.sign(
-    { userId: userId },
+    { userId: userId, xsrfToken: xsrfToken },
     Token_Secret_Key,
     { expiresIn: '3d' }
   );
 
-  /* On créer le token CSRF */
-  const xsrfToken = crypto.randomBytes(64).toString('hex');
-
   // Définir le cookie pour le JWT
   res.cookie('token', token, {
-    httpOnly: false, // empeche l'acces au cookie depuis le js
+    httpOnly: true, // empeche l'acces au cookie depuis le js
     secure: true, // cookie accessible uniquement en https
     sameSite: 'none', // cookie accessible depuis un autre domaine
     maxAge: 3 * 24 * 60 * 60 * 1000
   });
 
-  // Définir le cookie pour le xsrfToken
-  res.cookie('xsrfToken', xsrfToken, {
-    httpOnly: false, // permet l'accès au cookie depuis le js
-    secure: true, // cookie accessible uniquement en https
-    sameSite: 'none', // cookie accessible depuis un autre domaine
-    maxAge: 3 * 24 * 60 * 60 * 1000
+  // Renvoyer le xsrfToken dans la réponse JSON
+  res.json({
+    xsrfToken: xsrfToken,
+    tokenExpiresIn: 3 * 24 * 60 * 60 * 1000
   });
-
 };
 
 
