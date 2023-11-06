@@ -113,18 +113,7 @@ const verifyPassword = (password, hashedPassword) => {
   return bcryptjs.compare(password, hashedPassword);
 };
 
-// Fonction de création des tokens
-const createTokens = (userId, xsrfToken) => {
 
-  // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
-  const token = jwt.sign(
-    { userId: userId, xsrfToken: xsrfToken },
-    Token_Secret_Key,
-    { expiresIn: '3d' }
-  );
-
-  return { xsrfToken, token };
-};
 
 
 
@@ -199,11 +188,19 @@ exports.login = async (req, res, next) => {
       return res.status(401).json({ message: 'Le mot de passe est incorrect !' });
     }
 
-    // Mot de passe correct, créer un token
+
+
+    // Mot de passe correct
     const userId = user.userInfos.id;
-      /* On créer le token CSRF */
+    /* On créer le token CSRF */
     const xsrfToken = crypto.randomBytes(64).toString('hex');
-    const { token } = createTokens(userId, xsrfToken);
+    
+    // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
+    const token = jwt.sign(
+      { userId: userId, xsrfToken: xsrfToken },
+      Token_Secret_Key,
+      { expiresIn: '3d' }
+    );
 
     // Définir le cookie pour le JWT
     res.cookie('token', token, {
@@ -212,7 +209,9 @@ exports.login = async (req, res, next) => {
       sameSite: 'none', // cookie accessible depuis un autre domaine
       maxAge: 3 * 24 * 60 * 60 * 1000
     });
-    
+
+
+
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.userInfos.password_hash;
     // Récupérer les informations du hub
