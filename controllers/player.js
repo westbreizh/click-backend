@@ -127,7 +127,7 @@ const createTokens = (userId, res) => {
   // Définir le cookie pour le JWT
   res.cookie('token', token, {
     httpOnly: true, // empeche l'acces au cookie depuis le js
-    secure: true, // cookie accessible uniquement en https
+    secure: false, // cookie accessible uniquement en https !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
     sameSite: 'none', // cookie accessible depuis un autre domaine
     maxAge: 3 * 24 * 60 * 60 * 1000
   });
