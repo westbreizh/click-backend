@@ -6,8 +6,10 @@ const jwt = require('jsonwebtoken');
 
 // Middleware d'authentification et d'autorisation, le token et le xsrfToken sont vérifiés
 const authenticateJWTandXSRF = (req, res, next) => {
+
   const token = req.cookies.token; // On extrait le token du cookie renvoyé par le navigateur
   console.log("token du cookies envoyé direct par le nav: " + token)  
+  
   const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête venant du frontend
   console.log("xsrfTokenHeader venant du frontend : " + xsrfTokenHeader)
 
