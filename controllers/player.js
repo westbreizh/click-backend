@@ -124,6 +124,14 @@ const createTokens = (userId, res) => {
     { expiresIn: '3d' }
   );
 
+
+
+  // Renvoyer le xsrfToken dans la réponse JSON
+  res.json({
+    xsrfToken: xsrfToken,
+    tokenExpiresIn: 3 * 24 * 60 * 60 * 1000
+  });
+  
   // Définir le cookie pour le JWT
   res.cookie('token', token, {
     httpOnly: true, // empeche l'acces au cookie depuis le js
@@ -132,11 +140,7 @@ const createTokens = (userId, res) => {
     maxAge: 3 * 24 * 60 * 60 * 1000
   });
 
-  // Renvoyer le xsrfToken dans la réponse JSON
-  res.json({
-    xsrfToken: xsrfToken,
-    tokenExpiresIn: 3 * 24 * 60 * 60 * 1000
-  });
+
 };
 
 
