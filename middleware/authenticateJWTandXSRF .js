@@ -4,7 +4,9 @@ dotenv.config();
 const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const jwt = require('jsonwebtoken');
 
-// Middleware d'authentification et d'autorisation, le token et le xsrfToken sont vérifiés
+// Middleware d'authentification et d'autorisation, 
+// vérifiez que le token du cookies est bon via jwt.verifie d'une part ; token non disponible par js protection contre les attaques XSS
+// et vérifiez que le xsrfToken du payload et celui de l'en-tête correspondent d'autre part protection contre les attaques CSRF
 const authenticateJWTandXSRF = (req, res, next) => {
 
   const token = req.cookies.token; // On extrait le token du cookie renvoyé par le navigateur
