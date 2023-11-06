@@ -1,19 +1,18 @@
 const express = require('express');
 const router = express.Router();
 const stringerCtrl = require('../controllers/stringer');
-router.use(express.json());  // Middleware d'analyse JSON pour toutes les routes du routeur
 const authenticateJWTandXSRF = require('../middleware/authenticateJWTandXSRF '); 
 const sessionMiddleware = require('../middleware/sessionMiddleware'); 
 
-// Appliquez sessionMiddleware à toutes les routes
+// Appliquez sessionMiddleware analyse JSON  et autentification token et xsrfToken à toutes les routes 
+router.use(express.json());
 router.use(sessionMiddleware);
+router.use(authenticateJWTandXSRF);
 
-router.post('/ordertSelectedByStatus', authenticateJWTandXSRF,  stringerCtrl.ordertSelectedByStatus);
-router.post('/change-status-order', authenticateJWTandXSRF,  stringerCtrl.changeStatusOrder);
-router.post('/oneOrder', authenticateJWTandXSRF, stringerCtrl.sendOneOrder);
-router.post('/onePlayer', authenticateJWTandXSRF, stringerCtrl.sendOnePlayer);
-
-
+router.post('/ordertSelectedByStatus', stringerCtrl.ordertSelectedByStatus);
+router.post('/change-status-order', stringerCtrl.changeStatusOrder);
+router.post('/oneOrder', stringerCtrl.sendOneOrder);
+router.post('/onePlayer', stringerCtrl.sendOnePlayer);
 
 module.exports = router;
 

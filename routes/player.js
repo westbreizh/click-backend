@@ -15,13 +15,11 @@ router.post('/login', userCtrl.login);
 router.post('/createOrUploadCoordinate', authenticateJWTandXSRF, userCtrl.createOrUploadCoordinate);
 router.post('/savePreferencePlayer', authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
 router.post('/loadDataPlayerAfterModif', authenticateJWTandXSRF, userCtrl.loadDataPlayerAfterModif);
-
 router.post('/orderLog', authenticateJWTandXSRF,  userCtrl.sendOrderLog);
 router.post('/oneOrder', authenticateJWTandXSRF, userCtrl.sendOneOrder);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 router.post('/saveResetPassword', userCtrl.saveResetPassword);
-
 
 
 module.exports = router;
