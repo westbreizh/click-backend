@@ -113,7 +113,8 @@ const verifyPassword = (password, hashedPassword) => {
   return bcryptjs.compare(password, hashedPassword);
 };
 
-const createTokens = (userId, res) => {
+// Fonction de création des tokens
+const createTokens = (userId) => {
   /* On créer le token CSRF */
   const xsrfToken = crypto.randomBytes(64).toString('hex');
 
@@ -124,23 +125,7 @@ const createTokens = (userId, res) => {
     { expiresIn: '3d' }
   );
 
-
-
-  // Renvoyer le xsrfToken dans la réponse JSON
-  res.json({
-    xsrfToken: xsrfToken,
-    tokenExpiresIn: 3 * 24 * 60 * 60 * 1000
-  });
-  
-  // Définir le cookie pour le JWT
-  res.cookie('token', token, {
-    httpOnly: true, // empeche l'acces au cookie depuis le js
-    secure: false, // cookie accessible uniquement en https !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-    sameSite: 'none', // cookie accessible depuis un autre domaine
-    maxAge: 3 * 24 * 60 * 60 * 1000
-  });
-
-
+  return { xsrfToken, token };
 };
 
 
@@ -218,8 +203,16 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfos.id;
-    const token = createTokens(userId, res);
+    const { xsrfToken, token } = createTokens(userId);
 
+    // Définir le cookie pour le JWT
+    res.cookie('token', token, {
+      httpOnly: true, // empeche l'acces au cookie depuis le js
+      secure: false, // cookie accessible uniquement en https !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      sameSite: 'none', // cookie accessible depuis un autre domaine
+      maxAge: 3 * 24 * 60 * 60 * 1000
+    });
+    
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.userInfos.password_hash;
     // Récupérer les informations du hub
@@ -238,6 +231,8 @@ exports.login = async (req, res, next) => {
     // Retourner les données et le message
     return res.status(201).json({
       userInfo: user.userInfos,
+      xsrfToken: xsrfToken, // Ajouter le xsrfToken à la réponse
+      tokenExpiresIn: 3 * 24 * 60 * 60 * 1000,
       message: 'Connexion au site réussie !',
     });
   } catch (err) {
