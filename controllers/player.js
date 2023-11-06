@@ -192,12 +192,13 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct
     const userId = user.userInfos.id;
-    /* On créer le token CSRF */
+
+    /* On créer le token CSRF  */
     const xsrfToken = crypto.randomBytes(64).toString('hex');
     
     // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
     const token = jwt.sign(
-      {  xsrfToken: xsrfToken, userId: userId },
+      {  userId: userId, xsrfToken },
       Token_Secret_Key,
       { expiresIn: '3d' }
     );
@@ -231,7 +232,7 @@ exports.login = async (req, res, next) => {
     return res.status(201).json({
       userInfo: user.userInfos,
       xsrfToken: xsrfToken, // Ajouter le xsrfToken à la réponse
-      tokenExpiresIn: 3 * 24 * 60 * 60 * 1000,
+      tokenExpiresIn: 3 * 24 * 60 * 60 * 1000,// Ajouter le temps d'expiration du token à la réponse
       message: 'Connexion au site réussie !',
     });
   } catch (err) {

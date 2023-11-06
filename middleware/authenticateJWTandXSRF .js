@@ -6,28 +6,34 @@ const jwt = require('jsonwebtoken');
 
 // Middleware d'authentification et d'autorisation, le token et le xsrfToken sont vérifiés
 const authenticateJWTandXSRF = (req, res, next) => {
-  const token = req.cookies.token; // On extrait le token du cookie  
-  const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête
-  console.log("token : " + token)
-  console.log("xsrfTokenHeader : " + xsrfTokenHeader)
+  const token = req.cookies.token; // On extrait le token du cookie renvoyé par le navigateur
+  console.log("token du cookies envoyé direct par le nav: " + token)  
+  const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête venant du frontend
+  console.log("xsrfTokenHeader venant du frontend : " + xsrfTokenHeader)
 
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
   }
 
   try {
-
-    const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token mais le token contient deux element ... token et xsrfToken pas genant?
+    // On décode et veifie le token du cookies qui contient deux elements 
+    const decodedToken = jwt.verify(token, Token_Secret_Key ); 
     console.log("decodedToken : " + decodedToken)
-    console.log("xsrfToken du payload du token décodé : " + decodedToken.xsrfToken);
+
+
+    const xsrfTokenCookie = decodedToken.xsrfToken;
+    console.log("xsrfToken du cookies  du token décodé : " + xsrfTokenCookie);
+
     const userId = decodedToken.userId;
     console.log("userId : " + userId)
-    if (!xsrfTokenHeader || decodedToken.xsrfToken !== xsrfTokenHeader) { // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
+
+    // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
+    if (!xsrfTokenHeader || xsrfTokenCookie !== xsrfTokenHeader) { 
       return res.status(403).json({ error: 'Requête non autorisée' });
     }
 
     // Passer les informations du token décodé à la demande pour une utilisation ultérieure
-    req.user = decodedToken;
+    req.user = userId;
     console.log("l'auhentification via le token réussi")
     next(); // Si l'authentification et l'autorisation sont réussies, on passe à l'étape suivante
   } catch (error) {
