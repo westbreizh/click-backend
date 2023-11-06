@@ -16,10 +16,12 @@ const authenticateJWTandXSRF = (req, res, next) => {
   }
 
   try {
-    const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token
+
+    const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token mais le token contient deux element ... token et xsrfToken pas genant?
     console.log("decodedToken : " + decodedToken)
     console.log("xsrfToken du payload du token décodé : " + decodedToken.xsrfToken);
-
+    const userId = decodedToken.userId;
+    console.log("userId : " + userId)
     if (!xsrfTokenHeader || decodedToken.xsrfToken !== xsrfTokenHeader) { // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
       return res.status(403).json({ error: 'Requête non autorisée' });
     }
