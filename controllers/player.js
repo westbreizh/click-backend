@@ -114,9 +114,7 @@ const verifyPassword = (password, hashedPassword) => {
 };
 
 // Fonction de création des tokens
-const createTokens = (userId) => {
-  /* On créer le token CSRF */
-  const xsrfToken = crypto.randomBytes(64).toString('hex');
+const createTokens = (userId, xsrfToken) => {
 
   // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
   const token = jwt.sign(
@@ -203,7 +201,9 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfos.id;
-    const { xsrfToken, token } = createTokens(userId);
+      /* On créer le token CSRF */
+    const xsrfToken = crypto.randomBytes(64).toString('hex');
+    const { token } = createTokens(userId, xsrfToken);
 
     // Définir le cookie pour le JWT
     res.cookie('token', token, {
