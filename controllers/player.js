@@ -197,7 +197,7 @@ exports.login = async (req, res, next) => {
     
     // On créer le token JWT, et on inclue le xsrfToken dans le payload pour pouvoir le recuperer ensuite et le comparer
     const token = jwt.sign(
-      { userId: userId, xsrfToken: xsrfToken },
+      {  xsrfToken: xsrfToken, userId: userId },
       Token_Secret_Key,
       { expiresIn: '3d' }
     );
