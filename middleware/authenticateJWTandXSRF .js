@@ -8,7 +8,6 @@ const jwt = require('jsonwebtoken');
 const authenticateJWTandXSRF = (req, res, next) => {
   const token = req.cookies.token; // On extrait le token du cookie  
   const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête
-  console.log("req.header",req.headers)
   console.log("token : " + token)
   console.log("xsrfTokenHeader : " + xsrfTokenHeader)
 
@@ -18,6 +17,8 @@ const authenticateJWTandXSRF = (req, res, next) => {
 
   try {
     const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token
+    console.log("decodedToken : " + decodedToken)
+    console.log("xsrfToken du payload du token décodé : " + decodedToken.xsrfToken);
 
     if (!xsrfTokenHeader || decodedToken.xsrfToken !== xsrfTokenHeader) { // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
       return res.status(403).json({ error: 'Requête non autorisée' });
