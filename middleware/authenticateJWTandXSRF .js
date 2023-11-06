@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const authenticateJWTandXSRF = (req, res, next) => {
   const token = req.cookies.token; // On extrait le token du cookie  
   const xsrfTokenHeader = req.headers['X-XSRF-TOKEN']; // On extrait le xsrfToken de l'en-tête
-
+  console.log("req.header",req.headers)
   console.log("token : " + token)
   console.log("xsrfTokenHeader : " + xsrfTokenHeader)
 
