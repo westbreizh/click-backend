@@ -5,18 +5,23 @@ const Token_Secret_Key = process.env.TOKEN_SECRET_KEY;
 const jwt = require('jsonwebtoken');
 
 
-// Middleware d'authentification et d'autorisation basé sur les JWT
-const authenticateJWT = (req, res, next) => {
+// Middleware d'authentification et d'autorisation, le token et le xsrfToken sont vérifiés
+const authenticateJWTandXSRF = (req, res, next) => {
   const token = req.cookies.token; // On extrait le token du cookie  
+  const xsrfToken = req.cookies.xsrfToken; // On extrait le xsrfToken du cookie
+  const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête
+
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
   }
 
-  try {
-    const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token en utilisant la clé secrète, c'est cette fonction qui verifie la validité du token reçu
+  if (!xsrfToken || !xsrfTokenHeader || xsrfToken !== xsrfTokenHeader) { // On vérifie que le xsrfToken du cookie et celui de l'en-tête correspondent
+    return res.status(403).json({ error: 'Requête non autorisée' });
+  }
 
-    // Vous pouvez ajouter des vérifications supplémentaires ici selon vos besoins
-    // Par exemple, vérifier si l'utilisateur existe dans la base de données, ses autorisations, etc.
+  try {
+    const decodedToken = jwt.verify(token, Token_Secret_Key ); // On décode le token
+
 
     // Passer les informations du token décodé à la demande pour une utilisation ultérieure
     req.user = decodedToken;
@@ -28,4 +33,4 @@ const authenticateJWT = (req, res, next) => {
   }
 };
 
-module.exports = authenticateJWT;
+module.exports = authenticateJWTandXSRF;

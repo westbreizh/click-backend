@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const authenticateJWT = require('../middleware/authenticateJWT '); 
+const authenticateJWTandXSRF = require('../middleware/authenticateJWTandXSRF '); 
 const sessionMiddleware = require('../middleware/sessionMiddleware'); 
 const userCtrl = require('../controllers/player');
 
@@ -12,16 +12,16 @@ router.use(sessionMiddleware);
 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
-router.post('/isTokenYeatOk', authenticateJWT, userCtrl.isTokenYeatOk);
-router.post('/createOrUploadCoordinate', authenticateJWT, userCtrl.createOrUploadCoordinate);
-router.post('/savePreferencePlayer', authenticateJWT, userCtrl.savePreferencePlayer);
-router.post('/loadDataPlayerAfterModif', authenticateJWT, userCtrl.loadDataPlayerAfterModif);
+router.post('/isTokenYeatOk', authenticateJWTandXSRF, userCtrl.isTokenYeatOk);
+router.post('/createOrUploadCoordinate', authenticateJWTandXSRF, userCtrl.createOrUploadCoordinate);
+router.post('/savePreferencePlayer', authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
+router.post('/loadDataPlayerAfterModif', authenticateJWTandXSRF, userCtrl.loadDataPlayerAfterModif);
 
 router.post('/sendEmailToResetPassword', userCtrl.sendEmailToResetPassword);
 router.post('/saveResetPassword', userCtrl.saveResetPassword);
 
-router.post('/orderLog', authenticateJWT,  userCtrl.sendOrderLog);
-router.post('/oneOrder', authenticateJWT, userCtrl.sendOneOrder);
+router.post('/orderLog', authenticateJWTandXSRF,  userCtrl.sendOrderLog);
+router.post('/oneOrder', authenticateJWTandXSRF, userCtrl.sendOneOrder);
 
 module.exports = router;
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const stripeCtrl = require('../controllers/stripes');
-//const authenticateJWT = require('../middleware/authenticateJWT'); // a voir si necessaire
+//const authenticateJWTandXSRF = require('../middleware/authenticateJWTandXSRF'); // a voir si necessaire
 //const sessionMiddleware = require('../middleware/sessionMiddleware'); // a voir si necessaire
  
 
