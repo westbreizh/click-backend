@@ -14,7 +14,6 @@ const nodemailer = require('nodemailer');
 const sendEmail = require("../email/sendEmail")
 // fichier pour se connecter à notre base de donnée
 const db = require("../BDD/database-connect")
-const cookieParser = require('cookie-parser');
 const app = require('../app');
 
 
@@ -114,22 +113,36 @@ const verifyPassword = (password, hashedPassword) => {
   return bcryptjs.compare(password, hashedPassword);
 };
 
-const createToken = (userId, res) => {
+const createTokens = (userId, res) => {
   const token = jwt.sign(
     { userId: userId },
     Token_Secret_Key,
     { expiresIn: '3d' }
   );
-  console.log('token avant ', token)
-  // Définir le cookie
+
+  /* On créer le token CSRF */
+  const xsrfToken = crypto.randomBytes(64).toString('hex');
+
+  // Définir le cookie pour le JWT
   res.cookie('token', token, {
-    httpOnly: true,
-    secure: true,
-    sameSite: 'none',
+    httpOnly: true, // empeche l'acces au cookie depuis le javascript
+    secure: true, // cookie accessible uniquement en https
+    sameSite: 'none', // cookie accessible depuis un autre domaine
     maxAge: 3 * 24 * 60 * 60 * 1000
-  }); 
-  console.log('token apres', token)
+  });
+
+  // Définir le cookie pour le xsrfToken
+  res.cookie('xsrfToken', xsrfToken, {
+    httpOnly: false, // permet l'accès au cookie depuis le javascript
+    secure: true, // cookie accessible uniquement en https
+    sameSite: 'none', // cookie accessible depuis un autre domaine
+    maxAge: 3 * 24 * 60 * 60 * 1000
+  });
+
 };
+
+
+
 
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
@@ -203,7 +216,7 @@ exports.login = async (req, res, next) => {
 
     // Mot de passe correct, créer un token
     const userId = user.userInfos.id;
-    const token = createToken(userId, res);
+    const token = createTokens(userId, res);
 
     // Supprimer le mot de passe de l'objet utilisateur avant de le renvoyer
     delete user.userInfos.password_hash;
@@ -569,6 +582,7 @@ exports.isTokenYeatOk = (req, res, next) => {
     });
   }
 };
+
 
 
 
