@@ -2,10 +2,10 @@ const rateLimit = require('express-rate-limit'); // package pour prévenir des a
 
 
 const limiter = rateLimit({
-        windowMs: 120 * 60 * 1000, // 1 hour
-        max: 20, // limite l'utilisateur a 2 requetes par windowMs par heure
-        message: "trop de tentative de connexions, rééssayer dans une heure! merci !"
-      });
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 5, // limite chaque IP à 5 requêtes par fenêtre
+  message: "Trop de tentatives de connexion à partir de cette IP, veuillez réessayer plus tard."
+});
 
       
  module.exports = limiter;
