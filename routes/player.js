@@ -3,10 +3,10 @@ const router = express.Router();
 const authenticateJWTandXSRF = require('../middleware/authenticateJWTandXSRF '); 
 const userCtrl = require('../controllers/player');
 const limiter = require("../middleware/rate-limit");
-
+const validateLogin = require("../middleware/validationInput/validateLogin");
 
 router.post('/signup', limiter, userCtrl.signup);
-router.post('/login', limiter, userCtrl.login);
+router.post('/login',validateLogin, limiter, userCtrl.login);
 router.post('/createOrUploadCoordinate', authenticateJWTandXSRF, userCtrl.createOrUploadCoordinate);
 router.post('/savePreferencePlayer', authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
 router.post('/loadDataPlayerAfterModif', authenticateJWTandXSRF, userCtrl.loadDataPlayerAfterModif);
