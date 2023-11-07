@@ -14,7 +14,9 @@ router.post('/accessoriesListFiltered', shopCtrl.accessoriesListFiltered);
 router.post('/productSelected', shopCtrl.productSelected);
 router.post('/listHubCollect', shopCtrl.listHubCollect);
 router.post('/listHubWithdrawal', shopCtrl.listHubWithdrawal);
-router.post('/paiement-in-shop', authenticateJWTandXSRF, sessionMiddleware, shopCtrl.saveOrderPaiementInShop);
+router.post('/paiement-in-shop', authenticateJWTandXSRF,  shopCtrl.saveOrderPaiementInShop);
+
+//router.post('/paiement-in-shop', authenticateJWTandXSRF, sessionMiddleware, shopCtrl.saveOrderPaiementInShop);
 
 
 
