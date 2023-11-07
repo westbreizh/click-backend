@@ -1,9 +1,7 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
-    password: Joi.string()
-    .pattern(new RegExp('^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$'))
-    .required(),
+
     email: Joi.string().email({ minDomainSegments: 2 }).required()
 });
 
