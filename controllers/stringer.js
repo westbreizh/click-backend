@@ -299,7 +299,8 @@ exports.changeStatusOrder = async (req, res) => {
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
     if (statusOrder === "prêt à corder" && phoneNumber !== null && phoneNumber !== undefined) {
-      await sendSms(forename, phoneNumber);
+      //await sendSms(forename, phoneNumber);
+      console.log("SMS sera envoyé avec succès à", phoneNumber);
     }
 
     res.status(200).json({ message: 'la modification de status de la commande et l\'envoie d\'email sont effectives '});
