@@ -13,10 +13,6 @@ const schema = Joi.object({
   password: Joi.string()
     .pattern(/^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/)
     .required(),
-  passwordConfirm: Joi.any()
-    .valid(Joi.ref('password'))
-    .required()
-    .messages({ 'any.only': 'Les mots de passes doivent être identiques' }),
   telephone: Joi.string()
     .pattern(/^\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}$/)
 });
