@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS `player`;
 
 CREATE TABLE `player` (
     `id`                          int NOT NULL AUTO_INCREMENT,
-    `civilite`                    varchar(100) DEFAULT NULL,
     `lastname`                    varchar(100) DEFAULT NULL,
     `forename`                    varchar(100) DEFAULT NULL,
     `email`                       varchar(255) NOT NULL,

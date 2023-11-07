@@ -132,9 +132,9 @@ exports.signup = (req, res ) => {
       .then(cryptedPassword => {
         
         //implemente la base de donnée
-        db.query(`INSERT INTO player (civilite, lastname, forename, email, password_hash ) VALUES
-           ( '${req.body.civilite}','${req.body.lastname}', '${req.body.forename}', 
-           '${req.body.email}', '${cryptedPassword}' )`,
+        db.query(`INSERT INTO player ( lastname, forename, email, password_hash, telephone ) VALUES
+           ( '${req.body.lastname}', '${req.body.forename}', 
+           '${req.body.email}', '${cryptedPassword}', '${req.body.telephone}' )`,
           (err, result) => {        
 
             //recupère l'id pour création du token ...
