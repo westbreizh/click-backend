@@ -14,6 +14,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Middleware pour analyser les données JSON pour toutes les routes
+app.use(express.json());
+
 // Middleware pour analyser les données encodées dans l'URL (par exemple, les formulaires)
 app.use(express.urlencoded({ extended: true }));
 

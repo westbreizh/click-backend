@@ -1,14 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const authenticateJWTandXSRF = require('../middleware/authenticateJWTandXSRF '); 
-const sessionMiddleware = require('../middleware/sessionMiddleware'); 
 const userCtrl = require('../controllers/player');
 
-// Middleware d'analyse JSON pour toutes les routes du routeur
-router.use(express.json());
 
-// Appliquez sessionMiddleware à toutes les routes
-//router.use(sessionMiddleware);
 
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
