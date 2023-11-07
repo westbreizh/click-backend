@@ -114,16 +114,12 @@ const verifyPassword = (password, hashedPassword) => {
 };
 
 
-
-
-
-
 // fonction de creation d'un compte joueur   
 exports.signup = (req, res ) => {
 
   // verifie que l'email est disponible
   db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
-  (err, results) => {
+  async (err, results) => {
 
     // email deja utilisé
     if (results.length > 0) {                           
@@ -143,18 +139,32 @@ exports.signup = (req, res ) => {
 
             //recupère l'id pour création du token ...
             db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
-              (err, result) => {
+              async (err, result) => {
                 const userId = result[0].id;
+
+                /* On créer le token CSRF  */
+                const xsrfToken = crypto.randomBytes(64).toString('hex');
+
                 const token = jwt.sign(        
-                  { userId: userId },
+                  { userId: userId, xsrfToken },
                   Token_Secret_Key, 
-                  { expiresIn: '24h' }
+                  { expiresIn: '3d' }
                 );
-                delete (result[0].password);
+                delete (result[0].password_hash);
+
+                // Définir le cookie pour le JWT
+                res.cookie('token', token, {
+                  httpOnly: true, // empeche l'acces au cookie depuis le js
+                  secure: true, // cookie accessible uniquement en https !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+                  sameSite: 'none', // cookie accessible depuis un autre domaine
+                  maxAge: 3 * 24 * 60 * 60 * 1000
+                });
+
                 //on retourne des datas et le message
-                return res.status(201).json(data = {
+                return res.status(201).json({
                   userInfo: result[0],
-                  token: token,
+                  xsrfToken: xsrfToken, // Ajouter le xsrfToken à la réponse
+                  tokenExpiresIn: 3 * 24 * 60 * 60 * 1000,// Ajouter le temps d'expiration du token à la réponse
                   message: 'Votre compte a bien été crée !'
                 });
 
@@ -164,7 +174,7 @@ exports.signup = (req, res ) => {
       })
     }    
   })
-} 
+}
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
