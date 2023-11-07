@@ -3,6 +3,8 @@ const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser'); 
 
+// Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
+app.set('trust proxy', 1);
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
