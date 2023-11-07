@@ -115,66 +115,56 @@ const verifyPassword = (password, hashedPassword) => {
 
 
 // fonction de creation d'un compte joueur   
-exports.signup = (req, res ) => {
+exports.signup = (req, res) => {
+  db.query('SELECT * FROM player WHERE email = ?', [req.body.email], async (err, results) => {
+    if (err) {
+      return res.status(500).json({ message: 'Une erreur est survenue lors de la vérification de l\'email.' });
+    }
 
-  // verifie que l'email est disponible
-  db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
-  async (err, results) => {
+    if (results.length > 0) {
+      return res.status(422).json({ message: 'Email non disponible l\'ami ! ' });
+    } else {
+      try {
+        const cryptedPassword = await bcryptjs.hash(req.body.password, Number(bcryptSalt));
 
-    // email deja utilisé
-    if (results.length > 0) {                           
-        return res.status(422).json({message: 'Email non disponible l\'ami ! '});
-
-    // email disponible
-    }else{  
-
-      bcryptjs.hash(req.body.password, Number(bcryptSalt))
-      .then(cryptedPassword => {
-        
-        //implemente la base de donnée
-        db.query(`INSERT INTO player ( lastname, forename, email, password_hash, telephone ) VALUES
-           ( '${req.body.lastname}', '${req.body.forename}', 
-           '${req.body.email}', '${cryptedPassword}', '${req.body.telephone}' )`,
-          (err, result) => {        
-
-            //recupère l'id pour création du token ...
-            db.query(`SELECT * FROM player WHERE email='${req.body.email}'`, 
-              async (err, result) => {
-                const userId = result[0].id;
-
-                /* On créer le token CSRF  */
-                const xsrfToken = crypto.randomBytes(64).toString('hex');
-
-                const token = jwt.sign(        
-                  { userId: userId, xsrfToken },
-                  Token_Secret_Key, 
-                  { expiresIn: '3d' }
-                );
-                delete (result[0].password_hash);
-
-                // Définir le cookie pour le JWT
-                res.cookie('token', token, {
-                  httpOnly: true, // empeche l'acces au cookie depuis le js
-                  secure: true, // cookie accessible uniquement en https !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-                  sameSite: 'none', // cookie accessible depuis un autre domaine
-                  maxAge: 3 * 24 * 60 * 60 * 1000
-                });
-
-                //on retourne des datas et le message
-                return res.status(201).json({
-                  userInfo: result[0],
-                  xsrfToken: xsrfToken, // Ajouter le xsrfToken à la réponse
-                  tokenExpiresIn: 3 * 24 * 60 * 60 * 1000,// Ajouter le temps d'expiration du token à la réponse
-                  message: 'Votre compte a bien été crée !'
-                });
-
-            })
+        db.query('INSERT INTO player (lastname, forename, email, password_hash, telephone) VALUES (?, ?, ?, ?, ?)', [req.body.lastname, req.body.forename, req.body.email, cryptedPassword, req.body.telephone], (err, result) => {
+          if (err) {
+            return res.status(500).json({ message: 'Une erreur est survenue lors de l\'insertion des données.' });
           }
-        )
-      })
-    }    
-  })
-}
+
+          db.query('SELECT * FROM player WHERE email = ?', [req.body.email], (err, result) => {
+            if (err) {
+              return res.status(500).json({ message: 'Une erreur est survenue lors de la récupération des données.' });
+            }
+
+            const userId = result[0].id;
+            const xsrfToken = crypto.randomBytes(64).toString('hex');
+            const token = jwt.sign({ userId: userId, xsrfToken }, Token_Secret_Key, { expiresIn: '3d' });
+
+            delete result[0].password_hash;
+
+            res.cookie('token', token, {
+              httpOnly: true,
+              secure: true,
+              sameSite: 'none',
+              maxAge: 3 * 24 * 60 * 60 * 1000 // 3 jours
+            });
+
+            //on retourne des datas et le message
+            return res.status(201).json({
+              userInfo: result[0],
+              xsrfToken: xsrfToken, // Ajouter le xsrfToken à la réponse
+              tokenExpiresIn: 3 * 24 * 60 * 60 * 1000, // Ajouter le temps d'expiration du token à la réponse
+              message: 'Votre compte a bien été crée !'
+            });
+          });
+        });
+      } catch (err) {
+        return res.status(500).json({ message: 'Une erreur est survenue lors du hachage du mot de passe.' });
+      }
+    }
+  });
+};
 
 // Fonction de connexion
 exports.login = async (req, res, next) => {
