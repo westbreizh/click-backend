@@ -33,7 +33,7 @@ const authenticateJWTandXSRF = (req, res, next) => {
 
     // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
     if (!xsrfTokenHeader || xsrfTokenCookie !== xsrfTokenHeader) { 
-      return res.status(403).json({ error: 'Requête non autorisée' });
+      return res.status(403).json({ error: 'Requête non autorisée contrôle xsrfToken pas bon ' });
     }
 
     // Passer les informations du token décodé à la demande pour une utilisation ultérieure
