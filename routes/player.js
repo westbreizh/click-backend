@@ -8,6 +8,7 @@ const validateSignup = require("../middleware/validationInput/validateSignup");
 const validateEmail = require("../middleware/validationInput/validateEmail");
 const validateSaveResetPassword = require("../middleware/validationInput/validateSaveResetPassword");
 const validateCoordonates = require("../middleware/validationInput/validateCoordonates");
+const validatePreferencePlayer = require("../middleware/validationInput/validatePreferencePlayer");
 
 router.post('/signup', validateSignup, limiter, userCtrl.signup);
 router.post('/login',validateLogin, limiter, userCtrl.login);
@@ -15,7 +16,7 @@ router.post('/sendEmailToResetPassword', validateEmail, limiter, userCtrl.sendEm
 router.post('/saveResetPassword', validateSaveResetPassword, limiter, userCtrl.saveResetPassword);
 
 router.post('/createOrUploadCoordinate', validateCoordonates, authenticateJWTandXSRF, userCtrl.createOrUploadCoordinate);
-router.post('/savePreferencePlayer', authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
+router.post('/savePreferencePlayer', validatePreferencePlayer, authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
 router.post('/loadDataPlayerAfterModif', authenticateJWTandXSRF, userCtrl.loadDataPlayerAfterModif);
 router.post('/orderLog', authenticateJWTandXSRF,  userCtrl.sendOrderLog);
 router.post('/oneOrder', authenticateJWTandXSRF, userCtrl.sendOneOrder);

@@ -273,21 +273,14 @@ db.query(`UPDATE player SET telephone = ?, road = ?, city = ?, postal_code = ? W
 
 // fonction qui enregistre les préférences du joueur 
 exports.savePreferencePlayer = (req, res) => {
-  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, stringFromPlayerOrigin, numberKnotChoice } = req.body;
+  const { userId, stringFromPlayer, stringFromShopId, stringRopeChoice, hubChoiceId, hubBackChoiceId, racquetPlayer, numberKnotChoice } = req.body;
 
   const stringFromPlayerValue = stringFromPlayer !== "null" ? stringFromPlayer : null;
   const stringFromShopIdValue = stringFromShopId !== "null" ? stringFromShopId : null;
 
   const updateQuery = `
     UPDATE player 
-    SET stringFromShop_id = ?,
-    string_rope = ?,
-    hub_id = ?,
-    hubBack_id = ?,
-    racquet_player = ?,
-    stringFromPlayer = ?,
-    stringFromPlayerOrigin = ?,
-    numberKnotChoice = ?
+    SET stringFromShop_id = ?, string_rope = ?, hub_id = ?, hubBack_id = ?, racquet_player = ?, stringFromPlayer = ?, numberKnotChoice = ?
     WHERE id = ?
   `;
 
@@ -298,7 +291,6 @@ exports.savePreferencePlayer = (req, res) => {
     hubBackChoiceId,
     racquetPlayer,
     stringFromPlayerValue,
-    stringFromPlayerOrigin,
     numberKnotChoice,
     userId
   ];
@@ -312,6 +304,7 @@ exports.savePreferencePlayer = (req, res) => {
     }
   });
 };
+
 
 // Fonction qui recupère les données joueurs ave un email fournies comme payload
 exports.loadDataPlayerAfterModif = async (req, res, next) => {
