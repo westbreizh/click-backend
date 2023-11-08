@@ -6,7 +6,7 @@ const schema = Joi.object({
   postalCode: Joi.string().max(30).allow(''),
   telephone: Joi.string()
   .pattern(/^\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}\s?\d{1}$/)
-
+  .options({ allowUnknown: true })
 });
 
 
