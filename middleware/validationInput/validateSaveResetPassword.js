@@ -3,7 +3,7 @@ const Joi = require('joi');
 const schema = Joi.object({
   userId: Joi.number().integer().required(),
   resetToken: Joi.string().required(),
-  password: Joi.string()
+  newPassword: Joi.string()
   .pattern(/^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/)
   .required(),
 });
