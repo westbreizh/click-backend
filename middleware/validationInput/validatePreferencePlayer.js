@@ -5,9 +5,9 @@ const schema = Joi.object({
   stringFromShopId: Joi.number().integer().min(1).max(99).allow(null),
   stringRopeChoice: Joi.number().integer().min(10).max(35).allow(null),
   racquetPlayer: Joi.string().max(30).allow(null, ''),
-  hubChoiceId: Joi.number().integer().min(10).max(99).allow(null),
-  hubBackChoiceId: Joi.number().integer().min(10).max(99).allow(null),
-  numberKnotChoice: Joi.number().integer().min(0).max(9).allow(null),
+  hubChoiceId: Joi.number().integer().min(1).max(99).allow(null),
+  hubBackChoiceId: Joi.number().integer().min(1).max(99).allow(null),
+  numberKnotChoice: Joi.number().integer().min(2).max(4).allow(null),
 }).unknown(true);
 
 function validatePreferencePlayer(req, res, next) {
