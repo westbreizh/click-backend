@@ -13,7 +13,7 @@ function validateSaveResetPassword(req, res, next) {
   const { error } = schema.validate(req.body);
   if (error) {
     res.status(400).json({message: "Vos données ne sont pas valides."});
-    console.log('error dans validate login', error);
+    console.log('error dans validate save reset password ', error);
   } else {
     next();
   }

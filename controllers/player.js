@@ -476,37 +476,37 @@ exports.saveResetPassword = (req, res) => {
     }
 
 // Compare le token de réinitialisation fourni avec le token haché stocké dans la base de données
-bcryptjs.compare(resetToken, storedResetToken, (compareErr, isMatch) => {
-  // Si une erreur se produit lors de la comparaison, renvoie une réponse avec le statut 500
-  if (compareErr) {
-    return res.status(500).json({ message: "Une erreur s'est produite. Veuillez réessayer." });
-  }
-
-  // Si les tokens ne correspondent pas, renvoie une réponse avec le statut 400
-  if (!isMatch) {
-    return res.status(400).json({ message: "Le token de réinitialisation est invalide." });
-  }
-
-  // Hache le nouveau mot de passe
-  bcryptjs.hash(newPassword, Number(bcryptSalt))
-    .then((hashedPassword) => {
-      // Met à jour le mot de passe dans la base de données
-      db.query('UPDATE player SET password_hash = ?, resetToken = NULL WHERE id = ?', [hashedPassword, userId], (updateErr) => {
-        // Si une erreur se produit lors de la mise à jour, renvoie une réponse avec le statut 500
-        if (updateErr) {
-          return res.status(500).json({ message: "Une erreur s'est produite. Veuillez réessayer." });
-        }
-
-        // Renvoie une réponse avec le statut 200 indiquant que le mot de passe a été réinitialisé avec succès
-        return res.status(200).json({ message: "Le mot de passe a été réinitialisé avec succès." });
-      });
-    })
-    .catch((hashErr) => {
-      // Si une erreur se produit lors du hachage du mot de passe, renvoie une réponse avec le statut 500
+  bcryptjs.compare(resetToken, storedResetToken, (compareErr, isMatch) => {
+    // Si une erreur se produit lors de la comparaison, renvoie une réponse avec le statut 500
+    if (compareErr) {
       return res.status(500).json({ message: "Une erreur s'est produite. Veuillez réessayer." });
-    });
-});
-});
+    }
+
+    // Si les tokens ne correspondent pas, renvoie une réponse avec le statut 400
+    if (!isMatch) {
+      return res.status(400).json({ message: "Le token de réinitialisation est invalide." });
+    }
+
+    // Hache le nouveau mot de passe
+    bcryptjs.hash(newPassword, Number(bcryptSalt))
+      .then((hashedPassword) => {
+        // Met à jour le mot de passe dans la base de données
+        db.query('UPDATE player SET password_hash = ?, resetToken = NULL WHERE id = ?', [hashedPassword, userId], (updateErr) => {
+          // Si une erreur se produit lors de la mise à jour, renvoie une réponse avec le statut 500
+          if (updateErr) {
+            return res.status(500).json({ message: "Une erreur s'est produite. Veuillez réessayer." });
+          }
+
+          // Renvoie une réponse avec le statut 200 indiquant que le mot de passe a été réinitialisé avec succès
+          return res.status(200).json({ message: "Le mot de passe a été réinitialisé avec succès." });
+        });
+      })
+      .catch((hashErr) => {
+        // Si une erreur se produit lors du hachage du mot de passe, renvoie une réponse avec le statut 500
+        return res.status(500).json({ message: "Une erreur s'est produite. Veuillez réessayer." });
+      });
+  });
+  });
 };
 
 
