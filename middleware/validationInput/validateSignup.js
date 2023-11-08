@@ -21,7 +21,7 @@ function validateSignup(req, res, next) {
   const { error } = schema.validate(req.body);
   console.log('req.body', req.body);
   if (error) {
-    res.status(400).json({message: "Vos données ne sont pas valides dans signup."});
+    res.status(400).json({message: "Vos données ne sont pas valides."});
     console.log('error dans validate signup', error);
   } else {
     next();

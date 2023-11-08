@@ -1,13 +1,14 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
+  userId: Joi.number().integer().required(),
+  resetToken: Joi.string().required(),
   password: Joi.string()
   .pattern(/^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/)
   .required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required()
 });
 
-function validateLogin(req, res, next) {
+function validateSaveResetPassword(req, res, next) {
     console.log('req.body', req.body);
   const { error } = schema.validate(req.body);
   if (error) {
@@ -18,5 +19,5 @@ function validateLogin(req, res, next) {
   }
 }
 
-module.exports = validateLogin;
+module.exports = validateSaveResetPassword;
 

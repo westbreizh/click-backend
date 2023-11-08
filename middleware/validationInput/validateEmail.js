@@ -1,13 +1,10 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
-  password: Joi.string()
-  .pattern(/^(?=.{8,}$)(?=.*?[a-z])(?=.*?[A-Z])(?=.*?[0-9])(?=.*?\W).*$/)
-  .required(),
-  email: Joi.string().email({ minDomainSegments: 2 }).required()
+    email: Joi.string().email({ minDomainSegments: 2 }).required()
 });
 
-function validateLogin(req, res, next) {
+function validateEmail(req, res, next) {
     console.log('req.body', req.body);
   const { error } = schema.validate(req.body);
   if (error) {
@@ -18,5 +15,5 @@ function validateLogin(req, res, next) {
   }
 }
 
-module.exports = validateLogin;
+module.exports = validateEmail;
 

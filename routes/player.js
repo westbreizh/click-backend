@@ -5,11 +5,14 @@ const userCtrl = require('../controllers/player');
 const limiter = require("../middleware/rate-limit");
 const validateLogin = require("../middleware/validationInput/validateLogin");
 const validateSignup = require("../middleware/validationInput/validateSignup");
+const validateEmail = require("../middleware/validationInput/validateEmail");
+const validateSaveResetPassword = require("../middleware/validationInput/validateSaveResetPassword");
+
 
 router.post('/signup', validateSignup, limiter, userCtrl.signup);
 router.post('/login',validateLogin, limiter, userCtrl.login);
-router.post('/sendEmailToResetPassword', limiter, userCtrl.sendEmailToResetPassword);
-router.post('/saveResetPassword', limiter, userCtrl.saveResetPassword);
+router.post('/sendEmailToResetPassword', validateEmail, limiter, userCtrl.sendEmailToResetPassword);
+router.post('/saveResetPassword', validateSaveResetPassword, limiter, userCtrl.saveResetPassword);
 
 router.post('/createOrUploadCoordinate', authenticateJWTandXSRF, userCtrl.createOrUploadCoordinate);
 router.post('/savePreferencePlayer', authenticateJWTandXSRF, userCtrl.savePreferencePlayer);
@@ -26,7 +29,6 @@ module.exports = router;
 router.post('/isTokenYeatOk', authenticateJWTandXSRF, userCtrl.isTokenYeatOk);
 
 
-//const passwordSchema = require("../middleware/passwordValidate");
 
 
 // dans modalchangepassword ??
