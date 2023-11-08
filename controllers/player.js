@@ -242,6 +242,7 @@ exports.login = async (req, res, next) => {
 };
 
 
+
 // Fonction de création ou modification des coordonnées
 exports.createOrUploadCoordinate = (req, res) => {
   console.log("req.body", req.body);
