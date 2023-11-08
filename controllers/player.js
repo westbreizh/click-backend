@@ -590,23 +590,7 @@ exports.sendOneOrder = (req, res, next) => {
 };
 
 
-//--------------- à suivre     ---------------//
 
-// Fonction qui vérifie si le token a été validé
-exports.isTokenYeatOk = (req, res, next) => {
-  try {
-    // Une fois que toutes les vérifications sont terminées avec succès, vous pouvez renvoyer une réponse au frontend
-    return res.status(200).json({
-      message: 'Token encore valide',
-    });
-  } catch (error) {
-    // Si une erreur se produit (par exemple, des vérifications supplémentaires échouent),
-    // vous pouvez renvoyer une réponse d'erreur appropriée
-    return res.status(401).json({
-      error: 'Vérification du token échouée'
-    });
-  }
-};
 
 
 

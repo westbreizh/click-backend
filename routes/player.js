@@ -25,8 +25,7 @@ router.post('/oneOrder', authenticateJWTandXSRF, userCtrl.sendOneOrder);
 
 module.exports = router;
 
-// ?? ne trouve pas dans le frontend
-router.post('/isTokenYeatOk', authenticateJWTandXSRF, userCtrl.isTokenYeatOk);
+
 
 
 
