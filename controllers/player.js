@@ -384,10 +384,6 @@ exports.sendEmailToResetPassword = (req, res) => {
   // Récupération de l'email à partir de la requête
   const email = req.body.email;
 
-  // Validation des entrées
-  if (typeof email !== 'string') {
-    return res.status(400).json({ message: "Les données fournies sont invalides." });
-  }
 
   // Requête à la base de données pour trouver le joueur avec cet email
   db.query('SELECT * FROM player WHERE email = ?', [email], (err, result) => {
@@ -460,10 +456,7 @@ exports.saveResetPassword = (req, res) => {
   const resetToken = req.body.resetToken;
   const newPassword = req.body.newPassword;
 
-  // Validation des entrées
-  if (typeof userId !== 'number' || typeof resetToken !== 'string' || typeof newPassword !== 'string') {
-    return res.status(400).json({ message: "Les données fournies sont invalides." });
-  }
+
 
   // Requête à la base de données pour trouver l'utilisateur avec cet ID
   db.query('SELECT * FROM player WHERE id = ?', [userId], (err, result) => {
