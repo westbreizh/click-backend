@@ -378,13 +378,11 @@ exports.getOneUser = (req, res, next) => {
 
 
 //--------------- mot de passe---------------//
-
-// Fonction pour envoyer un email pour réinitialiser le mot de passe
+//envoie d'un email pour réinitialisation du mot de passe, payload l'email associé au compte
 exports.sendEmailToResetPassword = (req, res) => {
   const email = req.body.email;
 
-  // Utilisez une requête paramétrée pour prévenir les injections SQL
-  db.query('SELECT * FROM player WHERE email = ?', [email], (err, result) => {
+  db.query(`SELECT * FROM player WHERE email='${email}'`, (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
     }
@@ -392,15 +390,13 @@ exports.sendEmailToResetPassword = (req, res) => {
     if (result.length > 0) {
       let resetToken = crypto.randomBytes(32).toString("hex");
 
-      // Hache le token de réinitialisation avant de le stocker
-      bcryptjs.hash(resetToken, Number(bcryptSalt))
+      bcryptjs
+        .hash(resetToken, Number(bcryptSalt))
         .then((hashedToken) => {
+          // Enregistrement du token hashé dans la table player
           const playerId = result[0].id;
-
-          // Utilisez une requête paramétrée pour prévenir les injections SQL
           db.query(
-            'UPDATE player SET resetToken = ? WHERE id = ?',
-            [hashedToken, playerId],
+            `UPDATE player SET resetToken='${hashedToken}' WHERE id=${playerId}`,
             (updateErr) => {
               if (updateErr) {
                 return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du token de réinitialisation." });
@@ -436,25 +432,25 @@ exports.sendEmailToResetPassword = (req, res) => {
     }
   });
 };
-
-
-// Fonction pour enregistrer le nouveau mot de passe réinitialisé
+//enregistrement du nouveau mot de passe réinitialisé, payload fourni : le mot de passe, id et le token
 exports.saveResetPassword = (req, res) => {
-  // Récupération des données à partir de la requête
+
   const userId = req.body.userId;
   const resetToken = req.body.resetToken;
   const newPassword = req.body.newPassword;
+  console.log("userId"+req.body.userId)
+  console.log("resetToken"+req.body.resetToken)
+  console.log("newpassword"+req.body.newPassword)
 
-  // Utilisez une requête paramétrée pour prévenir les injections SQL
-  db.query('SELECT * FROM player WHERE id = ?', [userId], (err, result) => {
+  // Vérifier si l'utilisateur existe dans la base de données
+  db.query(`SELECT * FROM player WHERE id='${userId}'`, (err, result) => {
     if (err) {
       return res.status(500).json({ message: "Une erreur avec le serveur s'est produite !" });
     }
 
-    // Récupère le token de réinitialisation haché stocké dans la base de données
-    const storedResetToken = result[0].resetToken;
 
-    // Compare le token de réinitialisation fourni avec le token haché stocké dans la base de données
+    // Vérifier si l'utilisateur a le même resetToken que celui stocké dans la base de données
+    const storedResetToken = result[0].resetToken;
     bcryptjs.compare(resetToken, storedResetToken, (compareErr, isMatch) => {
       if (compareErr) {
         return res.status(500).json({ message: "Une erreur de comparaison s'est produite." });
@@ -463,22 +459,19 @@ exports.saveResetPassword = (req, res) => {
       if (!isMatch) {
         return res.status(400).json({ message: "Le token de réinitialisation est invalide." });
       }
-
-      // Hache le nouveau mot de passe
+      console.log("avant le hachage du new password")
+      // Hacher le nouveau mot de passe
       bcryptjs.hash(newPassword, Number(bcryptSalt))
         .then((hashedPassword) => {
-          // Utilisez une requête paramétrée pour prévenir les injections SQL
-          db.query(
-            'UPDATE player SET password_hash = ?, resetToken = NULL WHERE id = ?',
-            [hashedPassword, userId],
-            (updateErr) => {
-              if (updateErr) {
-                return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du mot de passe." });
-              }
-
-              return res.status(200).json({ message: "Le mot de passe a été réinitialisé avec succès." });
+          console.log("hashedPassword", hashedPassword)
+          // Mettre à jour le mot de passe dans la base de données
+          db.query(`UPDATE player SET password_hash='${hashedPassword}', resetToken=NULL WHERE id='${userId}'`, (updateErr) => {
+            if (updateErr) {
+              return res.status(500).json({ message: "Une erreur s'est produite lors de la mise à jour du mot de passe." });
             }
-          );
+
+            return res.status(200).json({ message: "Le mot de passe a été réinitialisé avec succès." });
+          });
         })
         .catch((hashErr) => {
           return res.status(500).json({ message: "Une erreur s'est produite lors du hachage du mot de passe." });
