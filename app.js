@@ -2,17 +2,30 @@
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser'); 
-const helmetMiddleware = require('./middleware/helmetConfig');  
+const helmet = require('helmet');
 
 // Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
 app.set('trust proxy', 1);
 
-// Utilisation du middleware Helmet pour définir des en-têtes HTTP sécurisés
-app.use(helmetMiddleware);
-app.use((req, res, next) => {
-  console.log('Helmet middleware used');
-  next();
-});
+// Utilisation de Helmet pour définir des en-têtes HTTP sécurisés
+app.use(
+
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+      },
+    },
+    frameguard: {
+      action: 'sameorigin',
+    },
+    hidePoweredBy: true,
+    hsts: true,
+    noSniff: true,
+    noCache: true,
+  })
+
+);
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
