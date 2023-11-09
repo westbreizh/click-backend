@@ -24,5 +24,5 @@ const helmetMiddleware = helmet({
   noCache: true,
 
 });
-
+console.log('Helmet middleware configured');
 module.exports = helmetMiddleware;

@@ -9,6 +9,10 @@ app.set('trust proxy', 1);
 
 // Utilisation du middleware Helmet pour définir des en-têtes HTTP sécurisés
 app.use(helmetMiddleware);
+app.use((req, res, next) => {
+  console.log('Helmet middleware used');
+  next();
+});
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
@@ -60,23 +64,3 @@ module.exports = app;
 
 
 
-//const helmet = require('helmet');
-//app.use(helmet({
-//  crossOriginResourcePolicy: false,
-//}));
-// Middleware CORS
-//app.use(cors({
- // origin: ['https://click-and-raquette.com', 'http://localhost:3000'],
-//}));
-//const path = require('path');
-
-/* gestion des différentes origines de communications back frontend 
-const cors = require('cors');
-app.use(cors());
-app.use((req, res, next) => {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  next();
-});
-*/
