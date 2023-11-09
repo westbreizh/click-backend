@@ -292,7 +292,10 @@ exports.listHubCollect = (req, res) => {
           message: 'Erreur avec la base de données'
         });
       } else {
-        const listHubCollect = results;
+        const listHubCollect = results.map(result => {
+          const { password_hash, ...rest } = result;
+          return rest;
+        });
         return res.status(200).json({
           listHubCollect: listHubCollect,
           message: 'La liste des dépôts de collecte a été récupérée!'
@@ -311,7 +314,10 @@ exports.listHubWithdrawal = (req, res) => {
           message: 'Erreur avec la base de données'
         });
       } else {
-        const listHubWithdrawal = results;
+        const listHubWithdrawal = results.map(result => {
+          const { password_hash, ...rest } = result;
+          return rest;
+        });
         return res.status(200).json({
           listHubWithdrawal: listHubWithdrawal,
           message: 'La liste des dépôts de retrait a été récupérée!'
