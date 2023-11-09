@@ -3,6 +3,7 @@ const helmet = require('helmet');
 // Configuration de Helmet
 const helmetMiddleware = helmet({
   // Configuration de la politique de sécurité du contenu (Content Security Policy)
+
   contentSecurityPolicy: {
     directives: {
       // Seules les ressources du même origine (self) peuvent être chargées
