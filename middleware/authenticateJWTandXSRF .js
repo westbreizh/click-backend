@@ -10,10 +10,10 @@ const jwt = require('jsonwebtoken');
 const authenticateJWTandXSRF = (req, res, next) => {
 
   const token = req.cookies.token; // On extrait le token du cookie renvoyé par le navigateur
-  console.log("token du cookies envoyé direct par le nav: " + token)  
+  //console.log("token du cookies envoyé direct par le nav: " + token)  
   
   const xsrfTokenHeader = req.headers['x-xsrf-token']; // On extrait le xsrfToken de l'en-tête venant du frontend
-  console.log("xsrfTokenHeader venant du frontend : " + xsrfTokenHeader)
+  //console.log("xsrfTokenHeader venant du frontend : " + xsrfTokenHeader)
 
   if (!token) {
     return res.status(401).json({ error: 'Token manquant' });
@@ -22,14 +22,14 @@ const authenticateJWTandXSRF = (req, res, next) => {
   try {
     // On décode et veifie le token du cookies qui contient deux elements 
     const decodedToken = jwt.verify(token, Token_Secret_Key ); 
-    console.log("decodedToken : " + decodedToken)
+   // console.log("decodedToken : " + decodedToken)
 
 
     const xsrfTokenCookie = decodedToken.xsrfToken;
-    console.log("xsrfToken du cookies  du token décodé : " + xsrfTokenCookie);
+    //console.log("xsrfToken du cookies  du token décodé : " + xsrfTokenCookie);
 
     const userId = decodedToken.userId;
-    console.log("userId : " + userId)
+    //console.log("userId : " + userId)
 
     // On vérifie que le xsrfToken du payload et celui de l'en-tête correspondent
     if (!xsrfTokenHeader || xsrfTokenCookie !== xsrfTokenHeader) { 
@@ -38,7 +38,7 @@ const authenticateJWTandXSRF = (req, res, next) => {
 
     // Passer les informations du token décodé à la demande pour une utilisation ultérieure
     req.user = userId;
-    console.log("l'auhentification via le token réussi")
+    //console.log("l'auhentification via le token réussi")
     next(); // Si l'authentification et l'autorisation sont réussies, on passe à l'étape suivante
   } catch (error) {
     console.log("problème identification token middleware ...")
