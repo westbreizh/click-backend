@@ -2,9 +2,13 @@
 const express = require('express');
 const app = express();
 const cookieParser = require('cookie-parser'); 
+const helmetMiddleware = require('./helmetConfig');
 
 // Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
 app.set('trust proxy', 1);
+
+// Utilisation du middleware Helmet pour définir des en-têtes HTTP sécurisés
+app.use(helmetMiddleware);
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
