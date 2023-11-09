@@ -350,11 +350,11 @@ exports.saveOrderPaiementInShop = async (req, res) => {
   try {
     // On récupère les données du frontend depuis le corps de la requête
     const datas = req.body;
-   //console.log("datas", datas)
-   //console.log("articleList", articleList)
+    console.log("datas", datas)
+
     // Données pour l'enregistrement de la commande
     const articleList = JSON.stringify(datas.articleList); // Convertir l'objet en chaîne JSON
-
+    console.log("articleList", articleList)
     const orderDate = new Date();
     const userInfo = JSON.stringify(datas.userInfo);
     const firstName = userInfo.firstName;
@@ -364,7 +364,7 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     const totalPriceString = datas.totalPrice;
     const totalPrice = Number(totalPriceString.replace(",", "."));
     const unitAmount = Math.round(totalPrice * 100);
-    const token = datas.token;
+
     let statusOrder = "initié"; // Initialisez la variable ici
 
     if (datas.hubChoice.enterprise_name == "click-and-raquette") {
@@ -399,7 +399,7 @@ exports.saveOrderPaiementInShop = async (req, res) => {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Envoi d'e-mail au transporteur
-    const emailTransporteur = "herbreteauaurelien@tutanota.com";
+    const emailTransporteur = "clickandraquette@gmail.com";
     try {
       await sendEmail(emailTransporteur, 'Nouvelle commande', {
         idOrder: idOrder,
