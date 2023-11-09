@@ -6,22 +6,23 @@ const helmetMiddleware = helmet({
 
   contentSecurityPolicy: {
     directives: {
-      // Seules les ressources du même origine (self) peuvent être chargées
+      // dit au navigateur n'accepte que les elements de même origine provenant de votre site du frontend mais n'enpeche pas la communication entre backend et frontend
       defaultSrc: ["'self'"],
-      // Seules les images du même origine et de https://images.example.com peuvent être chargées
-      imgSrc: ["'self'", "https://images.example.com"],
-      // Seuls les scripts du même origine et de https://scripts.example.com peuvent être chargés
-      scriptSrc: ["'self'", "https://scripts.example.com"],
     },
   },
+    // Définit l'en-tête X-Frame-Options pour aider à prévenir les attaques de type "clickjacking"
+    frameguard: {
+      action: 'sameorigin'
+    },
   // Supprime l'en-tête X-Powered-By pour rendre plus difficile pour les attaquants de déterminer quel logiciel serveur vous utilisez
   hidePoweredBy: true,
   // Active Strict Transport Security (HSTS) pour demander aux navigateurs de n'utiliser que HTTPS
   hsts: true,
-  // Définit l'en-tête X-Content-Type-Options pour aider à prévenir les attaques de type "sniffing" de type MIME
+  // Définit l'en-tête X-Content-Type-Options pour aider à prévenir les attaques de type "sniffing" de type MIME, indiquant au navigateur de ne pas "sniffer" automatiquement le type MIME du contenu, mais plutôt de se fier à l'en-tête Content-Type fourni par le serveur.
   noSniff: true,
-  // Définit l'en-tête X-Frame-Options pour aider à prévenir les attaques de type "clickjacking"
-  frameguard: true,
+  // Définit l'en-tête Cache-Control
+  noCache: true,
+
 });
 
 module.exports = helmetMiddleware;
