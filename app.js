@@ -9,22 +9,28 @@ app.set('trust proxy', 1);
 
 // Utilisation de Helmet pour définir des en-têtes HTTP sécurisés
 app.use(
-
   helmet({
+    // Configuration de la politique de sécurité du contenu (Content Security Policy)
     contentSecurityPolicy: {
       directives: {
+        // Autorise uniquement les ressources provenant du même domaine
         defaultSrc: ["'self'"],
       },
     },
+    // Configuration de l'en-tête X-Frame-Options pour prévenir les attaques de type "clickjacking"
     frameguard: {
+      // Autorise uniquement les iframes provenant du même domaine
       action: 'sameorigin',
     },
+    // Supprime l'en-tête X-Powered-By pour rendre plus difficile pour les attaquants de déterminer quel logiciel serveur vous utilisez
     hidePoweredBy: true,
+    // Active Strict Transport Security (HSTS) pour demander aux navigateurs de n'utiliser que HTTPS
     hsts: true,
+    // Définit l'en-tête X-Content-Type-Options pour aider à prévenir les attaques de type "sniffing" de type MIME, indiquant au navigateur de ne pas "sniffer" automatiquement le type MIME du contenu, mais plutôt de se fier à l'en-tête Content-Type fourni par le serveur.
     noSniff: true,
+    // Définit l'en-tête Cache-Control pour désactiver la mise en cache
     noCache: true,
   })
-
 );
 
 // Middleware pour gérer les autorisations CORS
