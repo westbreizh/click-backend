@@ -1,7 +1,7 @@
 const Joi = require('joi');
 
 const schema = Joi.object({
-  userInfo: Joi.string().max(1000).required(),
+  userInfo: Joi.object().required(),
   articleList: Joi.string().max(1000).required(),
   totalPrice: Joi.number().precision(2).required(),
   hubChoice: Joi.string().max(1000).required(),
