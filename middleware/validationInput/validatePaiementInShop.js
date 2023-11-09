@@ -3,9 +3,9 @@ const Joi = require('joi');
 const schema = Joi.object({
   userInfo: Joi.object().required(),
   articleList: Joi.array().items(Joi.object()).required(),
-  totalPrice: Joi.number().precision(2).required(),
-  hubChoice: Joi.string().max(1000).required(),
-  hubBackChoice: Joi.string().max(1000).required(),
+  totalPrice: Joi.string().max(30).required(),
+  hubChoice: Joi.object().required(),
+  hubBackChoice: Joi.object().required(),
   racquetPlayer: Joi.string().max(30).required(),
 }).unknown(true);
 
@@ -19,5 +19,6 @@ function validatePaiementInShop(req, res, next) {
     next();
   }
 }
+
 
 module.exports = validatePaiementInShop;
