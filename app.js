@@ -4,8 +4,7 @@ const app = express();
 const cookieParser = require('cookie-parser'); 
 const helmet = require('helmet');
 
-// Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
-app.set('trust proxy', 1);
+
 
 
 
@@ -35,6 +34,12 @@ app.use(
   })
 );
 
+// Middleware pour définir l'en-tête Pragma
+app.use((req, res, next) => {
+  res.setHeader("Pragma", "no-cache");
+  next();
+});
+
 
 // Middleware pour gérer les autorisations CORS
 const cors = require('cors');
@@ -45,6 +50,9 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
+
+// Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
+app.set('trust proxy', 1);
 
 // Middleware pour analyser les données JSON pour toutes les routes
 app.use(express.json());
@@ -109,6 +117,8 @@ app.use((req, res, next) => {
   // Définit l'en-tête Cache-Control
   res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
 
+  res.setHeader("Pragma", "no-cache");
+
   next();
 });
 
@@ -136,6 +146,11 @@ app.use(
     // Définit l'en-tête Cache-Control pour désactiver la mise en cache
     noCache: true,
   })
+  // Middleware pour définir l'en-tête Pragma
+  app.use((req, res, next) => {
+    res.setHeader("Pragma", "no-cache");
+    next();
+  });
 );
 
 
