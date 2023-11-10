@@ -9,29 +9,31 @@ app.set('trust proxy', 1);
 
 
 
-// middleware pour definir les en-têtes de sécurité
-app.use((req, res, next) => {
-  // Définit l'en-tête Content-Security-Policy
-  res.setHeader("Content-Security-Policy", "default-src 'self'");
-
-  // Définit l'en-tête X-Frame-Options
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
-
-  // Supprime l'en-tête X-Powered-By
-  res.setHeader("X-Powered-By", "");
-
-  // Active Strict Transport Security (HSTS)
-  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-
-  // Définit l'en-tête X-Content-Type-Options
-  res.setHeader("X-Content-Type-Options", "nosniff");
-
-  // Définit l'en-tête Cache-Control
-  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-
-  next();
-});
-
+// Utilisation de Helmet pour définir des en-têtes HTTP sécurisés
+app.use(
+  helmet({
+    // Configuration de la politique de sécurité du contenu (Content Security Policy)
+    contentSecurityPolicy: {
+      directives: {
+        // Autorise uniquement les ressources provenant du même domaine
+        defaultSrc: ["'self'"],
+      },
+    },
+    // Configuration de l'en-tête X-Frame-Options pour prévenir les attaques de type "clickjacking"
+    frameguard: {
+      // Autorise uniquement les iframes provenant du même domaine
+      action: 'sameorigin',
+    },
+    // Supprime l'en-tête X-Powered-By pour rendre plus difficile pour les attaquants de déterminer quel logiciel serveur vous utilisez
+    hidePoweredBy: true,
+    // Active Strict Transport Security (HSTS) pour demander aux navigateurs de n'utiliser que HTTPS
+    hsts: true,
+    // Définit l'en-tête X-Content-Type-Options pour aider à prévenir les attaques de type "sniffing" de type MIME, indiquant au navigateur de ne pas "sniffer" automatiquement le type MIME du contenu, mais plutôt de se fier à l'en-tête Content-Type fourni par le serveur.
+    noSniff: true,
+    // Définit l'en-tête Cache-Control pour désactiver la mise en cache
+    noCache: true,
+  })
+);
 
 
 // Middleware pour gérer les autorisations CORS
@@ -84,3 +86,57 @@ module.exports = app;
 
 
 
+/*
+
+
+// middleware pour definir les en-têtes de sécurité
+app.use((req, res, next) => {
+  // Définit l'en-tête Content-Security-Policy
+  res.setHeader("Content-Security-Policy", "default-src 'self'");
+
+  // Définit l'en-tête X-Frame-Options
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+
+  // Supprime l'en-tête X-Powered-By
+  res.setHeader("X-Powered-By", "");
+
+  // Active Strict Transport Security (HSTS)
+  res.setHeader("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
+
+  // Définit l'en-tête X-Content-Type-Options
+  res.setHeader("X-Content-Type-Options", "nosniff");
+
+  // Définit l'en-tête Cache-Control
+  res.setHeader("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
+
+  next();
+});
+
+// Utilisation de Helmet pour définir des en-têtes HTTP sécurisés
+app.use(
+  helmet({
+    // Configuration de la politique de sécurité du contenu (Content Security Policy)
+    contentSecurityPolicy: {
+      directives: {
+        // Autorise uniquement les ressources provenant du même domaine
+        defaultSrc: ["'self'"],
+      },
+    },
+    // Configuration de l'en-tête X-Frame-Options pour prévenir les attaques de type "clickjacking"
+    frameguard: {
+      // Autorise uniquement les iframes provenant du même domaine
+      action: 'sameorigin',
+    },
+    // Supprime l'en-tête X-Powered-By pour rendre plus difficile pour les attaquants de déterminer quel logiciel serveur vous utilisez
+    hidePoweredBy: true,
+    // Active Strict Transport Security (HSTS) pour demander aux navigateurs de n'utiliser que HTTPS
+    hsts: true,
+    // Définit l'en-tête X-Content-Type-Options pour aider à prévenir les attaques de type "sniffing" de type MIME, indiquant au navigateur de ne pas "sniffer" automatiquement le type MIME du contenu, mais plutôt de se fier à l'en-tête Content-Type fourni par le serveur.
+    noSniff: true,
+    // Définit l'en-tête Cache-Control pour désactiver la mise en cache
+    noCache: true,
+  })
+);
+
+
+*/
