@@ -5,7 +5,15 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 
 
+// Middleware pour gérer les autorisations CORS
+const cors = require('cors');
+const corsOptions = {
+  origin: ['https://click-and-raquette.com', 'http://localhost:3000', 'https://api.stripe.com'], // Spécifiez l'origine autorisée
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Méthodes HTTP autorisées
+  credentials: true, // Permet d'envoyer des cookies et des en-têtes d'authentification
+};
 
+app.use(cors(corsOptions));
 
 
 // middleware pour definir les en-têtes de sécurité
@@ -13,8 +21,8 @@ app.use((req, res, next) => {
   // Définit l'en-tête Content-Security-Policy
   res.setHeader("Content-Security-Policy", "default-src 'self'");
 
-  // Définit l'en-tête X-Frame-Options
-  res.setHeader("X-Frame-Options", "SAMEORIGIN");
+// Définit l'en-tête X-Frame-Options
+res.setHeader("X-Frame-Options", "DENY");
 
   // Supprime l'en-tête X-Powered-By
   res.setHeader("X-Powered-By", "");
@@ -34,15 +42,7 @@ app.use((req, res, next) => {
 });
 
 
-// Middleware pour gérer les autorisations CORS
-const cors = require('cors');
-const corsOptions = {
-  origin: ['https://click-and-raquette.com', 'http://localhost:3000', 'https://api.stripe.com'], // Spécifiez l'origine autorisée
-  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE', // Méthodes HTTP autorisées
-  credentials: true, // Permet d'envoyer des cookies et des en-têtes d'authentification
-};
 
-app.use(cors(corsOptions));
 
 // Middleware pour gérer les sessions, le prowy de heroku ok pas tres clair ...
 app.set('trust proxy', 1);
