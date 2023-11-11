@@ -35,9 +35,7 @@ const db = require("../BDD/database-connect")
 // payload -> statusOrder
 exports.ordertSelectedByStatus = (req, res, next) => {
   const datas = req.body;
-  console.log("datas", datas);
   const statusOrder= datas.statusOrder;
-  console.log("statusOrder", statusOrder); 
   const statusToRetrieve = statusOrder;
   const sqlQuery = `
     SELECT id, hub, articleList
@@ -81,7 +79,6 @@ exports.ordertSelectedByStatus = (req, res, next) => {
 // payload -> orderId
 exports.sendOneOrder = (req, res, next) => {
   const orderId = req.body.orderId
-  console.log("req.body.orderId", orderId);
     db.query(`SELECT * FROM orders WHERE id='${orderId}'`, (err, result) => {
       if (err) {
         console.error(err);
@@ -119,7 +116,7 @@ async function sendSms(forename, phoneNumber) {
     }
 
     const message = await client.messages.create({
-      body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée à la boutique ! Hervé Karren`,
+      body: `Bonjour ${forename}, votre raquette est magnifiquement cordée et prête à être retirée !`,
       from: '+18159499877',
       to: formattedPhoneNumber
     });
@@ -299,7 +296,7 @@ exports.changeStatusOrder = async (req, res) => {
     await sendEmailAfterStatusModify(orderId, statusOrder, changeStatusDate, forename, email);
 
     if (statusOrder === "prêt à corder" && phoneNumber !== null && phoneNumber !== undefined) {
-      //await sendSms(forename, phoneNumber);
+      await sendSms(forename, phoneNumber);
       console.log("SMS sera envoyé avec succès à", phoneNumber);
     }
 

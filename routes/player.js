@@ -22,15 +22,8 @@ router.post('/orderLog', authenticateJWTandXSRF,  userCtrl.sendOrderLog);
 router.post('/oneOrder', authenticateJWTandXSRF, userCtrl.sendOneOrder);
 
 
-
-
 module.exports = router;
 
 
 
-
-
-
-// dans modalchangepassword ??
-//const response = await fetch(`https://click-backend.herokuapp.com/api/user/changePassword`, {
 

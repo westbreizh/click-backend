@@ -366,7 +366,7 @@ exports.getOneUser = (req, res, next) => {
 
 //--------------- mot de passe---------------//
 
-// Exportation de la fonction sendEmailToResetPassword
+// fonction qui envoie un mail pour réinitialiser le mot de passe
 exports.sendEmailToResetPassword = (req, res) => {
   // Récupération de l'email à partir de la requête
   const email = req.body.email;
@@ -516,7 +516,6 @@ exports.sendOrderLog = (req, res, next) => {
       }
 
       const ordersId = result.map((row) => row.id);
-      console.log("ordersId", ordersId);
 
       const ordersInfo = [];
       let count = 0;

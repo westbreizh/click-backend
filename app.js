@@ -5,7 +5,7 @@ const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 
 
-// Middleware pour gérer les autorisations CORS
+// Middleware pour gérer les autorisations CORS, qui a le droit d'envoyer des requêtes à notre API
 const cors = require('cors');
 const corsOptions = {
   origin: ['https://click-and-raquette.com', 'http://localhost:3000', 'https://api.stripe.com'], // Spécifiez l'origine autorisée
@@ -16,7 +16,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-// middleware pour definir les en-têtes de sécurité
+// middleware pour definir les en-têtes de sécurité, pour les réponses à toutes les requêtes
 app.use((req, res, next) => {
   // Définit l'en-tête Content-Security-Policy
   res.setHeader("Content-Security-Policy", "default-src 'self'");
