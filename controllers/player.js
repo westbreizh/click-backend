@@ -66,7 +66,9 @@ const getHubViaId = (id) => {
         console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
       } else {
         if (hubInfo.length > 0) {
-          resolve(hubInfo[0] );
+          let hub = hubInfo[0];
+          delete hub.password_hash; // Supprimer l'attribut password_hash
+          resolve(hub);
         } else {
           resolve(null);
         }
@@ -83,7 +85,9 @@ const getHubBackViaId = (id) => {
         console.log("Erreur ici : ", err); // Afficher l'erreur dans la console
       } else {
         if (hubBackInfo.length > 0) {
-          resolve( hubBackInfo[0] );
+          let hubBack = hubBackInfo[0];
+          delete hubBack.password_hash; // Supprimer l'attribut password_hash
+          resolve(hubBack);
         } else {
           resolve(null);
         }
